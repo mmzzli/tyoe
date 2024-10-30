@@ -352,6 +352,7 @@
         align-items: center;
         &-title{
           position: relative;
+          white-space: nowrap;
           z-index: 2;
           width: 155px;
           height: 22px;
