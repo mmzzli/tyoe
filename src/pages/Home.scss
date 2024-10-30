@@ -354,7 +354,6 @@
           position: relative;
           white-space: nowrap;
           z-index: 2;
-          width: 155px;
           height: 22px;
           border-radius: 5px;
           border: 1px solid #22A646;
@@ -364,6 +363,7 @@
           align-items: center;
           justify-content: center;
           span{
+            padding: 0 6px;
             color: #16FF16;
             font-size: 13px;
             font-style: normal;
