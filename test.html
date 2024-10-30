@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="zh">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>老虎机</title>
+    <style>
+        body {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            font-family: Arial, sans-serif;
+            margin-top: 50px;
+        }
+        .slot-machine {
+            display: flex;
+            gap: 20px;
+        }
+        .reel-container {
+            width: 100px;
+            height: 150px; /* 显示三个元素的高度 */
+            border: 2px solid #333;
+            overflow: hidden;
+            position: relative;
+        }
+        .reel {
+            position: absolute;
+            top: 0;
+            width: 100%;
+        }
+        .symbol {
+            width: 100%;
+            height: 50px; /* 每个元素的高度 */
+        }
+        img {
+            width: 100%;
+            height: 100%;
+            display: block;
+        }
+        #result {
+            margin-top: 20px;
+            font-size: 24px;
+            font-weight: bold;
+        }
+        button {
+            margin-top: 20px;
+            padding: 10px 20px;
+            font-size: 16px;
+        }
+    </style>
+</head>
+<body>
+
+<h1>老虎机</h1>
+<div class="slot-machine">
+    <div class="reel-container" id="reel1">
+        <div class="reel"></div>
+    </div>
+    <div class="reel-container" id="reel2">
+        <div class="reel"></div>
+    </div>
+    <div class="reel-container" id="reel3">
+        <div class="reel"></div>
+    </div>
+</div>
+<button onclick="startSlotMachine()">开始</button>
+<div id="result"></div>
+
+<script>
+	const images = [
+		'https://iph.href.lu/100x50?text=荔枝&fg=666666&bg=cccccc',
+		'https://iph.href.lu/100x50?text=苹果&fg=666666&bg=cccccc',
+		'https://iph.href.lu/100x50?text=香蕉&fg=666666&bg=cccccc',
+		'https://iph.href.lu/100x50?text=橘子&fg=666666&bg=cccccc',
+		'https://iph.href.lu/100x50?text=草莓&fg=666666&bg=cccccc',
+		'https://iph.href.lu/100x50?text=西瓜&fg=666666&bg=cccccc'
+	];
+
+	let reels = [];
+	let reelPositions = [0, 0, 0]; // 记录每个滚动条的位置
+	let isSpinning = [false, false, false];
+	let resultMessage = document.getElementById("result");
+
+	window.onload = function() {
+		reels = [
+			document.querySelector('#reel1 .reel'),
+			document.querySelector('#reel2 .reel'),
+			document.querySelector('#reel3 .reel')
+		];
+		// 初始化滚动条内容
+		for (let i = 0; i < reels.length; i++) {
+			initReel(reels[i]);
+			// 显示初始符号
+			setInitialPosition(i);
+		}
+	};
+
+	function initReel(reel) {
+		// 为了实现无缝滚动，复制符号列表
+		let reelSymbols = images.concat(images);
+		for (let imgSrc of reelSymbols) {
+			let symbol = document.createElement('div');
+			symbol.className = 'symbol';
+			symbol.innerHTML = `<img src="${imgSrc}" alt="symbol">`;
+			reel.appendChild(symbol);
+		}
+	}
+
+	function setInitialPosition(index) {
+		let reel = reels[index];
+        let randomIndex = Math.floor(Math.random() * images.length);
+		let symbolHeight = 50; // 每个符号的高度
+		reelPositions[index] = randomIndex * symbolHeight;
+		reel.style.transform = `translateY(-${reelPositions[index]}px)`;
+	}
+
+	function startSlotMachine() {
+		resultMessage.textContent = ""; // 清除上一次的结果
+		isSpinning = [true, true, true]; // 重置滚动状态
+
+		// 开始滚动
+		for (let i = 0; i < reels.length; i++) {
+			spinReel(i);
+		}
+
+		// 按顺序停止滚动
+		for (let i = 0; i < reels.length; i++) {
+			setTimeout(() => {
+				stopReel(i);
+			}, 2000 + i * 1000); // 每个滚动条延迟停止
+		}
+	}
+
+	function spinReel(index) {
+		let reel = reels[index];
+		let symbolHeight = 50;
+		let totalSymbols = images.length;
+		let reelHeight = symbolHeight * totalSymbols;
+
+		function step() {
+			if (isSpinning[index]) {
+				reelPositions[index] = (reelPositions[index] + 20 + index * 5) % (reelHeight);
+				reel.style.transform = `translateY(-${reelPositions[index]}px)`;
+				requestAnimationFrame(step);
+			}
+		}
+		step();
+	}
+
+	function stopReel(index) {
+		isSpinning[index] = false;
+		// 对齐符号位置
+		let reel = reels[index];
+		let symbolHeight = 50;
+		let totalSymbols = images.length;
+		let position = reelPositions[index] % (symbolHeight * totalSymbols);
+		let symbolIndex = Math.round(position / symbolHeight) % totalSymbols;
+		reelPositions[index] = symbolIndex * symbolHeight;
+		reel.style.transform = `translateY(-${reelPositions[index]}px)`;
+
+		// 检查是否所有滚动条都已停止
+		if (isSpinning.every(spin => spin === false)) {
+			displayResult();
+		}
+	}
+
+	function displayResult() {
+		// 获取每个滚动条中间的符号
+		let symbolHeight = 50;
+		let totalSymbols = images.length;
+		let middleSymbols = reels.map((reel, index) => {
+			let position = reelPositions[index] % (symbolHeight * totalSymbols);
+			let symbolIndex = Math.round(position / symbolHeight) % totalSymbols;
+			return images[symbolIndex % images.length];
+		});
+
+		// 检查中间符号是否相同
+		const isWin = middleSymbols.every(symbol => symbol === middleSymbols[0]);
+		resultMessage.textContent = isWin ? "恭喜！你中奖了！" : "再接再厉！";
+	}
+</script>
+
+</body>
+</html>

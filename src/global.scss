@@ -1,0 +1,30 @@
+html,body{
+  width: 100%;
+  overflow-x: hidden;
+}
+
+ @font-face {
+   font-family:"Terminator";
+   src:url("./assets/font/TERMINAT.eot?") format("eot"),
+   url("./assets/font/TERMINAT.woff") format("woff"),
+   url("./assets/font/TERMINAT.ttf") format("truetype"),
+   url("./assets/font/TERMINAT.svg#TerminatorTwo") format("svg");
+   font-weight:normal;
+   font-style:normal;
+ }
+
+@font-face {font-family:"Unbounded";
+  src: url("./assets/font/Unbounded.ttf") format("truetype");
+  font-weight:normal;font-style:normal;}
+
+.font-terminator{
+  font-family: "Terminator";
+}
+
+.font-unbounded{
+  font-family: "Unbounded";
+}
+
+.text-white{
+  color: #fff;
+}

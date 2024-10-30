@@ -1,0 +1,9 @@
+@mixin inner-text-shadow{
+  &:before{
+    content: attr(data-text);
+    text-shadow: 0 0 5px #000;
+  }
+  &:after{
+
+  }
+}
