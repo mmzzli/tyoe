@@ -17,6 +17,7 @@ function App() {
     }
 
   })
+  console.log(user)
   return (
     <>
       <RouterProvider router={router}></RouterProvider>
