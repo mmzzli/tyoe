@@ -19,7 +19,7 @@ function App() {
   })
   return (
     <>
-      {user}
+      <span style={{color:"#fff"}}>{user}</span>
       <RouterProvider router={router}></RouterProvider>
     </>
   )
