@@ -1,6 +1,21 @@
-
-.dialog{
+.dialog-mask{
   position: fixed;
+  z-index: 998;
+  left: 0;
+  top: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0,0,0,0.6);
+  visibility: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  &.show{
+    visibility: visible;
+  }
+}
+.dialog{
+  position: absolute;
   z-index: 999;
   left: 50%;
   transform: translateX(-50%);
@@ -11,14 +26,11 @@
   border: 1px solid #22A646;
   background: #122323;
   backdrop-filter: blur(2px);
-  box-shadow: 0 0 10000px 1000px rgba(0,0,0,0.7);
+
   display: flex;
   flex-direction: column;
   align-items: center;
-  visibility: hidden;
-  &.show{
-    visibility: visible;
-  }
+
   &-title{
     position: relative;
     top: -15px;

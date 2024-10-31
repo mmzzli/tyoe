@@ -82,8 +82,10 @@ class Game{
 
 	// 开始抽奖
 	async startAwart(prizeDraw:()=>Promise<any>,setRandom:React.Dispatch<React.SetStateAction<number>>,setDialog:React.Dispatch<React.SetStateAction<boolean>>){
+		console.log(this.shake,'stake');
 		// 开关限制多次点击
 		if(this.shake) return;
+		this.shake = true;
 			// 滚动起来
 		for (let i = 0; i < this.wheelLength; i++) {
 			this.endings[i] = true;

@@ -52,22 +52,24 @@ const GameComponent:FC<{realPrize:InitPrize[]; setRandom: React.Dispatch<React.S
 
 	return (
 		<>
-			<div className={`dialog ${awardDialog?'show':''}`}>
-				<div className="dialog-title">
-					<span className="font-unbounded ">You win</span>
-				</div>
-				<div className="point">
-					{
-						award?.number ? <span className="font-terminator">{award?.number}</span> :
-							<span className="font-terminator nothing">Nothing</span>
-					}
-					<img src={award?.url} alt=""/>
-				</div>
-				<div className="ok" onClick={()=>setAwardDialog(false)}>
-					<span className="font-terminator">OK</span>
-				</div>
+			<div className={`dialog-mask ${awardDialog?'show':''}`}>
+				<div className={`dialog `}>
+					<div className="dialog-title">
+						<span className="font-unbounded ">You win</span>
+					</div>
+					<div className="point">
+						{
+							award?.number ? <span className="font-terminator">{award?.number}</span> :
+								<span className="font-terminator nothing">Nothing</span>
+						}
+						<img src={award?.url} alt=""/>
+					</div>
+					<div className="ok" onClick={()=>setAwardDialog(false)}>
+						<span className="font-terminator">OK</span>
+					</div>
 
 
+				</div>
 			</div>
 			<div className="game" ref={domRef}>
 				<div className="game-box">
