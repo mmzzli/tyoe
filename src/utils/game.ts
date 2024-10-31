@@ -95,14 +95,11 @@ class Game{
 		}
 		// 查看中奖元素
 		const res = await prizeDraw();
-		// 刷新数据
-		setRandom(Math.random());
-
 		const prize = this.prizeList.find((item) => item.id === res.id);
 
 		if(prize){
 			setTimeout(()=>{
-				this.stopAllReels(prize,setDialog)
+				this.stopAllReels(prize,setRandom,setDialog)
 			},1000)
 		}
 		return res;
@@ -122,16 +119,16 @@ class Game{
 	}
 
 
-	stopAllReels (prize: InitPrize,setDialog:React.Dispatch<React.SetStateAction<boolean>>)  {
+	stopAllReels (prize: InitPrize,setRandom:React.Dispatch<React.SetStateAction<number>>,setDialog:React.Dispatch<React.SetStateAction<boolean>>)  {
 		// 按顺序停止滚动
 		for (let i = 0; i < this.wheelLength; i++) {
 			setTimeout(() => {
-				this.stopReel(i, prize,setDialog);
+				this.stopReel(i, prize,setRandom,setDialog);
 			}, i * 1000); // 每个滚动条延迟停止
 		}
 	};
 
-	stopReel (index: number, prize: InitPrize,setDialog:React.Dispatch<React.SetStateAction<boolean>>)  {
+	stopReel (index: number, prize: InitPrize,setRandom:React.Dispatch<React.SetStateAction<number>>,setDialog:React.Dispatch<React.SetStateAction<boolean>>)  {
 		cancelAnimationFrame(this.animationFrames[index]);
 		// 找到中奖奖品在 prizePool 中的索引
 		const prizeIndex = this.prizePool.findIndex((item) => item.id === prize.id);
@@ -148,6 +145,7 @@ class Game{
 		if(this.endings.filter(item=>item===false).length === this.wheelLength){
 			this.shake = false
 			setTimeout(()=>{
+				setRandom(Math.random())
 				setDialog(true)
 			},300)
 		}
