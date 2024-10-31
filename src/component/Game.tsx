@@ -4,6 +4,7 @@ import {InitPrize, prizeDraw} from "@/service/home.ts";
 import arrow from "@/assets/images/icon/arrow.svg";
 import JoySticImgSrc from "@/assets/images/joystick.svg";
 import Game from "@/utils/game.ts";
+import none from '@/assets/images/coin/none.png';
 const GameComponent:FC<{realPrize:InitPrize[]; setRandom: React.Dispatch<React.SetStateAction<number>>}> = ({realPrize,setRandom})=>{
 	const domRef = useRef(null);
 	// 手动创建 reelRefs 和 animationRefs 数组，避免在循环中使用 Hooks
@@ -62,7 +63,10 @@ const GameComponent:FC<{realPrize:InitPrize[]; setRandom: React.Dispatch<React.S
 							award?.number ? <span className="font-terminator">{award?.number}</span> :
 								<span className="font-terminator nothing">Nothing</span>
 						}
-						<img src={award?.url} alt=""/>
+						{
+							award?.number ? <img src={award?.url} alt=""/> : <img src={none} alt=""/>
+						}
+
 					</div>
 					<div className="ok" onClick={()=>setAwardDialog(false)}>
 						<span className="font-terminator">OK</span>
