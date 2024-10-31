@@ -65,11 +65,13 @@ class Game{
 		// 可视化高度
 		this.wheelWindow = this.prizeList.length*this.symbolHeight;
 		// 无縫内容
+		console.log(document.querySelectorAll('.game .game-item-main'));
+		// 创建元素
+		this.createDom()
+
 		// 获取滚动元素
 		this.wheelDom = Array.prototype.slice.call(document.querySelectorAll('.game .game-item-main'));
 
-		// 创建元素
-		this.createDom()
 
 		// 初始化位置
 		const startPosition = this.calculatePosition(0);
