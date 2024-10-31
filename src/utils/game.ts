@@ -71,13 +71,15 @@ class Game{
 		// 获取滚动元素
 		this.wheelDom = Array.prototype.slice.call(document.querySelectorAll('.game .game-item-main'));
 
-		// 初始化位置
-		const startPosition = this.calculatePosition(0);
+
 		// 更新位置
-		this.wheelDom.forEach((item)=>{
+		this.wheelDom.forEach((item,index)=>{
+			// 初始化位置
+			const startPosition = this.calculatePosition(index);
 			item.style.transform = `translateY(-${startPosition}rem)`;
+			this.reelPositions[index] = startPosition;
 		})
-		this.reelPositions = new Array(this.wheelLength).fill(startPosition)
+
 	}
 
 	// 开始抽奖
