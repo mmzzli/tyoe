@@ -12,7 +12,7 @@ import {completeTask, getHomeData, getPrize, InitData, InitPrize, Task} from "@/
 import {formatWithSeparator} from "@/utils/common.ts";
 import Game from "@/component/Game";
 
-const picUrl:any = {
+export const picUrl:any = {
 	1:coin1,
 	2:coin2,
 	3:none
@@ -35,11 +35,7 @@ const Home:React.FC = () =>{
 	// 获取奖品列表
 	const initGetPirze = async () => {
 		const res = await getPrize()
-		res.map(item=>{
-			const id:string = item.id.toString()
-				item.url = (picUrl[id] as any) || ''
-				return item;
-		})
+
 		setPrize(res);
 
 		console.log(res);
@@ -108,7 +104,7 @@ const Home:React.FC = () =>{
 							{
 								(initData?.prizeResultList||[])?.map(item=> {
 									return (<div className="award-item" key={item.prizeId}>
-										<img src={picUrl[item.prizeId]} alt=""/>
+										<img src={item.url} alt=""/>
 										<span className="font-terminator">+{item.balance}</span>
 									</div>)
 								})

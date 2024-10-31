@@ -69,9 +69,7 @@ class Game{
 		this.createDom()
 
 		// 获取滚动元素
-		console.log(document.querySelectorAll('.game .game-item-main'));
 		this.wheelDom = Array.prototype.slice.call(document.querySelectorAll('.game .game-item-main'));
-
 
 		// 初始化位置
 		const startPosition = this.calculatePosition(0);
@@ -83,7 +81,7 @@ class Game{
 	}
 
 	// 开始抽奖
-	async startAwart(prizeDraw:()=>Promise<any>,setRandom:React.Dispatch<React.SetStateAction<number>>){
+	async startAwart(prizeDraw:()=>Promise<any>,setRandom:React.Dispatch<React.SetStateAction<number>>,setDialog:React.Dispatch<React.SetStateAction<boolean>>){
 		// 开关限制多次点击
 		if(this.shake) return;
 			// 滚动起来
@@ -93,9 +91,6 @@ class Game{
 				this.spinReel(i)
 			},i*300)
 		}
-		console.log(333);
-
-
 		// 查看中奖元素
 		const res = await prizeDraw();
 		// 刷新数据
@@ -105,10 +100,10 @@ class Game{
 
 		if(prize){
 			setTimeout(()=>{
-				this.stopAllReels(prize)
+				this.stopAllReels(prize,setDialog)
 			},1000)
 		}
-
+		return res;
 	}
 
 
@@ -117,7 +112,6 @@ class Game{
 			const position = this.reelPositions[index];
 			const newPosition = (position + 0.5 + index * 0.1) % this.wheelWindow;
 			// 更新元素位置``
-			console.log(this.wheelDom,'this.wheelDom');
 			this.wheelDom[index].style.transform = `translateY(-${newPosition}rem)`
 			this.reelPositions[index] = newPosition
 			this.animationFrames[index] = requestAnimationFrame(step);
@@ -126,16 +120,16 @@ class Game{
 	}
 
 
-	stopAllReels (prize: InitPrize)  {
+	stopAllReels (prize: InitPrize,setDialog:React.Dispatch<React.SetStateAction<boolean>>)  {
 		// 按顺序停止滚动
 		for (let i = 0; i < this.wheelLength; i++) {
 			setTimeout(() => {
-				this.stopReel(i, prize);
+				this.stopReel(i, prize,setDialog);
 			}, i * 1000); // 每个滚动条延迟停止
 		}
 	};
 
-	stopReel (index: number, prize: InitPrize)  {
+	stopReel (index: number, prize: InitPrize,setDialog:React.Dispatch<React.SetStateAction<boolean>>)  {
 		cancelAnimationFrame(this.animationFrames[index]);
 		// 找到中奖奖品在 prizePool 中的索引
 		const prizeIndex = this.prizePool.findIndex((item) => item.id === prize.id);
@@ -151,6 +145,9 @@ class Game{
 		this.endings[index] = false;
 		if(this.endings.filter(item=>item===false).length === this.wheelLength){
 			this.shake = false
+			setTimeout(()=>{
+				setDialog(true)
+			},300)
 		}
 	};
 

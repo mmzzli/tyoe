@@ -19,7 +19,7 @@ export interface InitPrize {
 	createTime:string
 	id:number
 	name:string
-	number:string
+	number:string|number
 	probability:number
 	updateTime:string
 	url?:string
