@@ -111,7 +111,7 @@ class Game{
 	spinReel(index:number){
 		const step = () => {
 			const position = this.reelPositions[index];
-			const newPosition = (position + 0.5 + index * 0.1) % this.wheelWindow;
+			const newPosition = (position + 0.5 + (index+1) * 0.12) % this.wheelWindow;
 			// 更新元素位置``
 			this.wheelDom[index].style.transform = `translateY(-${newPosition}rem)`
 			this.reelPositions[index] = newPosition
