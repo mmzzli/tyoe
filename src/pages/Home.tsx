@@ -11,6 +11,7 @@ import './Home.scss'
 import {completeTask, getHomeData, getPrize, InitData, InitPrize, Task} from "@/service/home.ts";
 import {formatWithSeparator} from "@/utils/common.ts";
 import Game from "@/component/Game";
+import WebApp from "@twa-dev/sdk";
 
 export const picUrl:any = {
 	1:coin1,
@@ -21,6 +22,7 @@ export const picUrl:any = {
 const Home:React.FC = () =>{
 	const [prize,setPrize] = useState<InitPrize[]>([])
 	const [random,setRandom] = useState(0)
+
 
 
 
@@ -59,8 +61,7 @@ const Home:React.FC = () =>{
 		await completeTask({
 			taskId:task.id
 		});
-		window.open(task.url, '_blank');
-
+		WebApp.openLink(task.url)
 		setRandom(Math.random())
 	}
 
