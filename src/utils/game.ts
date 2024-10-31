@@ -22,12 +22,7 @@ class Game{
 	constructor(prizeList:InitPrize[],wheelLength:number) {
 		this.prizeList = prizeList;
 		this.wheelLength = wheelLength;
-		this.prizePool = [...prizeList,...prizeList]
-
-	}
-
-	start(){
-
+		this.prizePool = [...prizeList,...prizeList,...prizeList]
 	}
 
 	// 创建 dom
