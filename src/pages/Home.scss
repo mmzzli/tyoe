@@ -336,57 +336,60 @@
         }
       }
     }
-    .awards{
-      margin:16px auto 0;
-      width: 258px;
-      height: 40px;
-      flex-shrink: 0;
-      border-radius: 5px;
-      border: 1px solid #22A646;
-      background: #000;
-      align-items: center;
+  }
+  .awards{
+
+    margin:-70px auto 40px;
+    width: 258px;
+    flex-shrink: 0;
+    border-radius: 5px;
+    border: 1px solid #22A646;
+    background: #000;
+    align-items: center;
+    display: flex;
+    .award{
+      width: 100%;
       display: flex;
-      .award{
-        width: 100%;
+      align-items: center;
+      justify-content: space-between;
+      overflow:hidden;
+      flex-wrap: wrap;
+      &-item{
+        flex-shrink: 0;
+        height: 40px;
+        width: 50%;
         display: flex;
         align-items: center;
-        justify-content: space-between;
-        overflow:hidden;
-
-        &-item{
-          width: 50%;
-          display: flex;
-          align-items: center;
-          justify-content: center;
-          position: relative;
-          &:after{
-            content: '';
-            width:1px;
-            height: 15.5px;
-            flex-shrink: 0;
-            border-radius: 2px;
-            transform: scaleX(0.5);
-            background: #808080;
-            position: absolute;
-            right: -1px;
-            top: 5px;
-          }
-          img{
-            width: 24px;
-            height: 24px;
-            flex-shrink: 0;
-            border: 1px solid #13D713;
-            border-radius: 100%;
-            padding: 1px;
-          }
-          span{
-            margin-left: 6px;
-            color: #51FF25;
-          }
+        justify-content: center;
+        position: relative;
+        &:after{
+          content: '';
+          width:1px;
+          height: 15.5px;
+          flex-shrink: 0;
+          border-radius: 2px;
+          transform: scaleX(0.5);
+          background: #808080;
+          position: absolute;
+          right: -1px;
+          top: 12px;
+        }
+        img{
+          width: 24px;
+          height: 24px;
+          flex-shrink: 0;
+          border: 1px solid #13D713;
+          border-radius: 100%;
+          padding: 1px;
+        }
+        span{
+          margin-left: 6px;
+          color: #51FF25;
         }
       }
     }
   }
+
   .article{
     background: #361E63;
     display: flex;

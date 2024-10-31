@@ -92,30 +92,32 @@ const Home:React.FC = () =>{
 					<Game  realPrize={prize} setRandom={setRandom}/>
 
 
-					<div className="awards">
-						<div className="award">
-							{
-								(initData?.prizeResultList||[])?.map(item=> {
-									return (<div className="award-item" key={item.prizeId}>
-										<img src={item.url} alt=""/>
-										<span className="font-terminator">+{item.balance}</span>
-									</div>)
-								})
-							}
-						</div>
-					</div>
+
 				</div>
+
 				<div className="article">
 					<div className="article-container">
+						<div className="awards">
+							<div className="award">
+								{
+									(initData?.prizeResultList || [])?.map(item => {
+										return (<div className="award-item" key={item.prizeId}>
+											<img src={item.url} alt=""/>
+											<span className="font-terminator">+{item.balance}</span>
+										</div>)
+									})
+								}
+							</div>
+						</div>
 						<div className="mission">
 							<div className="mission-title">
 								<span className='font-unbounded text-white'>SPECIAL MISSION</span>
 							</div>
 							<div className="mission-box">
 								{
-									initData?.taskResultList?.map(item=>{
+									initData?.taskResultList?.map(item => {
 										return (
-											<div className={`mission-item ${item.complete?'active':''}`} key={`task-${item.id}`}>
+											<div className={`mission-item ${item.complete ? 'active' : ''}`} key={`task-${item.id}`}>
 												<div className="mission-item-main">
 													<div className="left">
 														<img src={mission} alt=""/>
@@ -133,7 +135,9 @@ const Home:React.FC = () =>{
 															</span>
 														</div>
 													</div>
-													<div className="right" onClick={()=>{handlerTask(item)}}>
+													<div className="right" onClick={() => {
+														handlerTask(item)
+													}}>
 														<span className='font-terminator'>GO</span>
 													</div>
 													<div className="right-arrow">
