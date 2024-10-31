@@ -154,12 +154,12 @@
 
       .info{
         color: #FFF;
-        font-size: 13px;
+        font-size: 12px;
         font-style: normal;
         font-weight: 600;
         line-height: 22px;
         position: relative;
-        left: 2px;
+        left: -4px;
         top: -1px;
         span{
           @include inner-text-shadow;
