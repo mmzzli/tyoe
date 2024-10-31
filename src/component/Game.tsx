@@ -4,8 +4,6 @@ import {InitPrize, prizeDraw} from "@/service/home.ts";
 import arrow from "@/assets/images/icon/arrow.svg";
 import JoySticImgSrc from "@/assets/images/joystick.svg";
 import Game from "@/utils/game.ts";
-import {picUrl} from "@/pages/Home.tsx";
-
 const GameComponent:FC<{realPrize:InitPrize[]; setRandom: React.Dispatch<React.SetStateAction<number>>}> = ({realPrize,setRandom})=>{
 	const domRef = useRef(null);
 	// 手动创建 reelRefs 和 animationRefs 数组，避免在循环中使用 Hooks
