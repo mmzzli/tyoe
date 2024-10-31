@@ -115,6 +115,7 @@ class Game{
 			const position = this.reelPositions[index];
 			const newPosition = (position + 0.5 + index * 0.1) % this.wheelWindow;
 			// 更新元素位置``
+			console.log(this.wheelDom,'this.wheelDom');
 			this.wheelDom[index].style.transform = `translateY(-${newPosition}rem)`
 			this.reelPositions[index] = newPosition
 			this.animationFrames[index] = requestAnimationFrame(step);
