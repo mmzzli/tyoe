@@ -1,32 +1,74 @@
 import * as React from "react";
+import {useEffect, useState} from "react";
 import LogoImgSrc from '@/assets/images/logo.svg'
-import JoySticImgSrc from '@/assets/images/joystick.svg'
 import coin1 from '@/assets/images/coin/coin1.png'
 import coin2 from '@/assets/images/coin/coin2.png'
 import none from '@/assets/images/coin/none.png';
-import arrow from '@/assets/images/icon/arrow.svg'
 import mission from '@/assets/images/icon/mission.svg'
 import diamond from '@/assets/images/icon/diamond.svg'
 import missionRight from '@/assets/images/icon/mission-right.svg'
 import './Home.scss'
-import {useEffect, useState} from "react";
-const REWARD_POOL = [coin1,coin2,none];
-const REPEAT_POOL  = [...REWARD_POOL,...REWARD_POOL]
+import {completeTask, getHomeData, getPrize, InitData, InitPrize, Task} from "@/service/home.ts";
+import {formatWithSeparator} from "@/utils/common.ts";
+import Game from "@/component/Game";
+
+const picUrl:any = {
+	1:coin1,
+	2:coin2,
+	3:none
+}
+
 const Home:React.FC = () =>{
-	const [shaking,setShaking] = useState(false)
-	const handlerShake = () =>{
-		console.log('shaking')
-		if(shaking) return true;
-		setShaking(true)
-		setTimeout(()=>{
-			setShaking(false)
-		},1000)
+	const [prize,setPrize] = useState<InitPrize[]>([])
+	const [random,setRandom] = useState(0)
+
+
+
+	const [initData,setInitData] = useState<InitData>()
+
+
+	// 获取首页信息
+	const getInitData = async () => {
+		const res = await getHomeData()
+		setInitData(res)
+	}
+	// 获取奖品列表
+	const initGetPirze = async () => {
+		const res = await getPrize()
+		res.map(item=>{
+			const id:string = item.id.toString()
+				item.url = (picUrl[id] as any) || ''
+				return item;
+		})
+		setPrize(res);
+
+		console.log(res);
+	}
+	useEffect(()=>{
+		getInitData()
+	},[random])
+
+	useEffect(()=>{
+		initGetPirze()
+	},[])
+
+
+
+
+
+
+
+	// 任务
+	const handlerTask = async (task:Task)=>{
+		await completeTask({
+			taskId:task.id
+		});
+		window.open(task.url, '_blank');
+
+		setRandom(Math.random())
 	}
 
-	// 初始给定默认位置
-	useEffect(()=>{
 
-	})
 	return(
     <div className="home-container">
 			<div className="home-container-inner">
@@ -53,77 +95,24 @@ const Home:React.FC = () =>{
 							JACKPOT
 						</div>
 						<div className="point">
-							215,966,230
+							{formatWithSeparator(initData?.diamond||0)}
 						</div>
 
 					</div>
-					<div className="game">
-						<div className="game-box">
-							<div className="game-item">
-								{
-									REPEAT_POOL.map((item,index)=> {
-										return (
-											<div className="game-item-award" key={`${item}${index}`}>
-												<img src={item} alt=""/>
-											</div>
-										)
-									})
-								}
 
-							</div>
-							<div className="game-item">
-								{
-									REPEAT_POOL.map((item,index)=> {
-										return (
-											<div className="game-item-award" key={`${item}${index}`}>
-												<img src={item} alt=""/>
-											</div>
-										)
-									})
-								}
-							</div>
-							<div className="game-item">
-								{
-									REPEAT_POOL.map((item,index)=> {
-										return (
-											<div className="game-item-award" key={`${item}${index}`}>
-												<img src={item} alt=""/>
-											</div>
-										)
-									})
-								}
-							</div>
-						</div>
-					</div>
+					<Game  realPrize={prize} setRandom={setRandom}/>
 
-					<div className="game-slogin">
-						<span className="arrow">
-							<img src={arrow} alt=""/>
-						</span>
-						<div className="font-terminator">PRIZE DESCRIPTION</div>
-						<span className="arrow">
-							<img src={arrow} alt=""/>
-						</span>
-					</div>
 
-					<div className={['joystick', shaking ? 'shaking' : ''].join(' ')} onClick={handlerShake}>
-						<img src={JoySticImgSrc} alt=""/>
-					</div>
-					<div className="start">
-						<span className="font-terminator">START</span>
-					</div>
 					<div className="awards">
 						<div className="award">
-							<div className="award-item">
-								<img src={coin1} alt=""/>
-								<span className="font-terminator">+1000000</span>
-							</div>
-
-							<div className="award-item">
-								<img src={coin2} alt=""/>
-								<span className="font-terminator">+1000000</span>
-							</div>
-
+							{
+								(initData?.prizeResultList||[])?.map(item=> {
+									return (<div className="award-item" key={item.prizeId}>
+										<img src={picUrl[item.prizeId]} alt=""/>
+										<span className="font-terminator">+{item.balance}</span>
+									</div>)
+								})
+							}
 						</div>
 					</div>
 				</div>
@@ -134,58 +123,39 @@ const Home:React.FC = () =>{
 								<span className='font-unbounded text-white'>SPECIAL MISSION</span>
 							</div>
 							<div className="mission-box">
-								<div className="mission-item">
-									<div className="mission-item-main default">
-										<div className="left">
-											<img src={mission} alt=""/>
-										</div>
-										<div className="middle">
-											<div className="up font-unbounded">
-												Follow Our X
-											</div>
-											<div className="down">
-												<div className="font-terminator">
-													<span className="text-white">+100</span>
+								{
+									initData?.taskResultList?.map(item=>{
+										return (
+											<div className={`mission-item ${item.complete?'active':''}`} key={`task-${item.id}`}>
+												<div className="mission-item-main">
+													<div className="left">
+														<img src={mission} alt=""/>
+													</div>
+													<div className="middle">
+														<div className="up font-unbounded">
+															{item.name}
+														</div>
+														<div className="down">
+															<div className="font-terminator">
+																<span className="text-white">+{item.diamond}</span>
+															</div>
+															<span className="symbol">
+																<img src={diamond} alt=""/>
+															</span>
+														</div>
+													</div>
+													<div className="right" onClick={()=>{handlerTask(item)}}>
+														<span className='font-terminator'>GO</span>
+													</div>
+													<div className="right-arrow">
+														<img src={missionRight} alt=""/>
+													</div>
 												</div>
-												<span className="symbol">
-												<img src={diamond} alt=""/>
-											</span>
 											</div>
-										</div>
-										<div className="right">
-											<span className='font-terminator'>GO</span>
-										</div>
-										<div className="right-arrow">
-											<img src={missionRight} alt=""/>
-										</div>
-									</div>
-								</div>
-								<div className="mission-item active">
-									<div className="mission-item-main">
-										<div className="left">
-											<img src={mission} alt=""/>
-										</div>
-										<div className="middle">
-											<div className="up font-unbounded">
-												Follow Our X
-											</div>
-											<div className="down">
-												<div className="font-terminator">
-													<span className="text-white">+100</span>
-												</div>
-												<span className="symbol">
-												<img src={diamond} alt=""/>
-											</span>
-											</div>
-										</div>
-										<div className="right">
-											<span className='font-terminator'>GO</span>
-										</div>
-										<div className="right-arrow">
-											<img src={missionRight} alt=""/>
-										</div>
-									</div>
-								</div>
+										)
+									})
+								}
+
 
 							</div>
 						</div>
@@ -196,7 +166,6 @@ const Home:React.FC = () =>{
 							</div>
 						</div>
 					</div>
-
 				</div>
 			</div>
 

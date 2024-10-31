@@ -108,6 +108,7 @@
         align-items: center;
         justify-content: space-around;
       }
+
       &-item{
         overflow:hidden;
         width: 56px;
@@ -116,10 +117,14 @@
         border: 2px solid #308556;
         background: #000;
         position: relative;
-        display: flex;
-        align-items: center;
-        justify-content: flex-start;
-        flex-direction: column;
+        overflow: hidden;
+        &-main{
+          display: flex;
+          align-items: center;
+          justify-content: flex-start;
+          flex-direction: column;
+
+        }
         &:before,&:after{
           content: '';
           width: 100%;
@@ -127,6 +132,7 @@
           border-radius: 6px;
           position: absolute;
           left: 0;
+          z-index: 3;
         }
         &:before{
           top: 0;
@@ -138,11 +144,10 @@
         }
         &-award{
           width: 50px;
-          height: 50px;
+          height: 63px;
           display: flex;
           align-items: center;
           justify-content: center;
-          padding: 8px 0;
           img{
             width: 46px;
             height: auto;

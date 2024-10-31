@@ -10,6 +10,22 @@ export default defineConfig({
       "@": path.resolve(__dirname, "./src")
     }
   },
+  server:{
+    proxy:{
+      '/api':{
+        target:"https://tg-test.newhuotech.com",
+        changeOrigin:true,
+        rewrite:path=>path.replace(/^\/api/,''),
+        configure: (proxy,) => {
+          proxy.on('proxyReq', (proxyReq, req) => {
+            // 显示真实的请求路径
+            console.log(`代理目标: ${proxyReq.protocol}//${proxyReq.host}`)
+            console.log(`代理请求: ${req.method} ${req.url} => ${proxyReq.path}`)
+          })
+        },
+      }
+    }
+  },
   css:{
     devSourcemap: true,
     preprocessorOptions:{
