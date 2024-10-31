@@ -1,23 +1,15 @@
 import * as React from "react";
 import {useEffect, useState} from "react";
 import LogoImgSrc from '@/assets/images/logo.svg'
-import coin1 from '@/assets/images/coin/coin1.png'
-import coin2 from '@/assets/images/coin/coin2.png'
-import none from '@/assets/images/coin/none.png';
 import mission from '@/assets/images/icon/mission.svg'
 import diamond from '@/assets/images/icon/diamond.svg'
 import missionRight from '@/assets/images/icon/mission-right.svg'
-import './Home.scss'
 import {completeTask, getHomeData, getPrize, InitData, InitPrize, Task} from "@/service/home.ts";
 import {formatWithSeparator} from "@/utils/common.ts";
 import Game from "@/component/Game";
 import WebApp from "@twa-dev/sdk";
+import './Home.scss'
 
-export const picUrl:any = {
-	1:coin1,
-	2:coin2,
-	3:none
-}
 
 const Home:React.FC = () =>{
 	const [prize,setPrize] = useState<InitPrize[]>([])
