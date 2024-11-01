@@ -57,9 +57,25 @@ const Home:React.FC = () =>{
 		setRandom(Math.random())
 	}
 
+	const [dialog,setDialog] = useState(false)
 
 	return(
-    <div className="home-container">
+		<div className="home-container">
+			<div className={`dialog-mask dialog-tips ${dialog ? 'show' : ''}`}>
+				<div className={`dialog `}>
+					<div className="dialog-title">
+						<span className="font-unbounded ">TIPS</span>
+					</div>
+					<div className="point font-terminator font-size-tip" >
+						Comming Soon
+					</div>
+					<div className="ok" onClick={() => setDialog(false)}>
+						<span className="font-terminator">OK</span>
+					</div>
+
+
+				</div>
+			</div>
 			<div className="home-container-inner">
 				<div className="logo">
 					<img src={LogoImgSrc} alt=""/>
@@ -84,13 +100,12 @@ const Home:React.FC = () =>{
 							JACKPOT
 						</div>
 						<div className="point">
-							{formatWithSeparator(initData?.diamond||0)}
+							{formatWithSeparator(initData?.diamond || 0)}
 						</div>
 
 					</div>
 
-					<Game  realPrize={prize} setRandom={setRandom}/>
-
+					<Game realPrize={prize} setRandom={setRandom}/>
 
 
 				</div>
@@ -101,7 +116,7 @@ const Home:React.FC = () =>{
 							<div className="award">
 								{
 									(initData?.prizeResultList || [])?.map(item => {
-										return (<div className="award-item" key={item.prizeId}>
+										return (<div className="award-item" key={item.prizeId} onClick={()=>setDialog(true)}>
 											<img src={item.url} alt=""/>
 											<span className="font-terminator">+{item.balance}</span>
 										</div>)
