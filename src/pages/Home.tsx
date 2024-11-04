@@ -9,6 +9,7 @@ import {formatWithSeparator} from "@/utils/common.ts";
 import Game from "@/component/Game";
 import WebApp from "@twa-dev/sdk";
 import './Home.scss'
+import usdtImgUrl from '@/assets/images/coin/ether.svg'
 
 
 const Home:React.FC = () =>{
@@ -77,8 +78,27 @@ const Home:React.FC = () =>{
 				</div>
 			</div>
 			<div className="home-container-inner">
-				<div className="logo">
-					<img src={LogoImgSrc} alt=""/>
+				{/*<div className="logo">*/}
+				{/*	<img src={LogoImgSrc} alt=""/>*/}
+				{/*</div>*/}
+				<div className="tools">
+
+					<img src={usdtImgUrl} alt=""/>
+					<div className='font-terminator share'>
+						INVITE TO SHARE
+					</div>
+					<div className="usdt text-white">
+							<span className="font-terminator">
+								20000
+							</span>
+
+							<span className="font-terminator ">
+								$USDT
+							</span>
+					</div>
+					<div className="prize-pool font-terminator">
+						prize pool weekly
+					</div>
 				</div>
 				<div className="main">
 					<div className="each-time">

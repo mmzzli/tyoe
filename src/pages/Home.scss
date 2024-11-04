@@ -106,29 +106,61 @@
     width: 100%;
     height: 100%;
     background:  radial-gradient(80.03% 60.63% at 50% 49.87%, #06AC0B 0%, #3BDBB6 5%, #17736B 6%, #151732 61%, #11091B 84%, #090313 100%);
-    .logo{
-      width: 310px;
-      height: auto;
-      margin: auto;
-      padding-top: 28px;
-      padding-bottom: 25px;
+    .tools{
+      position: relative;
+      padding-top: 11px;
       display: flex;
       align-items: center;
       justify-content: center;
+      width: 100%;
+      flex-direction: column;
+      height: 96px;
       img{
+        width: 45.156px;
+        height: 47.948px;
+        position: absolute;
+        left: 0;
+        top: 13px;
+      }
+      .share{
+        color: #51FF25;
+        font-size: 24px;
+        font-style: normal;
+        font-weight: 5;
+        line-height: 22px; /* 91.667% */
+        letter-spacing: 1px;
+      }
+      .usdt{
         width: 100%;
-        height: auto;
+        display: flex;
+        height: 38px;
+        font-weight: 5;
+        line-height: 40px;
+        letter-spacing: 1px;
+        font-size: 40px;
+        justify-content: space-around;
+        background: linear-gradient(90deg, #00D998 0%, #007351 5%,  #007351 95%, #00D998 100%);
+      }
+      .prize-pool{
+        margin-bottom: -40px;
+        margin-top: 4px;
+        color: #51FF25;
+        font-size: 20px;
+        font-style: normal;
+        font-weight: 5;
+        line-height: 22px; /* 110% */
+        letter-spacing: 1px;
       }
     }
   }
   .main{
     width: 375px;
-    height: 583.425px;
+    height: 605px;
     background: url("../assets/images/bg.png") no-repeat top center;
     background-size: 100% auto;
     box-sizing: border-box;
     position: relative;
-    padding-top: 10px;
+    padding-top: 32px;
     .each-time{
       width: 100%;
       height: 44px;
@@ -301,7 +333,7 @@
       left: 50%;
       margin-left: -17px;
       transform-origin: bottom center;
-      top: 346px;
+      top: 368px;
       img{
         width: 100%;
         height: auto;
