@@ -9,7 +9,7 @@ const service: AxiosInstance = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
 	(config:InternalAxiosRequestConfig) => {
-		config.headers.token = `AAH6vltS2SinTmT4kqf3wfjTGxzlhKkSKl8`;
+		config.headers.token = `AAEcK20msHwN8FUhl_okTqt8k6EaZrPn48o`;
 		const {user} = useUserStore.getState();
 		config.headers.userId = user.id;
 		return config;
