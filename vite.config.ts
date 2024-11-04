@@ -13,7 +13,7 @@ export default defineConfig({
   server:{
     proxy:{
       '/api':{
-        target:"https://tg-test.newhuotech.com",
+        target:"https://tgbotwatch.network3.io",
         changeOrigin:true,
         rewrite:path=>path.replace(/^\/api/,''),
         configure: (proxy,) => {
