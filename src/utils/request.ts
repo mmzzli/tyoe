@@ -1,6 +1,6 @@
 import axios, {AxiosInstance, AxiosResponse, InternalAxiosRequestConfig} from 'axios';
 import useUserStore from "@/store/user.ts";
-
+const {VITE_APP_TOKEN} = import.meta.env
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
 	timeout: 5000, // 请求超时时间
@@ -9,7 +9,7 @@ const service: AxiosInstance = axios.create({
 // 请求拦截器
 service.interceptors.request.use(
 	(config:InternalAxiosRequestConfig) => {
-		config.headers.token = `AAEcK20msHwN8FUhl_okTqt8k6EaZrPn48o`;
+		config.headers.token = VITE_APP_TOKEN;
 		const {user} = useUserStore.getState();
 		config.headers.userId = user.id;
 		return config;
