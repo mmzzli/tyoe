@@ -1,12 +1,25 @@
-
 # 环境准备
 node 版本 >= 18
+# docker部署
 
-# 安装 pnpm
+## 构建镜像
+```shell
+docker build -t 镜像名称 .
+```
+## 运行容器
+镜像端口 80
+```shell
+docker run -d -p 对外暴露商品:镜像端口 --name 容器名称 镜像名称
+```
+示例：
+
+# 命令部署
+
+## 安装 pnpm
 npm install -g pnpm
 pnpm >= 9
 
-# 安装依赖
+## 安装依赖
 ```shell
 pnpm install
 ```
@@ -20,6 +33,6 @@ npm run build
 
 ## 注意事项
 ### 跨域
- - 后端服务要开启 CORS
- - 静态服务器做 nginx 代理
+- 后端服务要开启 CORS
+- 静态服务器做 nginx 代理
 
