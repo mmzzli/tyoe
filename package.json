@@ -6,6 +6,7 @@
   "scripts": {
     "dev": "vite",
     "dev:staking": "vite --mode staking",
+    "build:staking": "tsc -b && vite build --mode staking",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
@@ -13,6 +14,7 @@
   "dependencies": {
     "@twa-dev/sdk": "^7.10.1",
     "axios": "^1.7.7",
+    "esbuild": "^0.24.0",
     "postcss": "^8.4.47",
     "postcss-pxtorem": "^6.1.0",
     "react": "^18.3.1",
