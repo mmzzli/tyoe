@@ -5,8 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-
     "dev:staking": "vite --mode staking",
+    "build:staking": "tsc -b && vite build --mode staking",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
