@@ -13,6 +13,7 @@ export interface InitData {
 	prizeResultList:any[];
 	taskResultList:Task[]
 	userId:number
+	deductDiamond:number|string
 }
 
 export interface InitPrize {

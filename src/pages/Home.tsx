@@ -104,9 +104,9 @@ const Home:React.FC = () =>{
 					<div className="each-time">
 						<span className="each-point font-terminator">
 							<i>
-								100
+								{initData?.deductDiamond}
 							</i>
-							<i>100</i>
+							<i>{initData?.deductDiamond}</i>
 						</span>
 						<span className="info">
 							<span className="font-unbounded">
