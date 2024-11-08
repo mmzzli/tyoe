@@ -6,7 +6,6 @@
   "scripts": {
     "dev": "vite",
     "dev:staking": "vite --mode staking",
-    "build:test": "tsc -b && vite build --mode test",
     "build": "tsc -b && vite build",
     "lint": "eslint .",
     "preview": "vite preview"
