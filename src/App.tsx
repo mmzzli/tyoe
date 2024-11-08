@@ -5,7 +5,8 @@ import router from "./router";
 import WebApp from '@twa-dev/sdk'
 import useUserStore from "@/store/user.ts";
 const {MODE, VITE_APP_USER}  = import.meta.env
-const isProd = MODE === 'production'
+const modes = ['production','staking']
+const isProd = modes.includes(MODE)
 function App() {
   const setUser = useUserStore(s=>s.setUser)
 
