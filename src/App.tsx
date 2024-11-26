@@ -1,28 +1,35 @@
-import {useEffect, useState} from 'react'
-import './App.scss'
-import {RouterProvider} from "react-router-dom";
-import router from "./router";
-import WebApp from '@twa-dev/sdk'
-
+import { useEffect } from 'react';
+import './App.scss';
+import { RouterProvider } from 'react-router-dom';
+import router from './router';
+import WebApp from '@twa-dev/sdk';
+import useUserStore from '@/store/user.ts';
+const { MODE, VITE_APP_USER } = import.meta.env;
+const modes = ['production', 'staking'];
+const isProd = modes.includes(MODE);
 function App() {
-  const [ user,setUser ] = useState<string>('')
+  const setUser = useUserStore((s) => s.setUser);
 
-
-  useEffect(()=>{
+  useEffect(() => {
     WebApp.ready();
-    const {user} = WebApp.initDataUnsafe;
-    if (user) {
-      const userInfo = `${user.first_name} ${user.last_name} (@${user.username})${JSON.stringify(user)}${JSON.stringify(WebApp.initDataUnsafe)}`;
-      setUser(userInfo);
-    }
+    let user: any = null;
+    if (!isProd) {
+      user = JSON.parse(VITE_APP_USER).user;
+      console.log(user, '====');
+    } else {
+      user = WebApp.initDataUnsafe.user;
 
-  })
+      console.log('user ', user);
+    }
+    if (user) {
+      setUser(user);
+    }
+  });
   return (
     <>
-      {user}
-      {/*<RouterProvider router={router}></RouterProvider>*/}
+      <RouterProvider router={router}></RouterProvider>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
