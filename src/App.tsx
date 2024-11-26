@@ -19,7 +19,7 @@ function App() {
     } else {
       user = WebApp.initDataUnsafe.user;
 
-      console.log('user ', user);
+      console.log('user ======', user);
     }
     if (user) {
       setUser(user);
