@@ -2,6 +2,7 @@ import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { TOKEN } from '@/utils/const.ts';
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
+	baseURL: import.meta.env.VITE_PROXY_URL,
 	timeout: 5000, // 请求超时时间
 });
 
