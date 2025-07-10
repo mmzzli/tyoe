@@ -24,6 +24,51 @@ const myRoutes: MyRoutesItem[] = [
 		path: "/about",
 		component: './About',
 		name: 'About',
+	},
+	{
+		path: "/assets",
+		component: './Assets',
+		name: 'Assets',
+	},
+	{
+		path: "/announcements",
+		component: './Announcements',
+		name: 'Announcements',
+	},
+	{
+		path: "/announcement-detail",
+		component: './AnnouncementDetail',
+		name: 'AnnouncementDetail',
+	},
+	{
+		path: "/team",
+		component: './Team',
+		name: 'Team',
+	},
+	{
+		path: "/node",
+		component: './Node',
+		name: 'Node',
+	},
+	{
+		path: "/withdraw",
+		component: './Withdraw',
+		name: 'Withdraw',
+	},
+	{
+		path: "/lp",
+		component: './Lp',
+		name: 'Lp',
+	},
+	{
+		path: "/staking",
+		component: './Staking',
+		name: 'Staking',
+	},
+	{
+		path: "/staking-records",
+		component: './StakingRecords',
+		name: 'StakingRecords',
 	}
 ];
 

@@ -1,0 +1,70 @@
+.announcement-container{
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  .card{
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    .top{
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      .left{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+        color: #fc6612;
+      }
+      .right{
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        gap: 10px;
+      }
+    }
+    .bottom{
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      h3{
+        font-size: 30px;
+        font-weight: bold;
+      }
+      p{
+        font-size: 22px;
+        line-height: 1.2em;
+        display: -webkit-box;
+        -webkit-line-clamp: 2;        /* 限制为2行 */
+        -webkit-box-orient: vertical;
+        overflow: hidden;
+        text-overflow: ellipsis;
+      }
+    }
+  }
+}
+.announcement-detail-container{
+
+  .card{
+    .top{
+      .left{
+        color: #000;
+      }
+    }
+    .bottom{
+      h3{
+        font-size: 30px;
+        line-height: 1.4em;
+      }
+    }
+    .content{
+      margin-top: 20px;
+      font-size: 26px;
+      line-height: 1.5em;
+      white-space: pre-wrap;
+      overflow-wrap: break-word;
+    }
+  }
+
+}

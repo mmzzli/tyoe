@@ -1,0 +1,35 @@
+.languages-container{
+  padding: 40px 20px;
+  font-size: 24px;
+  .title{
+    text-align: center;
+    font-size: 30px;
+    color: #fc6612;
+  }
+  .languages{
+    margin-top: 54px;
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
+    &-item{
+      display: flex;
+      background: #F5F5F5;
+      border-radius: 70px;
+      padding: 0 20px;
+      align-items: center;
+      height: 70px;
+      justify-content: space-between;
+      &.active{
+        background: #FFF2E8;
+      }
+      .left{
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        .flag{
+          font-size: 34px;
+        }
+      }
+    }
+  }
+}

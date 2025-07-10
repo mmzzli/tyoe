@@ -1,0 +1,53 @@
+@mixin flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin flex-between{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@mixin flex-column{
+  display: flex;
+  flex-direction: column;
+}
+.staking-records-list{
+  @include flex-column;
+  gap: 20px;
+  .list-item{
+    .top{
+      height: 90px;
+      @include flex-between;
+      .left{
+        display: flex;
+        gap: 10px;
+        .order-info{
+          @include flex-column;
+          gap: 10px;
+          .up{
+            font-weight: bold;
+          }
+          .down{
+            @include flex-center;
+            justify-content: flex-start;
+            font-size: 20px;
+            color: #787878;
+          }
+        }
+      }
+      .right{
+        color: #fc6612;
+      }
+    }
+    .ul-list{
+      margin-top: 20px;
+      @include flex-column;
+      gap: 30px;
+      .item{
+        @include flex-between
+      }
+    }
+
+  }
+}

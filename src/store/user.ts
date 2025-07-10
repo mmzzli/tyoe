@@ -1,7 +1,18 @@
 import {create} from "zustand";
 
+interface UserType{
+	"id": number,
+	"pid": number,
+	"account": string,
+	"invit": string,
+	"wp_grade": string,
+	"usdt_num": string,
+	"wp_num": string,
+	"panme": string,
+	toUsdtCost:string
+}
 interface UserStore{
-	user:any;
+	user:UserType|null;
 	setUser: (user:any)=>void;
 }
 

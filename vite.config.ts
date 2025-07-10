@@ -38,7 +38,7 @@ export default defineConfig(({mode})=>{
         scss:{
           additionalData: `
         @use "@/style/reset.scss";
-        @import "@/style/mixin.scss";
+        @use "@/style/mixin.scss";
         `
         }
       }

@@ -1,0 +1,69 @@
+@mixin flex-center{
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+@mixin flex-between{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+@mixin flex-column{
+  display: flex;
+  flex-direction: column;
+}
+.withdraw-info{
+  margin-bottom: 20px;
+  .card-title{
+    font-size: 30px;
+    color: #fc6612;
+  }
+  .form-item{
+    .label{
+      @include flex-between;
+      align-items: center;
+    }
+    .input{
+      box-sizing: border-box;
+      @include flex-center;
+      justify-content: flex-start;
+      padding-left: 30px;
+      input{
+        text-indent: 0;
+      }
+      .btn{
+        margin: 2px;
+        background: #fc6612;
+        height: 58px;
+        @include flex-center;
+        padding: 0 20px;
+        color: #fff;
+        border-radius: 58px;
+      }
+    }
+  }
+  .other-info{
+    margin: 40px 20px;
+    color: #787878;
+    @include flex-column;
+    gap: 20px;
+    .item{
+      @include flex-between;
+    }
+  }
+}
+.withdraw-list{
+  .top{
+    .title{
+      font-size: 30px;
+      color: #fc6612;
+    }
+  }
+  .record-list-item{
+    .tip{
+      display: flex;
+      justify-content: flex-end;
+      gap: 10px;
+    }
+  }
+}

@@ -6,7 +6,7 @@ import App from './App.tsx'
 
 const setRem = () => {
   const baseSize = 16; // 基础字体大小
-  const htmlFontSize = window.innerWidth / 375 * baseSize; // 假设设计稿宽度为 375px
+  const htmlFontSize = window.innerWidth / 750 * baseSize; // 假设设计稿宽度为 375px
   document.documentElement.style.fontSize = `${htmlFontSize}px`;
 };
 
