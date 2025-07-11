@@ -2,6 +2,7 @@ import './Layouts.scss'
 import React, { FC } from 'react';
 import { ArrowLeft } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
+import { useIntl } from 'react-intl';
 
 const Layouts:FC<{
   children:React.ReactNode|undefined|React.ReactNode[],
@@ -9,6 +10,9 @@ const Layouts:FC<{
   right?:React.ReactNode|null|React.ReactNode[]
 }> = ({children,title,right=null}) => {
   const navigation = useNavigate()
+  const intl = useIntl()
+  document.title = intl.formatMessage({id:'app.name'})
+
   return (
     <>
       <div className="layout-container">

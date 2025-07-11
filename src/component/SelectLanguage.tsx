@@ -12,7 +12,7 @@ interface LanguageOption {
   flag: string;
 }
 const languageOptions: LanguageOption[] = [
-  { code: 'zh', name: '简体中文', flag: '🇨🇳' },
+  // { code: 'zh', name: '简体中文', flag: '🇨🇳' },
   { code: 'zh-TW', name: '繁體中文', flag: '🇨🇳' },
   { code: 'en', name: 'English', flag: '🇺🇸' },
   { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },

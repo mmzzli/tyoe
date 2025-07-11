@@ -41,6 +41,6 @@ export const generateRandomString = (n:number) => {
 		result += characters.charAt(Math.floor(Math.random() * charactersLength))
 	}
 
-	return parseInt(t) + result
+	return parseInt(t)+'_' + result
 }
 

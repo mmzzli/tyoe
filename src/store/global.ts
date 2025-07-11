@@ -1,5 +1,5 @@
 import {create} from "zustand";
-type Language = 'zh' | 'zh-TW' | 'en' | 'vi';
+type Language = 'zh-TW' | 'en' | 'vi';
 
 interface GlobalStore{
 	language:Language
@@ -8,7 +8,7 @@ interface GlobalStore{
 
 const useLanguageStore = create<GlobalStore>((set)=>(
 	{
-		language:'zh',
+		language:'zh-TW',
 		setLanguage: (by) => set(() => {
 			return {language:by}
 		}),

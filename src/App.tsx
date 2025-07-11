@@ -3,7 +3,7 @@ import { RouterProvider } from 'react-router-dom';
 import router from './router';
 import { ConfigProvider } from 'react-vant';
 import '@rainbow-me/rainbowkit/styles.css';
-import { IntlProvider } from 'react-intl';
+import { IntlProvider, useIntl } from 'react-intl';
 import useLanguageStore from '@/store/global.ts';
 import { translations } from '@/lang/lang.ts';
 import { useEffect } from 'react';
@@ -31,7 +31,6 @@ function App() {
         localStorage.removeItem(TOKEN)
       }
     }
-
     fetchData()
   },[token])
   return (

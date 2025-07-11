@@ -47,6 +47,7 @@ const Home:React.FC = () =>{
 	const [visible, setVisible] = useState(false)
 	const [invite,setInvite]  = useState(searchParams.get('invite')||'')
 
+	document.title = intl.formatMessage({id:'app.name'})
 
 	const clearUser = ()=>{
 		localStorage.removeItem(TOKEN)
