@@ -9,7 +9,7 @@ import { translations } from '@/lang/lang.ts';
 import { useEffect } from 'react';
 import { getUserInfo } from '@/service/user.ts';
 import useUserStore from '@/store/user.ts';
-import { WagmiProvider } from 'wagmi';
+import { useAccount, WagmiProvider } from 'wagmi';
 import { wagmiConfig } from '@/wagmi.ts';
 import { QueryClient, QueryClientProvider } from '@tanstack/react-query';
 import { RainbowKitProvider } from '@rainbow-me/rainbowkit';
@@ -26,7 +26,7 @@ function App() {
     const fetchData =async () =>{
       try{
         const res = await getUserInfo()
-        userStore.setUser(res)
+          userStore.setUser(res)
       }catch  {
         localStorage.removeItem(TOKEN)
       }

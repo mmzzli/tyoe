@@ -13,7 +13,7 @@ import { useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { copyText, formatAddress, formatNumber, generateRandomString } from '@/utils/common.ts';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useSignMessage } from 'wagmi';
+import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
 import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
 import { TOKEN } from '@/utils/const.ts';
 import useUserStore from '@/store/user.ts';
@@ -41,13 +41,27 @@ const Home:React.FC = () =>{
 	const navigate = useNavigate();
 	const { address, isConnected } = useAccount()
 	const {signMessage,data, isSuccess} = useSignMessage()
-	const message = generateRandomString(32)
-	const token = localStorage.getItem(TOKEN)
+	const [message,setMessage] = useState(() => generateRandomString(32));
+	const [isSigned,setSigned] = useState(false)
 	const userStore = useUserStore()
 	const [visible, setVisible] = useState(false)
 	const [invite,setInvite]  = useState(searchParams.get('invite')||'')
-	
-	
+
+
+	const clearUser = ()=>{
+		localStorage.removeItem(TOKEN)
+		userStore.setUser(null)
+		setVisible(false)
+		setMessage(generateRandomString(32))
+	}
+	// 用户和地址不匹配
+	useEffect(() => {
+		if(userStore.user && address){
+			if(userStore.user?.account !== address){
+				clearUser();
+			}
+		}
+	}, [userStore.user,address]);
 
 
 	// 绑定上级
@@ -71,32 +85,49 @@ const Home:React.FC = () =>{
 		}
 	}
 
+	// 如果有用户信息不需要再登录
 	useEffect(() => {
-		if(token)return
-		if (isConnected) {
+		if(userStore.user?.id)return
+		if (isConnected && !isSigned) {
 			 signMessage({message})
+				setSigned(true)
 		}
-	}, [isConnected,token])
+	}, [isConnected,userStore.user,isSigned])
 
 	useEffect(() => {
+		if(!address){
+			localStorage.removeItem(TOKEN)
+			clearUser();
+		}
+	}, [address]);
+
+	// 根据签名的结果进行登陆注册 换取 token
+	useEffect(() => {
 		// 调用后端接口
+		// 登录成功后获取用户信息
 		const request = async () =>{
 			const res:any = await getLoginOrRegister({account:address!,hex:message,signed:data!})
 			localStorage.setItem(TOKEN, res)
+			try{
+				const res = await getUserInfo()
+				userStore.setUser(res)
+			}catch  {
+				localStorage.removeItem(TOKEN)
+			}
 		}
-		if(isSuccess){
+		if(isSuccess && data && address){
 			request()
 		}
-	}, [isSuccess,data]);
+	}, [isSuccess,data,address]);
 
 
 	useEffect(() => {
 		// 当前登录且没有绑定 PID
-		if(userStore.user?.id && !userStore.user.pid){
+		if(userStore.user?.id && !userStore.user.pid && address){
 			// 绑定 pid
 			setVisible(true)
 		}
-	}, [userStore.user]);
+	}, [userStore.user,address]);
 
 	useEffect(()=>{
 		const getBanner = async ()=>{
