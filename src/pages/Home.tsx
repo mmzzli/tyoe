@@ -348,9 +348,10 @@ const Home:React.FC = () =>{
 							{
 								(lpInfo?.levelinfo||[]).map((item, index) => {
 									const name = item[`name_${language}`]||item.name
+									const typeTitle = item.level_id === 0 ? intl.formatMessage({id:'home.lp.total.performance'}) :intl.formatMessage({id:'home.lp.district.performance'})
 									return (
 										<Swiper.Item key={item.id}>
-											<div className={`list-item list-item-${index % (lpInfo?.levelinfo?.length||1)+1}`}>
+											<div className={`list-item list-item-${index % 3+1}`}>
 												<div className="top-title">
 													{name}
 												</div>
@@ -369,7 +370,7 @@ const Home:React.FC = () =>{
 												</div>
 												<div className="item">
 													<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
-													<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
+													<div className="right">{typeTitle}</div>
 												</div>
 											</div>
 										</Swiper.Item>
