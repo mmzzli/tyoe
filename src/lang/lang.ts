@@ -149,7 +149,7 @@ export const translations:any = {
     'sidebar.personal.assets': '个人资产',
     'sidebar.function.menu': '功能菜单',
   },
-  'zh-TW': {
+  'tw': {
     // Common
     'app.name': '大叻火車',
     'common.copy': '複製',
@@ -299,7 +299,7 @@ export const translations:any = {
     'sidebar.personal.assets': '個人資產',
     'sidebar.function.menu': '功能選單',
   },
-  'en-us': {
+  'en': {
     // Common
     'app.name': 'Da Lat Train',
     'common.copy': 'Copy',
@@ -450,7 +450,7 @@ export const translations:any = {
     'sidebar.personal.assets': 'Personal Assets',
     'sidebar.function.menu': 'Function Menu',
   },
-  vi: {
+  vt: {
     // Common
     'app.name': 'Tàu Đà Lạt',
     'common.copy': 'Sao chép',

@@ -6,12 +6,14 @@ import { useEffect, useState } from 'react';
 import { AnnouncementInterface, getAnnouncementDetailById } from '@/service/announcement.ts';
 import { useLocation } from 'react-router-dom';
 import dayjs from 'dayjs';
+import useLanguageStore from '@/store/global.ts';
 
 const AnnouncementDetail = ()=>{
   const intl = useIntl()
   const location = useLocation();
   const query = new URLSearchParams(location.search)
   const id= query.get('id')
+  const {language} = useLanguageStore();
   const [announcement,setAnnouncement] = useState<AnnouncementInterface|null>(null)
 
   useEffect(()=>{
@@ -29,7 +31,7 @@ const AnnouncementDetail = ()=>{
       <div className="announcement-container announcement-detail-container ">
         <div className="card">
           <div className="bottom">
-            <h3>{announcement?.title}</h3>
+            <h3>{announcement?.[`title_${language}`] || announcement?.title}</h3>
           </div>
           <div className="top">
             <div className="left">
@@ -41,7 +43,7 @@ const AnnouncementDetail = ()=>{
               {announcement?.author}
             </div>
           </div>
-          <div className="content" dir="auto" dangerouslySetInnerHTML={{__html:announcement?.content||''}}>
+          <div className="content" dir="auto" dangerouslySetInnerHTML={{__html:announcement?.[`content_${language}`] || announcement?.content ||''}}>
 
           </div>
         </div>

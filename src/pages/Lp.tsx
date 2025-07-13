@@ -2,85 +2,110 @@ import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import './Lp.scss';
 import { ArrowRightLeft, Minus, Plus, TrendingUp } from 'lucide-react';
-import  { useState } from 'react';
-// import { useNavigate } from 'react-router-dom';
+import { useEffect, useState } from 'react';
+import { List, PullRefresh } from 'react-vant';
+import { getLpList, LpListItemInterface } from '@/service/home.ts';
+import dayjs from 'dayjs';
+import {BigNumber} from 'bignumber.js'
 
 const LP = ()=>{
   const intl = useIntl();
   // const navigator = useNavigate()
   const tabs = [
     {
-      value:'all',
+      value:-1,
       label:intl.formatMessage({id:'common.all'}),
     },
     {
-      value:'add',
+      value:1,
       label:intl.formatMessage({id:'lp.type.add'})
     },
     {
-      value:'remove',
+      value:2,
       label:intl.formatMessage({id:'lp.type.remove'})
     },
     {
-      value:'transfer',
+      value:3,
       label:intl.formatMessage({id:'lp.type.transfer'})
     }
   ]
   const iconMap:any = {
-    'add':{
+    '1':{
       color:'#4ade80',
       icon:<Plus size={16} color="#4ade80" />,
       label:intl.formatMessage({id:'lp.type.add'})
 
     },
-    'remove':{
+    '2':{
       color:"#FF2020",
       icon:<Minus size={16} color="#f87171" />,
       label:intl.formatMessage({id:'lp.type.remove'})
 
     },
-    'transfer':{
+    '3':{
       color:"#266DFF",
       icon:<ArrowRightLeft size={16} color="#fbbf24" />,
       label:intl.formatMessage({id:'lp.type.transfer'})
 
     }
   }
-  const lpRecords: any[] = [
-    {
-      id: '1',
-      type: 'add',
-      time: '2025-01-15 14:30',
-      lpAmount: 5000,
-    },
-    {
-      id: '2',
-      type: 'remove',
-      time: '2025-01-14 16:45',
-      lpAmount: 1500,
-    },
-    {
-      id: '3',
-      type: 'transfer',
-      time: '2025-01-13 09:30',
-      lpAmount: 2000,
-    },
-    {
-      id: '4',
-      type: 'add',
-      time: '2025-01-12 11:20',
-      lpAmount: 3500,
-    },
-  ];
 
+
+  const [myLp,setMyLp] = useState(0)
   const [type,setType] = useState(tabs[0].value)
+
+  const [list,setList] = useState<LpListItemInterface[]>([])
+  const [finished, setFinished] = useState<boolean>(false)
+  const [,setTotal] = useState(0)
+  const [page,setPage] = useState(1)
+  const [loading, setLoading] = useState(false)
+
+  // 请求数据
+  const fetchRecords = async (pageNum:number, isRefresh = false) => {
+    if (loading) return;
+    setLoading(true);
+    try {
+      const params:any = { page: pageNum,type }
+      const res = await getLpList(params)
+      setTotal(res.total)
+      setMyLp(res.mynumber)
+      const newList = isRefresh ? res.list : [...list, ...res.list]
+      setList(newList)
+      setFinished(newList.length >= res.total)
+      setPage(pageNum + 1)
+    } catch (e) {
+      console.log(e);
+    } finally {
+      setLoading(false);
+    }
+  }
+
+  // 下拉刷新
+  const onRefresh = async () => {
+    if (loading) return;
+    setFinished(false)
+    setPage(1)
+    setList([])
+    await fetchRecords(1, true)
+  }
+
+  // 分页加载
+  const onLoad = async () => {
+    if (loading || finished) return;
+    await fetchRecords(page)
+  }
+
+  // 切换tab时刷新
+  useEffect(() => {
+    onRefresh()
+  }, [type]);
 
   return <Layouts title={intl.formatMessage({ id: 'nav.lp' })}>
 
     <div className="lp-info card bd">
       <TrendingUp size={32} color="#FC6612" />
       <div className="title">{intl.formatMessage({id:'lp.total'})}</div>
-      <div className="value">15,000 LP</div>
+      <div className="value">{BigNumber(myLp).toFormat()} LP</div>
     </div>
 
     <div className="card lp-detail">
@@ -101,8 +126,10 @@ const LP = ()=>{
         }
       </div>
       <div className="record-list">
+        <PullRefresh onRefresh={onRefresh}>
+          <List finished={finished} onLoad={onLoad} className="record-list">
         {
-          lpRecords.map((item, ) => {
+          list.map((item, ) => {
             return <div className="record-list-item" key={item.id}>
               <div className="left">
                 <div className="coin">
@@ -110,15 +137,17 @@ const LP = ()=>{
                 </div>
                 <div className="box">
                   <div className="up">{iconMap[item.type].label}</div>
-                  <div className="time">2022-03-01 14:30</div>
+                  <div className="time">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
                 </div>
               </div>
               <div className="right">
-                <div style={{color: iconMap[item.type].color}} >125.5 LP</div>
+                <div style={{color: iconMap[item.type].color}} >{BigNumber(item.amount).toFormat()} LP</div>
               </div>
             </div>;
           })
         }
+          </List>
+        </PullRefresh>
 
       </div>
     </div>

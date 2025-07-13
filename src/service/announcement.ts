@@ -2,7 +2,13 @@ import service from "@/utils/request.ts";
 export interface AnnouncementInterface{
 	id:number,
 	title:string,
+	title_en:string,
+	title_tw:string,
+	title_vt:string
 	content:string,
+	content_en:string,
+	content_tw:string,
+	content_vt:string,
 	create_time:string,
 	author?:string
 }

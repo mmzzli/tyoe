@@ -8,7 +8,14 @@ import priceBg from '@/assets/images/price-bg.png';
 import logo from '@/assets/images/bigtrainlogo.png';
 import Menus from '@/component/Menus.tsx';
 import SelectLanguage from '@/component/SelectLanguage.tsx';
-import { getHomeBanner, getProblems, getTokenInfo, ProblemInterface } from '@/service/home.ts';
+import {
+	getHomeBanner,
+	getLpinfo,
+	getProblems,
+	getTokenInfo,
+	LpInfoInterface,
+	ProblemInterface,
+} from '@/service/home.ts';
 import { useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { copyText, formatAddress, formatNumber, generateRandomString } from '@/utils/common.ts';
@@ -19,6 +26,8 @@ import { TOKEN } from '@/utils/const.ts';
 import useUserStore from '@/store/user.ts';
 import { AnnouncementInterface, getLatestAnnouncement } from '@/service/announcement.ts';
 import Iconfont from '@/component/Iconfont.tsx';
+import useLanguageStore from '@/store/global.ts';
+import {BigNumber} from 'bignumber.js'
 
 interface BannerItem{
 	urlimg:string;
@@ -42,6 +51,7 @@ const Home:React.FC = () =>{
 	const [announcement,setAnnouncement] = useState<AnnouncementInterface|null>(null)
 	const [problems,setProblems] = useState<ProblemInterface[]|null>(null)
 	const [tokenInfo, setTokenInfo] =useState<TokenInfoType|null>(null)
+	const [lpInfo,setLpInfo] = useState<LpInfoInterface|null>(null)
 	const navigate = useNavigate();
 	const { address, isConnected } = useAccount()
 	const {signMessage,data, isSuccess} = useSignMessage()
@@ -50,6 +60,7 @@ const Home:React.FC = () =>{
 	const userStore = useUserStore()
 	const [visible, setVisible] = useState(false)
 	const [invite,setInvite]  = useState(searchParams.get('invite')||'')
+	const {language}  = useLanguageStore()
 
 	document.title = intl.formatMessage({id:'app.name'})
 
@@ -140,10 +151,12 @@ const Home:React.FC = () =>{
 			const tokenInfo:any = await getTokenInfo()
 			const announcement:any = await getLatestAnnouncement()
 			const problems = await getProblems()
+			const lpInfo = await getLpinfo()
 			setBanner(banner)
 			setTokenInfo(tokenInfo)
 			setAnnouncement(announcement)
 			setProblems(problems?.list)
+			setLpInfo(lpInfo)
 		}
 		getBanner()
 	},[])
@@ -193,7 +206,7 @@ const Home:React.FC = () =>{
 				</div>
 				<div className="main">
 					<div style={{ fontSize: '12px' }}>
-						{announcement?.[`title`]}
+						{announcement?.[`title_${language}`] || announcement?.[`title`]}
 					</div>
 
 				</div>
@@ -210,8 +223,7 @@ const Home:React.FC = () =>{
 						<img src={avator} alt="" />
 					</div>
 					<div className="right">
-						<div className="text">						{intl.formatMessage({id:'home.invite.link'})}
-						</div>
+						<div className="text">{intl.formatMessage({id:'home.invite.link'})}</div>
 						<div className="link">
 							<div className="link-text">{`${window.location.origin}?invite=${userStore.user?.invit}`}</div>
 							<Iconfont icon={'icon-fuzhi'} onClick={() => {
@@ -316,12 +328,13 @@ const Home:React.FC = () =>{
 							{intl.formatMessage({id:'home.lp.expected.dividend'})}
 						</div>
 						<div className="profit-value">
-							3，200 Da Lat
+							{BigNumber(lpInfo?.lpinfo?.nextnumber||0).toFormat()} Da Lat
 						</div>
 					</div>
 					<div className="profit-clean">
 						<div className="left">{intl.formatMessage({id:'home.lp.yesterday.dividend'})}：</div>
-						<div className="right">2，500 Da Lat</div>
+						<div className="right">
+							{BigNumber(lpInfo?.lpinfo?.yestodaynumber||0).toFormat()} Da Lat</div>
 					</div>
 				</div>
 				<div className="top">
@@ -332,82 +345,37 @@ const Home:React.FC = () =>{
 				<div className="main">
 					<div className="list">
 						<Swiper slideSize={70} trackOffset={15}>
-							<Swiper.Item>
-								<div className="list-item list-item-1">
-									<div className="top-title">
-										1號分紅池
-									</div>
-									<div className="item">
-										<div className="left">						{intl.formatMessage({id:'home.lp.direct.users'})}
-										</div>
-										<div className="right">3</div>
-									</div>
-									<div className="item">
-										<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
-										<div className="right">8%</div>
-									</div>
-									<div className="item">
-										<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
-										<div className="right">5.0K LP</div>
-									</div>
-									<div className="item">
-										<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
-										<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
-									</div>
-								</div>
-							</Swiper.Item>
-
-							<Swiper.Item>
-								<div className="list-item list-item-2">
-									<div className="top-title">
-										1號分紅池
-									</div>
-									<div className="item">
-										<div className="left">						{intl.formatMessage({id:'home.lp.direct.users'})}
-										</div>
-										<div className="right">3</div>
-									</div>
-									<div className="item">
-										<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
-										<div className="right">8%</div>
-									</div>
-									<div className="item">
-										<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
-										<div className="right">5.0K LP</div>
-									</div>
-									<div className="item">
-										<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
-										<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
-									</div>
-								</div>
-							</Swiper.Item>
-
-							<Swiper.Item>
-								<div className="list-item list-item-3">
-									<div className="top-title">
-										1號分紅池
-									</div>
-									<div className="item">
-										<div className="left">						{intl.formatMessage({id:'home.lp.direct.users'})}
-										</div>
-										<div className="right">3</div>
-									</div>
-									<div className="item">
-										<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
-										<div className="right">8%</div>
-									</div>
-									<div className="item">
-										<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
-										<div className="right">5.0K LP</div>
-									</div>
-									<div className="item">
-										<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
-										<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
-									</div>
-								</div>
-							</Swiper.Item>
-
-
+							{
+								(lpInfo?.levelinfo||[]).map((item, index) => {
+									const name = item[`name_${language}`]||item.name
+									return (
+										<Swiper.Item key={item.id}>
+											<div className={`list-item list-item-${index % (lpInfo?.levelinfo?.length||1)+1}`}>
+												<div className="top-title">
+													{name}
+												</div>
+												<div className="item">
+													<div className="left">{intl.formatMessage({id:'home.lp.direct.users'})}
+													</div>
+													<div className="right">{item.num}</div>
+												</div>
+												<div className="item">
+													<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
+													<div className="right">{item.ratio}%</div>
+												</div>
+												<div className="item">
+													<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
+													<div className="right">{formatNumber(item.service_charge)} LP</div>
+												</div>
+												<div className="item">
+													<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
+													<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
+												</div>
+											</div>
+										</Swiper.Item>
+									)
+								})
+							}
 						</Swiper>
 					</div>
 					<div className="mine-lp">
@@ -416,9 +384,11 @@ const Home:React.FC = () =>{
 						</div>
 						<div className="mine-lp-value">
 							<div className="text">
-								1,500LP
+								{BigNumber(lpInfo?.lpinfo.mynumber||0).toFormat()}LP
 							</div>
-							<Button type="danger" round={true} className="primary-button">{intl.formatMessage({id:'home.lp.add.liquidity'})}</Button>
+							<Button type="danger" round={true} className="primary-button" onClick={()=>{
+								window.open('https://pancakeswap.finance/swap?utm_source=tokenpocket')
+							}}>{intl.formatMessage({id:'home.lp.add.liquidity'})}</Button>
 						</div>
 					</div>
 				</div>
@@ -440,8 +410,10 @@ const Home:React.FC = () =>{
 					<Collapse>
 						{
 							problems?.map((item)=>{
-								return <CollapseItem title={item.title} key={item.id} name={item.id}>
-									{item.content}
+								const title = item?.[`title_${language}`] || item?.[`title`]
+								const content = item?.[`content_${language}`] || item?.[`content`]
+								return <CollapseItem title={title} key={item.id} name={item.id}>
+									{content}
 								</CollapseItem>
 							})
 						}

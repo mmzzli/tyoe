@@ -1,11 +1,11 @@
 import {create} from "zustand";
 import { LANGUAGE } from '@/utils/const.ts';
 export enum language {
-	'zh-TW' = 'zh-TW',
-	'en' = 'en-us',
-	'vi' = 'vi'
+	'tw' = 'tw',
+	'en' = 'en',
+	'vt' = 'vt'
 }
-type LanguageType = 'zh-TW' | 'en-us' | 'vi';
+type LanguageType = 'tw' | 'en' | 'vt';
 
 interface GlobalStore{
 	language:LanguageType

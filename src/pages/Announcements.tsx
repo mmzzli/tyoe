@@ -6,10 +6,11 @@ import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { AnnouncementInterface, getAnnouncementList } from '@/service/announcement.ts';
 import dayjs from 'dayjs';
+import useLanguageStore from '@/store/global.ts';
 const Announcements = ()=>{
   const intl = useIntl()
   const navigate = useNavigate()
-
+  const {language} = useLanguageStore()
   const [announcements,setAnnouncements] = useState<AnnouncementInterface[]>([])
 
 
@@ -25,6 +26,8 @@ const Announcements = ()=>{
     <div className="announcement-container">
       {
         announcements.map((item)=>{
+          const title = item?.[`title_${language}`] || item.title
+          const content = item?.[`content_${language}`] || item.content
           return <>
             <div className="card " key={item.id} onClick={() => {
               navigate(`/announcement-detail?id=${item.id}`)
@@ -37,8 +40,8 @@ const Announcements = ()=>{
                 <ChevronRight size={20} color="#151515" />
               </div>
               <div className="bottom">
-                <h3>{item.title}</h3>
-                <p>{item.content}</p>
+                <h3>{title}</h3>
+                <p>{content}</p>
               </div>
             </div>
           </>

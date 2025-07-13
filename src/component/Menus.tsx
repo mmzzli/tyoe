@@ -13,8 +13,6 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
   const intl = useIntl();
   const navigate = useNavigate()
   const userStore = useUserStore()
-
-
   const menuItems = [
     {
       icon: <Iconfont icon={'icon-tuandui'}/>,
@@ -24,13 +22,11 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
     {
       icon: <Iconfont icon={'icon-jiedian'}/>,
       title: intl.formatMessage({id:'nav.node'}),
-
       onPress: () => navigate('/node'),
     },
     {
       icon: <Iconfont icon={'icon-rise'}/>,
       title: intl.formatMessage({id:'nav.lp'}),
-
       onPress: () => navigate('/lp'),
     },
     {
@@ -150,7 +146,10 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
           {
             menuItems.map((item, index) => {
               return (
-                <div className="menu-list-item" key={index} onClick={item.onPress}>
+                <div className="menu-list-item" key={index} onClick={()=>{
+                  close()
+                  item.onPress()
+                }}>
                   <div className="left">
                     {item.icon}
                     <span>{item.title}</span>
@@ -160,12 +159,8 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
               )
             })
           }
-
-
         </div>
-
       </div>
-
     </div>
   )
 }

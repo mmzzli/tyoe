@@ -25,6 +25,11 @@
       font-size: 30px;
       color: #fc6612;
       font-weight: bold;
+      gap: 10px;
+      .icon{
+        width: 30px;
+        height: 30px;
+      }
     }
     .info-content{
       gap: 40px;
@@ -52,6 +57,11 @@
         color: #787878;
         gap: 10px;
         @include flex-center;
+        align-items: center;
+        .icon{
+          width: 26px;
+          height: 26px;
+        }
       }
     }
     .node-info-details{
@@ -67,6 +77,20 @@
       }
       &-value{
         @include flex-between;
+      }
+    }
+  }
+}
+.node-records{
+  .record-list{
+    .record-list-item{
+      .left{
+        .coin{
+          .iconfont{
+            color: #fff;
+            font-size: 35px;
+          }
+        }
       }
     }
   }

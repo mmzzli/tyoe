@@ -11,9 +11,9 @@ interface LanguageOption {
   flag: string;
 }
 const languageOptions: LanguageOption[] = [
-  { code: language['zh-TW'], name: '繁體中文', flag: '🇨🇳' },
+  { code: language.tw, name: '繁體中文', flag: '🇨🇳' },
   { code: language.en, name: 'English', flag: '🇺🇸' },
-  { code: language.vi, name: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: language.vt, name: 'Tiếng Việt', flag: '🇻🇳' },
 ];
 
 const SelectLanguage = () =>{
