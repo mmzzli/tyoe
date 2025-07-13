@@ -40,7 +40,7 @@ const Withdraw = ()=>{
       setTotal(total)
       const newList = isRefresh ? res.list : [...list, ...res.list]
       setList(newList)
-      setFinished(newList.length >= res.total)
+      setFinished(newList.length >= total)
       setPage(pageNum + 1)
     } catch (e) {
       console.log(e);
