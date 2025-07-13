@@ -79,6 +79,9 @@
             display: flex;
             justify-content: space-between;
             align-items: center;
+            .icon{
+              fill: #fc6612;
+            }
           }
         }
       }
@@ -128,7 +131,7 @@
       justify-content: space-between;
       align-items: center;
       border-bottom: 1px solid #eee;
-      height: 80px;
+      height: 90px;
       &:last-of-type{
         border: none;
       }
@@ -137,6 +140,11 @@
         display: flex;
         align-items: center;
         gap: 10px;
+        font-size: 26px;
+        .icon{
+          width:30px;
+          height: 30px;
+        }
       }
     }
   }

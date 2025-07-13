@@ -14,6 +14,7 @@ export const translations:any = {
     'common.ongoing': '进行中',
     'common.pending': '待审核',
     'common.processing': '进行中',
+    'common.failed': '失败',
     'common.address': '地址',
     'common.superior': '上级',
     'common.invite.code': '邀请码',
@@ -163,6 +164,7 @@ export const translations:any = {
     'common.ongoing': '進行中',
     'common.pending': '待審核',
     'common.processing': '進行中',
+    'common.failed': '失敗',
     'common.address': '地址',
     'common.superior': '上級',
     'common.invite.code': '邀請碼',
@@ -297,7 +299,7 @@ export const translations:any = {
     'sidebar.personal.assets': '個人資產',
     'sidebar.function.menu': '功能選單',
   },
-  en: {
+  'en-us': {
     // Common
     'app.name': 'Da Lat Train',
     'common.copy': 'Copy',
@@ -312,6 +314,8 @@ export const translations:any = {
     'common.ongoing': 'Ongoing',
     'common.pending': 'Pending',
     'common.processing': 'Processing',
+    'common.failed': 'Failed',
+
     'common.address': 'Address',
     'common.superior': 'Superior',
     'common.invite.code': 'Invite Code',
@@ -461,6 +465,7 @@ export const translations:any = {
     'common.ongoing': 'Đang tiến hành',
     'common.pending': 'Chờ duyệt',
     'common.processing': 'Đang xử lý',
+    'common.failed': 'Thất bại',
     'common.address': 'Địa chỉ',
     'common.superior': 'Cấp trên',
     'common.invite.code': 'Mã mời',

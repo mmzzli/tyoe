@@ -1,12 +1,13 @@
 import avator from '@/assets/images/bigtrainlogo.png';
 import { Image } from 'react-vant';
-import { ChevronRight, Coins, Copy, Server, TrendingUp, Users, X } from 'lucide-react';
+import { ChevronRight } from 'lucide-react';
 import * as React from 'react';
 import './Menu.scss';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '@/store/user.ts';
 import { copyText, formatAddress, formatNumber } from '@/utils/common.ts';
+import Iconfont from '@/component/Iconfont.tsx';
 
 const Menus:React.FC<{close:()=>void}> = ({close})=>{
   const intl = useIntl();
@@ -16,24 +17,24 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
 
   const menuItems = [
     {
-      icon: Users,
+      icon: <Iconfont icon={'icon-tuandui'}/>,
       title: intl.formatMessage({id:'nav.team'}),
       onPress: () => navigate('/team'),
     },
     {
-      icon: Server,
+      icon: <Iconfont icon={'icon-jiedian'}/>,
       title: intl.formatMessage({id:'nav.node'}),
 
       onPress: () => navigate('/node'),
     },
     {
-      icon: TrendingUp,
+      icon: <Iconfont icon={'icon-rise'}/>,
       title: intl.formatMessage({id:'nav.lp'}),
 
       onPress: () => navigate('/lp'),
     },
     {
-      icon: Coins,
+      icon: <Iconfont icon={'icon-jijinzhiya'}/>,
       title: intl.formatMessage({id:'nav.staking'}),
       onPress: () => navigate('/staking'),
     },
@@ -46,7 +47,7 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
           <span>{intl.formatMessage({id:'app.name'})}</span>
         </div>
         <div className="right">
-          <X size={24} color="#797979" onClick={close} />
+          <Iconfont icon={'icon-close'} onClick={close}></Iconfont>
         </div>
       </div>
       <div className="menu-main scroll-container">
@@ -64,10 +65,9 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
                   {formatAddress(userStore.user?.account)}
                 </div>
                 <div className="right">
-                  <Copy size={18} color="#fc6612" onClick={() => {
+                  <Iconfont icon={'icon-fuzhi'} onClick={() => {
                     copyText(userStore.user?.account)
-
-                  }} />
+                  }}></Iconfont>
                 </div>
               </div>
             </div>
@@ -83,9 +83,10 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
 
                 </div>
                 <div className="right">
-                  <Copy size={18} color="#fc6612" onClick={() => {
+
+                  <Iconfont icon={'icon-fuzhi'} onClick={() => {
                     copyText(userStore.user?.panme)
-                  }} />
+                  }}></Iconfont>
                 </div>
               </div>
             </div>
@@ -110,23 +111,23 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
                   {userStore.user?.invit}
                 </div>
                 <div className="right">
-                  <Copy size={18} color="#fc6612" onClick={() => {
+                  <Iconfont icon={'icon-fuzhi'} onClick={() => {
                     copyText(`${window.location.origin}?invite=${userStore.user?.invit}`)
-                  }} />
+                  }}></Iconfont>
                 </div>
               </div>
             </div>
           </div>
         </div>
 
-        <div className="user-asset">
+        <div className="user-asset" onClick={()=>{navigate('/assets')}}>
           <div className="user-asset-title">
             {intl.formatMessage({id:'sidebar.personal.assets'})}
 
           </div>
           <div className="user-asset-value">
             <div className="text">
-              $ {userStore.user?.toUsdtCost}
+              $ {formatNumber(userStore?.user?.toUsdtCost||0)}
             </div>
             <ChevronRight size={20} color="#fc6612" />
           </div>
@@ -151,7 +152,7 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
               return (
                 <div className="menu-list-item" key={index} onClick={item.onPress}>
                   <div className="left">
-                    <item.icon size={20} color={'#fc6612'} />
+                    {item.icon}
                     <span>{item.title}</span>
                   </div>
                   <ChevronRight size={20} color="#fc6612" />

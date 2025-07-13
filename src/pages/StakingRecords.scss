@@ -22,6 +22,10 @@
       .left{
         display: flex;
         gap: 10px;
+        .icon{
+          width: 30px;
+          height: 30px;
+        }
         .order-info{
           @include flex-column;
           gap: 10px;
@@ -33,6 +37,11 @@
             justify-content: flex-start;
             font-size: 20px;
             color: #787878;
+            gap: 10px;
+            .icon{
+              width: 24px;
+              height: 24px;
+            }
           }
         }
       }

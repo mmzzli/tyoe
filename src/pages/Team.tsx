@@ -1,15 +1,26 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import { formatAddress, formatNumber } from '@/utils/common.ts';
-import { Award, CheckCircle, Search, TrendingUp, Users, XCircle } from 'lucide-react';
-import './Team.scss'
+import { Search, XCircle } from 'lucide-react';
+import './Team.scss';
 import { useEffect, useState } from 'react';
 import { getMyTeams } from '@/service/team.ts';
+import Iconfont from '@/component/Iconfont.tsx';
+import dayjs from 'dayjs';
 
 const Assets = ()=>{
   const intl = useIntl();
   const [search,setSearch] = useState('')
   const [team,setTeam] = useState<any>({})
+
+  const [filterList,setFilterList] = useState([])
+
+  useEffect(() => {
+    if(!search.trim())return setFilterList(team.firstList||[])
+    setFilterList(team.firstList.filter((item:any)=>{
+      return item?.id?.toString().includes(search) || item?.account?.includes(search)
+    }))
+  }, [team.firstList,search]);
 
   useEffect(()=>{
     const fetchData = async ()=>{
@@ -19,7 +30,6 @@ const Assets = ()=>{
     }
     fetchData()
   },[])
-  const isEffective = true
   return <Layouts title={intl.formatMessage({id:'nav.team'})}>
     <div className="team-container">
       <div className="card team-info">
@@ -34,7 +44,7 @@ const Assets = ()=>{
             <div className="uid">UID {team?.userInfo?.id}</div>
             <div className="status">
               {team?.userInfo?.grade ? (
-                <CheckCircle size={16} color="#3ED474" />
+                <Iconfont icon={'icon-zhaungtai1'}/>
               ) : (
                 <XCircle size={20} color="#f87171" />
               )}
@@ -48,7 +58,8 @@ const Assets = ()=>{
         </div>
         <div className="middle">
           <div className="item" style={{ backgroundColor: '#FFEFE7' }}>
-            <TrendingUp size={20} color="#FD6816" />
+            <Iconfont icon={'icon-tuanduiyeji'}/>
+
             <div className="label">
               {intl.formatMessage({ id: 'team.performance' })}
             </div>
@@ -58,7 +69,8 @@ const Assets = ()=>{
           </div>
 
           <div className="item" style={{ backgroundColor: '#E7F8FB' }}>
-            <TrendingUp size={20} color="#22B9D6" />
+            <Iconfont icon={'icon-tuanduiyeji'}/>
+
             <div className="label">
               {intl.formatMessage({ id: 'team.district.performance' })}
             </div>
@@ -68,7 +80,7 @@ const Assets = ()=>{
           </div>
 
           <div className="item" style={{ backgroundColor: '#E9F0FF' }}>
-            <Users size={20} color="#256DFF" />
+            <Iconfont icon={'icon-zhituiyouxiao'}/>
 
             <div className="label">
               {intl.formatMessage({ id: 'team.direct.users' })}
@@ -79,7 +91,8 @@ const Assets = ()=>{
           </div>
 
           <div className="item" style={{ backgroundColor: '#FDFCFF' }}>
-            <Users size={20} color="#8B5CF6" />
+            <Iconfont icon={'icon-tuanduiyonghu'}/>
+
 
             <div className="label">
               {intl.formatMessage({ id: 'team.team.users' })}
@@ -92,7 +105,8 @@ const Assets = ()=>{
         <div className="bottom">
           <div className="item">
             <div className="left">
-              <Award size={20} color="#F5A400" />
+              <Iconfont icon={'icon-fenhongbi'}/>
+
               <div className="label">{intl.formatMessage({ id: 'team.dividend.pool' })}</div>
             </div>
             <div className="value">
@@ -102,7 +116,7 @@ const Assets = ()=>{
 
           <div className="item">
             <div className="left">
-              <Award size={20} color="#F5A400" />
+              <Iconfont icon={'icon-fenhongbi'}/>
               <div className="label">{intl.formatMessage({ id: 'team.dividend.ratio' })}</div>
             </div>
             <div className="value">
@@ -115,7 +129,7 @@ const Assets = ()=>{
 
       <div className="card team-invite">
         <div className="title">
-          {intl.formatMessage({ id: 'team.direct.list' })} ({team?.userInfo?.firstLen})
+          {intl.formatMessage({ id: 'team.direct.list' })} ({team?.firstLen})
         </div>
 
         <div className="search-box">
@@ -125,7 +139,7 @@ const Assets = ()=>{
 
         <div className="list">
           {
-            (team?.firstList||[]).map((item:any)=> {
+            (filterList||[]).map((item:any)=> {
               return <div className="list-item" key={item.id}>
                 <div className="top">
                   <div className="left">
@@ -137,14 +151,16 @@ const Assets = ()=>{
                         formatAddress(item?.account)
                       }</div>
                       <div>{item?.grade ? (
-                        <CheckCircle size={16} color="#4ade80" />
+                        <Iconfont icon={'icon-zhaungtai1'}/>
                       ) : (
+                        <>
                         <XCircle size={16} color="#f87171" />
+                        </>
                       )}</div>
                     </div>
                     <div className="uid">UID {item.id}</div>
                     <div className="time">
-                      {intl.formatMessage({ id: 'team.registration.time' })}: {item.create_time}
+                      {intl.formatMessage({ id: 'team.registration.time' })}: {dayjs(item.create_time).format('YYYY.MM.DD')}
                     </div>
                   </div>
                 </div>

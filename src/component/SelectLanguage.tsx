@@ -1,21 +1,19 @@
-import { Check, Globe } from 'lucide-react';
+import { Check } from 'lucide-react';
 import { ActionSheet } from 'react-vant';
-import  { useState } from 'react';
+import { useState } from 'react';
 import './SelectLanguage.scss';
-import useLanguageStore from '@/store/global.ts';
-
-type Language = 'zh' | 'zh-TW' | 'en' | 'vi';
+import useLanguageStore, { language } from '@/store/global.ts';
+import Iconfont from '@/component/Iconfont.tsx';
 
 interface LanguageOption {
-  code: Language;
+  code: language;
   name: string;
   flag: string;
 }
 const languageOptions: LanguageOption[] = [
-  // { code: 'zh', name: '简体中文', flag: '🇨🇳' },
-  { code: 'zh-TW', name: '繁體中文', flag: '🇨🇳' },
-  { code: 'en', name: 'English', flag: '🇺🇸' },
-  { code: 'vi', name: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: language['zh-TW'], name: '繁體中文', flag: '🇨🇳' },
+  { code: language.en, name: 'English', flag: '🇺🇸' },
+  { code: language.vi, name: 'Tiếng Việt', flag: '🇻🇳' },
 ];
 
 const SelectLanguage = () =>{
@@ -23,7 +21,7 @@ const SelectLanguage = () =>{
   const store = useLanguageStore()
   return (
     <>
-      <Globe size={20} onClick={()=>setVisible(true)} />
+      <Iconfont onClick={()=>setVisible(true)} icon={'icon-duoyuyan'}></Iconfont>
       <ActionSheet visible={visible} onCancel={()=>{setVisible(false)}}>
         <div className="languages-container">
           <div className="title">选择语言 / Select Language</div>

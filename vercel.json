@@ -2,7 +2,7 @@
   "rewrites": [
     {
       "source": "/api/(.*)",
-      "destination": "http://api.dalatbsc.org/$1"
+      "destination": "https://api.dalatbsc.org/$1"
     }
   ]
 }

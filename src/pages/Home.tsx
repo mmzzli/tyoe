@@ -1,22 +1,24 @@
 import * as React from 'react';
 import { useEffect, useState } from 'react';
 import './home.scss';
-import { ChevronRight, Copy, ExternalLink, Menu } from 'lucide-react';
+import { ChevronRight, ExternalLink } from 'lucide-react';
 import avator from '@/assets/images/avator-img.png';
 import { Button, Collapse, CollapseItem, Dialog, Popup, PopupPosition, Swiper, Toast } from 'react-vant';
 import priceBg from '@/assets/images/price-bg.png';
 import logo from '@/assets/images/bigtrainlogo.png';
 import Menus from '@/component/Menus.tsx';
 import SelectLanguage from '@/component/SelectLanguage.tsx';
-import { getHomeBanner, getTokenInfo } from '@/service/home.ts';
+import { getHomeBanner, getProblems, getTokenInfo, ProblemInterface } from '@/service/home.ts';
 import { useIntl } from 'react-intl';
 import { useLocation, useNavigate } from 'react-router-dom';
 import { copyText, formatAddress, formatNumber, generateRandomString } from '@/utils/common.ts';
 import { ConnectButton } from '@rainbow-me/rainbowkit';
-import { useAccount, useDisconnect, useSignMessage } from 'wagmi';
+import { useAccount, useSignMessage } from 'wagmi';
 import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
 import { TOKEN } from '@/utils/const.ts';
 import useUserStore from '@/store/user.ts';
+import { AnnouncementInterface, getLatestAnnouncement } from '@/service/announcement.ts';
+import Iconfont from '@/component/Iconfont.tsx';
 
 interface BannerItem{
 	urlimg:string;
@@ -37,6 +39,8 @@ const Home:React.FC = () =>{
 	const [menuVisable, setMenuVisable] = useState<PopupPosition>('')
 	const intl = useIntl()
 	const [banner, setBanner] = useState<BannerItem[]>([])
+	const [announcement,setAnnouncement] = useState<AnnouncementInterface|null>(null)
+	const [problems,setProblems] = useState<ProblemInterface[]|null>(null)
 	const [tokenInfo, setTokenInfo] =useState<TokenInfoType|null>(null)
 	const navigate = useNavigate();
 	const { address, isConnected } = useAccount()
@@ -134,16 +138,22 @@ const Home:React.FC = () =>{
 		const getBanner = async ()=>{
 			const banner = await getHomeBanner()
 			const tokenInfo:any = await getTokenInfo()
+			const announcement:any = await getLatestAnnouncement()
+			const problems = await getProblems()
 			setBanner(banner)
 			setTokenInfo(tokenInfo)
+			setAnnouncement(announcement)
+			setProblems(problems?.list)
 		}
 		getBanner()
 	},[])
+
+
 	return(
 		<div className="container">
 			<div className="navbar">
 				<div className="left">
-					<Menu size={20} onClick={() => setMenuVisable('left')} />
+					<Iconfont onClick={() => setMenuVisable('left')} icon={'icon-ego-menu'}></Iconfont>
 				</div>
 				<div className="middle">
 					{
@@ -182,21 +192,17 @@ const Home:React.FC = () =>{
 					</div>
 				</div>
 				<div className="main">
-					<Swiper autoplay={3000} vertical style={{height:'30px'}}>
-						<Swiper.Item className="swiper-item">
-							<div style={{fontSize:'12px'}} >Platform upgrade maintenance notice, estimated maintenance time 2 hours</div>
-						</Swiper.Item>
-						<Swiper.Item className="swiper-item">
-							<div style={{fontSize:'12px'}}>Platform upgrade maintenance notice, estimated maintenance time 2 hours</div>
-						</Swiper.Item>
-					</Swiper>
+					<div style={{ fontSize: '12px' }}>
+						{announcement?.[`title`]}
+					</div>
+
 				</div>
 			</div>
 
 			<div className="card m20 invite">
 				<div className="top">
 					<div className="title">
-						邀请好友
+						{intl.formatMessage({id:'home.invite.title'})}
 					</div>
 				</div>
 				<div className="main">
@@ -204,12 +210,13 @@ const Home:React.FC = () =>{
 						<img src={avator} alt="" />
 					</div>
 					<div className="right">
-						<div className="text">個人邀請鏈接</div>
+						<div className="text">						{intl.formatMessage({id:'home.invite.link'})}
+						</div>
 						<div className="link">
 							<div className="link-text">{`${window.location.origin}?invite=${userStore.user?.invit}`}</div>
-							<Copy size={18} color="#fff" onClick={() => {
+							<Iconfont icon={'icon-fuzhi'} onClick={() => {
 								copyText(`${window.location.origin}?invite=${userStore.user?.invit}`)
-							}} />
+							}}></Iconfont>
 						</div>
 					</div>
 				</div>
@@ -235,9 +242,9 @@ const Home:React.FC = () =>{
 							</div>
 							<div className="right">
 								<span>{formatAddress(tokenInfo?.btdtoken)}</span>
-								<Copy size={18} color="#000" onClick={() => {
+								<Iconfont icon={'icon-fuzhi'} onClick={() => {
 									copyText(tokenInfo?.btdtoken || '')
-								}} />
+								}}></Iconfont>
 							</div>
 						</div>
 						<div className="list">
@@ -300,26 +307,26 @@ const Home:React.FC = () =>{
 			<div className="card mv20 lp-info">
 				<div className="top">
 					<div className="title">
-						Lp信息公示
+						{intl.formatMessage({id:'home.lp.title'})}
 					</div>
 				</div>
 				<div className="main">
 					<div className="profit">
 						<div className="profit-title">
-							預計下週分紅
+							{intl.formatMessage({id:'home.lp.expected.dividend'})}
 						</div>
 						<div className="profit-value">
 							3，200 Da Lat
 						</div>
 					</div>
 					<div className="profit-clean">
-						<div className="left">昨日靜態分紅：</div>
+						<div className="left">{intl.formatMessage({id:'home.lp.yesterday.dividend'})}：</div>
 						<div className="right">2，500 Da Lat</div>
 					</div>
 				</div>
 				<div className="top">
 					<div className="title">
-						分红池
+						{intl.formatMessage({id:'home.lp.pool'})}
 					</div>
 				</div>
 				<div className="main">
@@ -331,20 +338,21 @@ const Home:React.FC = () =>{
 										1號分紅池
 									</div>
 									<div className="item">
-										<div className="left">直推用户</div>
+										<div className="left">						{intl.formatMessage({id:'home.lp.direct.users'})}
+										</div>
 										<div className="right">3</div>
 									</div>
 									<div className="item">
-										<div className="left">分红占比</div>
+										<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
 										<div className="right">8%</div>
 									</div>
 									<div className="item">
-										<div className="left"> 业绩要求</div>
+										<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
 										<div className="right">5.0K LP</div>
 									</div>
 									<div className="item">
-										<div className="left"> 业绩类型</div>
-										<div className="right">小区业绩</div>
+										<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
+										<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
 									</div>
 								</div>
 							</Swiper.Item>
@@ -352,60 +360,65 @@ const Home:React.FC = () =>{
 							<Swiper.Item>
 								<div className="list-item list-item-2">
 									<div className="top-title">
-										2號分紅池
+										1號分紅池
 									</div>
 									<div className="item">
-										<div className="left">直推用户</div>
+										<div className="left">						{intl.formatMessage({id:'home.lp.direct.users'})}
+										</div>
 										<div className="right">3</div>
 									</div>
 									<div className="item">
-										<div className="left">分红占比</div>
+										<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
 										<div className="right">8%</div>
 									</div>
 									<div className="item">
-										<div className="left"> 业绩要求</div>
+										<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
 										<div className="right">5.0K LP</div>
 									</div>
 									<div className="item">
-										<div className="left"> 业绩类型</div>
-										<div className="right">小区业绩</div>
+										<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
+										<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
 									</div>
 								</div>
 							</Swiper.Item>
+
 							<Swiper.Item>
 								<div className="list-item list-item-3">
 									<div className="top-title">
-										3號分紅池
+										1號分紅池
 									</div>
 									<div className="item">
-										<div className="left">直推用户</div>
+										<div className="left">						{intl.formatMessage({id:'home.lp.direct.users'})}
+										</div>
 										<div className="right">3</div>
 									</div>
 									<div className="item">
-										<div className="left">分红占比</div>
+										<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
 										<div className="right">8%</div>
 									</div>
 									<div className="item">
-										<div className="left"> 业绩要求</div>
+										<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
 										<div className="right">5.0K LP</div>
 									</div>
 									<div className="item">
-										<div className="left"> 业绩类型</div>
-										<div className="right">小区业绩</div>
+										<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
+										<div className="right">{intl.formatMessage({id:'home.lp.district.performance'})}</div>
 									</div>
 								</div>
 							</Swiper.Item>
+
+
 						</Swiper>
 					</div>
 					<div className="mine-lp">
 						<div className="mine-lp-title">
-							<div className="title">我的LP</div>
+							<div className="title">{intl.formatMessage({id:'home.lp.my'})}</div>
 						</div>
 						<div className="mine-lp-value">
 							<div className="text">
 								1,500LP
 							</div>
-							<Button type="danger" round={true} className="primary-button">前往 PancakeSwap添加流动性</Button>
+							<Button type="danger" round={true} className="primary-button">{intl.formatMessage({id:'home.lp.add.liquidity'})}</Button>
 						</div>
 					</div>
 				</div>
@@ -415,30 +428,25 @@ const Home:React.FC = () =>{
 			<div className="card mv20 problem">
 				<div className="top">
 					<div className="title">
-						常见问题
+						{intl.formatMessage({id:'home.faq.title'})}
 					</div>
 					<div className="desc">
-						您有問題嗎？我們有答案！探索我們的常見問題解答，了解 大叻火車項目的一切
+						{intl.formatMessage({id:'home.faq.subtitle'})}
+
 					</div>
 				</div>
 
 				<div className="main">
-					<Collapse initExpanded={['1']}>
-						<CollapseItem title="什麼是大叻火車項目？" name="1">
-							大叻火車是一個基於區塊鏈技術的去中心化金融項目，通過 創新的代幣經濟模型為用戶提供多元化的收益機會。
-						</CollapseItem>
-						<CollapseItem title="什麼是大叻火車項目？" name="2">
-							大叻火車是一個基於區塊鏈技術的去中心化金融項目，通過 創新的代幣經濟模型為用戶提供多元化的收益機會。
-						</CollapseItem>
-						<CollapseItem title="什麼是大叻火車項目？" name="3">
-							大叻火車是一個基於區塊鏈技術的去中心化金融項目，通過 創新的代幣經濟模型為用戶提供多元化的收益機會。
-						</CollapseItem>
-						<CollapseItem title="什麼是大叻火車項目？" name="4">
-							大叻火車是一個基於區塊鏈技術的去中心化金融項目，通過 創新的代幣經濟模型為用戶提供多元化的收益機會。
-						</CollapseItem>
-						<CollapseItem title="什麼是大叻火車項目？" name="5">
-							大叻火車是一個基於區塊鏈技術的去中心化金融項目，通過 創新的代幣經濟模型為用戶提供多元化的收益機會。
-						</CollapseItem>
+					<Collapse>
+						{
+							problems?.map((item)=>{
+								return <CollapseItem title={item.title} key={item.id} name={item.id}>
+									{item.content}
+								</CollapseItem>
+							})
+						}
+
+
 					</Collapse>
 
 
@@ -461,22 +469,23 @@ const Home:React.FC = () =>{
 					</div>
 				</div>
 				<div className="info">
-					加密貨幣的價值可能會波動，請謹慎投資和理性對看待
+					{intl.formatMessage({id:'home.footer.disclaimer'})}
 				</div>
 
 				<div className="foot-logo">
 					<img src={logo} alt="" />
-					<span>大叻火車</span>
+					<span>{intl.formatMessage({id:'app.name'})}</span>
 				</div>
 
 				<div className="copy">
-					@ Da Lat 2025.保留所有權利
+					{intl.formatMessage({id:'home.footer.copyright'})}
+
 				</div>
 
 				<div className="secret">
-					<div>隐私政策</div>
+					<div>{intl.formatMessage({id:'home.footer.privacy'})}</div>
 					<span>•</span>
-					<div>使用条款</div>
+					<div>{intl.formatMessage({id:'home.footer.terms'})}</div>
 				</div>
 			</div>
 			<Popup

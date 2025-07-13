@@ -1,5 +1,5 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
-import { TOKEN } from '@/utils/const.ts';
+import { LANGUAGE, TOKEN } from '@/utils/const.ts';
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_PROXY_URL,
@@ -10,7 +10,7 @@ const service: AxiosInstance = axios.create({
 service.interceptors.request.use(
 	(config:any) => {
 		config.headers.token = localStorage.getItem(TOKEN);
-		console.log(config);
+		config.headers.lang = localStorage.getItem(LANGUAGE||'en')
 		return config
 	},
 	(error) => {

@@ -1,52 +1,136 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import './Staking.scss';
-import { formatNumber } from '@/utils/common.ts';
-import { Coins, DollarSign, FileText, TrendingUp } from 'lucide-react';
+import { formatNumber, generateRandomString } from '@/utils/common.ts';
 import { useNavigate } from 'react-router-dom';
-
-
-
+import { useEffect, useMemo, useState } from 'react';
+import {
+  buyProduct,
+  getGoodsList,
+  getStakingInfo,
+  StaingGoodsInterface,
+  StakingInfoInterface,
+} from '@/service/staking.ts';
+import Iconfont from '@/component/Iconfont.tsx';
+import { useSignMessage } from 'wagmi';
+import { Toast } from 'react-vant';
 
 const Staking = ()=>{
   const intl = useIntl();
-const navigator = useNavigate()
-  return <Layouts title={intl.formatMessage({ id: 'nav.staking' })} right={<FileText onClick={()=>{navigator('/staking-records')}} size={24} color="#000" />}>
+  const navigator = useNavigate()
+
+  const [nodeFees,setNodeFees] = useState<StaingGoodsInterface[]>([])
+  const [selectedGoodsIndex,setSelectedGoodsIndex] = useState(-1)
+  let  timeout: NodeJS.Timeout | string | number | undefined = 0;
+  const {signMessageAsync,} = useSignMessage()
+  const [stakeInfo,setStakeInfo] = useState<StakingInfoInterface|null>(null)
+
+  const [stakingValue,setStakingValue ] = useState<string|number>('')
+  // 请求数据
+  useEffect(() => {
+    const fetchData =async ()=>{
+      const stakingfeeList = await getGoodsList()
+      setNodeFees(stakingfeeList.list)
+      await getStakeInfo()
+      setSelectedGoodsIndex(stakingfeeList.list.length >0 ? 0 : -1)
+    }
+    fetchData()
+  }, []);
+
+  const getStakeInfo = async () =>{
+    const info  = await getStakingInfo()
+    console.log(info);
+    setStakeInfo(info)
+  }
+
+
+  const curSelectedGood = useMemo(() => {
+    if(nodeFees){
+      return nodeFees[selectedGoodsIndex]
+    }
+    return null;
+  }, [nodeFees, selectedGoodsIndex]);
+
+  const handleStaking =  (e:any) => {
+    setStakingValue(parseInt(e.target.value))
+  }
+
+  // 选择一个产品，没有选产品就是 true
+  // 没质押有值就是 true
+  // stakingvalue 小于 选中的价格
+  const buttonDisabled = useMemo(()=>{
+    return !curSelectedGood || !stakingValue || !(Number(stakingValue) >= Number(curSelectedGood. price))
+  },[curSelectedGood, stakingValue])
+
+
+  useEffect(() => {
+    const value = Number(stakingValue)
+    if(value){
+      clearTimeout(timeout)
+      timeout = setTimeout(()=>{
+        const index = nodeFees.findIndex((item)=>{
+          return  value -Number(item.price)  >= 0 && Number(item.maxprice) - value >=0
+        })
+        setSelectedGoodsIndex(index)
+      },300)
+    }
+  }, [stakingValue]);
+
+  const handleConfirmClick = async ()=>{
+    if(buttonDisabled) return
+    //   todo
+    const hex = generateRandomString(32)
+    // 签名
+    const signed  = await signMessageAsync({message:hex})
+    console.log(signed)
+
+    try{
+      await buyProduct({id:nodeFees[selectedGoodsIndex].id,amount:stakingValue.toString(),hex:hex,signed:signed})
+      Toast.success('购买成功')
+      await getStakeInfo()
+    }catch (e:any) {
+      Toast(e)
+    }
+  }
+
+  return <Layouts title={intl.formatMessage({ id: 'nav.staking' })} right={
+    <Iconfont className={'layout-icon'} icon="icon-jilu_" onClick={()=>{navigator('/staking-records')}} />
+  }>
     <div className="card staking-info bd">
       <div className="list">
         <div className="list-item">
           <div className="coin">
-            <Coins size={24} color="#fff" />
+            <Iconfont icon={'icon-jijinzhiya'}/>
           </div>
           <div className="label">
             {intl.formatMessage({ id: 'staking.total' })}
           </div>
           <div className="value">
-            $ {formatNumber(8500)}
+            $ {formatNumber(Number(stakeInfo?.pledgetotal||0))}
           </div>
         </div>
 
         <div className="list-item">
           <div className="coin">
-            <TrendingUp size={24} color="#fff" />
+            <Iconfont icon={'icon-jijinchi'}/>
           </div>
           <div className="label">
             {intl.formatMessage({ id: 'staking.fund.commission' })}
           </div>
           <div className="value">
-            $ {formatNumber(8500)}
+            $ {formatNumber(Number(stakeInfo?.pledgegetmoney||0))}
           </div>
         </div>
 
         <div className="list-item">
           <div className="coin">
-            <DollarSign size={24} color="#fff" />
+            <Iconfont icon={'icon-jijinzhi'}/>
           </div>
           <div className="label">
             {intl.formatMessage({ id: 'staking.fund.total' })}
           </div>
           <div className="value">
-            {formatNumber(2500)}
+            {formatNumber(Number(stakeInfo?.pledgeNumber||0))}
           </div>
         </div>
       </div>
@@ -60,29 +144,18 @@ const navigator = useNavigate()
       <div className="table">
         <div className="table-row-th">
           <div className="th">{intl.formatMessage({ id: 'staking.amount.range' })}</div>
-          <div className="th">{intl.formatMessage({ id: 'staking.days' })}</div>
           <div className="th">{intl.formatMessage({ id: 'staking.multiplier' })}</div>
           <div className="th">{intl.formatMessage({ id: 'staking.daily.rate' })}</div>
         </div>
-        <div className="table-row-td">
-          <div className="td">10-99U</div>
-          <div className="td">20天</div>
-          <div className="td">1.3倍</div>
-          <div className="td">5%</div>
-        </div>
-        <div className="table-row-td">
-          <div className="td">100-499U</div>
-          <div className="td">15天</div>
-          <div className="td">1.5倍</div>
-          <div className="td">6.7%</div>
-        </div>
-        <div className="table-row-td">
-          <div className="td">500U以上</div>
-          <div className="td">10天</div>
-          <div className="td">2倍</div>
-          <div className="td">10%</div>
-        </div>
-
+        {
+          nodeFees.map((item,index)=> {
+            return <div className={`table-row-td ${selectedGoodsIndex === index ? 'active':''}`} onClick={()=>{setSelectedGoodsIndex(index)}} key={item.id}>
+              <div className="td">{item.name}</div>
+              <div className="td">{Number(item.total)}倍</div>
+              <div className="td">{Number(item.reward)}%</div>
+            </div>;
+          })
+        }
       </div>
     </div>
 
@@ -96,7 +169,10 @@ const navigator = useNavigate()
           {intl.formatMessage({ id: 'staking.input.amount' })}
         </div>
         <div className="input">
-          <input type="text" placeholder={intl.formatMessage({ id: 'staking.amount.placeholder' })} />
+          <input type="text" value={stakingValue} placeholder={intl.formatMessage({ id: 'staking.amount.placeholder' })} onInput={handleStaking} />
+        </div>
+        <div>
+          {(buttonDisabled && curSelectedGood?.price && stakingValue !== '' )?`不能小于产品价格${curSelectedGood?.price}`:""}
         </div>
       </div>
 
@@ -104,23 +180,23 @@ const navigator = useNavigate()
         <div className="label">
           {intl.formatMessage({ id: 'staking.selected.tier.info' })}
         </div>
-        <div className="list">
-          <div className="list-item">
-            <div className="top">{intl.formatMessage({ id: 'staking.time' })}</div>
-            <div className="value">15{intl.formatMessage({ id: 'staking.days.unit' })}</div>
+        {
+          curSelectedGood && <div className="list">
+            <div className="list-item">
+              <div className="top">{intl.formatMessage({ id: 'staking.token.multiplier' })}</div>
+              <div className="value">{Number(curSelectedGood.total)}{intl.formatMessage({ id: 'staking.multiplier.unit' })}</div>
+            </div>
+            <div className="list-item">
+              <div className="top">{intl.formatMessage({ id: 'staking.daily.yield' })}</div>
+              <div className="value">{Number(curSelectedGood.reward)}%</div>
+            </div>
           </div>
-          <div className="list-item">
-            <div className="top">{intl.formatMessage({ id: 'staking.token.multiplier' })}</div>
-            <div className="value">15{intl.formatMessage({ id: 'staking.multiplier.unit' })}</div>
-          </div>
-          <div className="list-item">
-            <div className="top">{intl.formatMessage({ id: 'staking.daily.yield' })}</div>
-            <div className="value">15%</div>
-          </div>
-        </div>
+        }
+
       </div>
 
-      <div className={`button button-block button-disabled`}>{intl.formatMessage({ id: 'staking.confirm' })}</div>
+      {buttonDisabled}
+      <div className={`button button-block ${buttonDisabled ? 'button-disabled' : ''}`} onClick={handleConfirmClick}>{intl.formatMessage({ id: 'staking.confirm' })}</div>
 
     </div>
 
