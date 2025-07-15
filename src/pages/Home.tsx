@@ -54,8 +54,7 @@ const Home:React.FC = () =>{
 	const [lpInfo,setLpInfo] = useState<LpInfoInterface|null>(null)
 	const navigate = useNavigate();
 	const { address, isConnected } = useAccount()
-	const {signMessage,data, isSuccess} = useSignMessage()
-	const [message,setMessage] = useState(() => generateRandomString(32));
+	const {signMessageAsync} = useSignMessage()
 	const [isSigned,setSigned] = useState(false)
 	const userStore = useUserStore()
 	const [visible, setVisible] = useState(false)
@@ -68,7 +67,7 @@ const Home:React.FC = () =>{
 		localStorage.removeItem(TOKEN)
 		userStore.setUser(null)
 		setVisible(false)
-		setMessage(generateRandomString(32))
+		setSigned(false)
 	}
 	// 用户和地址不匹配
 	useEffect(() => {
@@ -76,6 +75,8 @@ const Home:React.FC = () =>{
 			if(userStore.user?.account !== address){
 				clearUser();
 			}
+		}else{
+			clearUser();
 		}
 	}, [userStore.user,address]);
 
@@ -83,7 +84,7 @@ const Home:React.FC = () =>{
 	// 绑定上级
 	const bindInvite = async () => {
 		if(!invite.trim()){
-			Toast('请输入邀请码')
+			Toast(intl.formatMessage({id:'bind.invite.placeholder'}))
 			return;
 		}
 		try{
@@ -101,62 +102,61 @@ const Home:React.FC = () =>{
 		}
 	}
 
+	const login = async () => {
+		const message = generateRandomString(32)
+		const data  = await signMessageAsync({message})
+		setSigned(true)
+		const res:any = await getLoginOrRegister({account:address!,hex:message,signed:data})
+		localStorage.setItem(TOKEN, res)
+		try{
+			const res = await getUserInfo()
+			userStore.setUser(res)
+		}catch  {
+			localStorage.removeItem(TOKEN)
+		}
+	}
+
 	// 如果有用户信息不需要再登录
 	useEffect(() => {
-		if(userStore.user?.id)return
+		if(userStore.user?.id) return
 		if (isConnected && !isSigned) {
-			 signMessage({message})
-				setSigned(true)
+			login()
 		}
 	}, [isConnected,userStore.user,isSigned])
 
 	useEffect(() => {
 		if(!address){
-			localStorage.removeItem(TOKEN)
 			clearUser();
 		}
 	}, [address]);
 
-	// 根据签名的结果进行登陆注册 换取 token
-	useEffect(() => {
-		// 调用后端接口
-		// 登录成功后获取用户信息
-		const request = async () =>{
-			const res:any = await getLoginOrRegister({account:address!,hex:message,signed:data!})
-			localStorage.setItem(TOKEN, res)
-			try{
-				const res = await getUserInfo()
-				userStore.setUser(res)
-			}catch  {
-				localStorage.removeItem(TOKEN)
-			}
-		}
-		if(isSuccess && data && address){
-			request()
-		}
-	}, [isSuccess,data,address]);
-
 
 	useEffect(() => {
+		const fetchLp = async ()=>{
+			const lpInfo = await getLpinfo()
+			setLpInfo(lpInfo)
+
+		}
 		// 当前登录且没有绑定 PID
 		if(userStore.user?.id && !userStore.user.pid && address){
 			// 绑定 pid
 			setVisible(true)
 		}
+		// 用户登陆了获取 Lp 信息
+		if(userStore?.user?.id && isConnected && userStore.user.account === address){
+			fetchLp();
+		}else{
+			setLpInfo(null)
+		}
 	}, [userStore.user,address]);
 
 	useEffect(()=>{
 		const getBanner = async ()=>{
-			const banner = await getHomeBanner()
-			const tokenInfo:any = await getTokenInfo()
-			const announcement:any = await getLatestAnnouncement()
-			const problems = await getProblems()
-			const lpInfo = await getLpinfo()
+			const [banner,tokenInfo,announcement,problems] = await Promise.all<any>([getHomeBanner(),getTokenInfo(),getLatestAnnouncement(),getProblems()])
 			setBanner(banner)
 			setTokenInfo(tokenInfo)
 			setAnnouncement(announcement)
 			setProblems(problems?.list)
-			setLpInfo(lpInfo)
 		}
 		getBanner()
 	},[])
@@ -212,45 +212,48 @@ const Home:React.FC = () =>{
 				</div>
 			</div>
 
-			<div className="card m20 invite">
-				<div className="top">
-					<div className="title">
-						{intl.formatMessage({id:'home.invite.title'})}
+			{
+				userStore.user?.invit && <div className="card m20 invite">
+					<div className="top">
+						<div className="title">
+							{intl.formatMessage({ id: 'home.invite.title' })}
+						</div>
 					</div>
-				</div>
-				<div className="main">
-					<div className="left">
-						<img src={avator} alt="" />
-					</div>
-					<div className="right">
-						<div className="text">{intl.formatMessage({id:'home.invite.link'})}</div>
-						<div className="link">
-							<div className="link-text">{`${window.location.origin}?invite=${userStore.user?.invit}`}</div>
-							<Iconfont icon={'icon-fuzhi'} onClick={() => {
-								copyText(`${window.location.origin}?invite=${userStore.user?.invit}`)
-							}}></Iconfont>
+					<div className="main">
+						<div className="left">
+							<img src={avator} alt="" />
+						</div>
+						<div className="right">
+							<div className="text">{intl.formatMessage({ id: 'home.invite.link' })}</div>
+							<div className="link">
+								<div className="link-text">{`${window.location.origin}?invite=${userStore.user?.invit}`}</div>
+								<Iconfont icon={'icon-fuzhi'} onClick={() => {
+									copyText(`${window.location.origin}?invite=${userStore.user?.invit}`);
+								}}></Iconfont>
+							</div>
 						</div>
 					</div>
 				</div>
-			</div>
+			}
+
 
 			<div className="card mv20 token-info">
 				<div className="top">
 					<div className="title">
-						{intl.formatMessage({id:'home.token.info'})}
+						{intl.formatMessage({ id: 'home.token.info' })}
 					</div>
 				</div>
 				<div className="main">
 					<div className="list-wrapper">
 						<div className="list">
 							<div className="left">
-								{intl.formatMessage({id:'home.token.name'})}：
+								{intl.formatMessage({ id: 'home.token.name' })}：
 							</div>
 							<div className="right">{tokenInfo?.btdname}</div>
 						</div>
 						<div className="list">
 							<div className="left">
-								{intl.formatMessage({id:'home.token.address'})}：
+								{intl.formatMessage({ id: 'home.token.address' })}：
 							</div>
 							<div className="right">
 								<span>{formatAddress(tokenInfo?.btdtoken)}</span>
@@ -316,93 +319,96 @@ const Home:React.FC = () =>{
 			</div>
 
 
-			<div className="card mv20 lp-info">
-				<div className="top">
-					<div className="title">
-						{intl.formatMessage({id:'home.lp.title'})}
-					</div>
-				</div>
-				<div className="main">
-					<div className="profit">
-						<div className="profit-title">
-							{intl.formatMessage({id:'home.lp.expected.dividend'})}
-						</div>
-						<div className="profit-value">
-							{BigNumber(lpInfo?.lpinfo?.nextnumber||0).toFormat()} Da Lat
+			{
+				lpInfo ? <div className="card mv20 lp-info">
+					<div className="top">
+						<div className="title">
+							{intl.formatMessage({ id: 'home.lp.title' })}
 						</div>
 					</div>
-					<div className="profit-clean">
-						<div className="left">{intl.formatMessage({id:'home.lp.yesterday.dividend'})}：</div>
-						<div className="right">
-							{BigNumber(lpInfo?.lpinfo?.yestodaynumber||0).toFormat()} Da Lat</div>
-					</div>
-				</div>
-				<div className="top">
-					<div className="title">
-						{intl.formatMessage({id:'home.lp.pool'})}
-					</div>
-				</div>
-				<div className="main">
-					<div className="list">
-						<Swiper slideSize={70} trackOffset={15}>
-							{
-								(lpInfo?.levelinfo||[]).map((item, index) => {
-									const name = item[`name_${language}`]||item.name
-									const typeTitle = item.level_id === 0 ? intl.formatMessage({id:'home.lp.total.performance'}) :intl.formatMessage({id:'home.lp.district.performance'})
-									return (
-										<Swiper.Item key={item.id}>
-											<div className={`list-item list-item-${index % 3+1}`}>
-												<div className="top-title">
-													{name}
-												</div>
-												<div className="item">
-													<div className="left">{intl.formatMessage({id:'home.lp.direct.users'})}
-													</div>
-													<div className="right">{item.num}</div>
-												</div>
-												<div className="item">
-													<div className="left">{intl.formatMessage({id:'home.lp.dividend.ratio'})}</div>
-													<div className="right">{item.ratio}%</div>
-												</div>
-												<div className="item">
-													<div className="left"> {intl.formatMessage({id:'home.lp.performance.requirement'})}</div>
-													<div className="right">{formatNumber(item.service_charge)} LP</div>
-												</div>
-												<div className="item">
-													<div className="left"> {intl.formatMessage({id:'home.lp.performance.type'})}</div>
-													<div className="right">{typeTitle}</div>
-												</div>
-											</div>
-										</Swiper.Item>
-									)
-								})
-							}
-						</Swiper>
-					</div>
-					<div className="mine-lp">
-						<div className="mine-lp-title">
-							<div className="title">{intl.formatMessage({id:'home.lp.my'})}</div>
-						</div>
-						<div className="mine-lp-value">
-							<div className="text">
-								{BigNumber(lpInfo?.lpinfo.mynumber||0).toFormat()}LP
+					<div className="main">
+						<div className="profit">
+							<div className="profit-title">
+								{intl.formatMessage({ id: 'home.lp.expected.dividend' })}
 							</div>
-							<Button type="danger" round={true} className="primary-button" onClick={()=>{
-								window.open('https://pancakeswap.finance/swap?utm_source=tokenpocket')
-							}}>{intl.formatMessage({id:'home.lp.add.liquidity'})}</Button>
+							<div className="profit-value">
+								{BigNumber(lpInfo?.lpinfo?.nextnumber || 0).toFormat()} Da Lat
+							</div>
+						</div>
+						<div className="profit-clean">
+							<div className="left">{intl.formatMessage({ id: 'home.lp.yesterday.dividend' })}：</div>
+							<div className="right">
+								{BigNumber(lpInfo?.lpinfo?.yestodaynumber || 0).toFormat()} Da Lat
+							</div>
 						</div>
 					</div>
-				</div>
-			</div>
+					<div className="top">
+						<div className="title">
+							{intl.formatMessage({ id: 'home.lp.pool' })}
+						</div>
+					</div>
+					<div className="main">
+						<div className="list">
+							<Swiper slideSize={70} trackOffset={15}>
+								{
+									(lpInfo?.levelinfo || []).map((item, index) => {
+										const name = item[`name_${language}`] || item.name
+										const typeTitle = item.level_id === 0 ? intl.formatMessage({ id: 'home.lp.total.performance' }) : intl.formatMessage({ id: 'home.lp.district.performance' })
+										return (
+											<Swiper.Item key={item.id}>
+												<div className={`list-item list-item-${index % 3 + 1}`}>
+													<div className="top-title">
+														{name}
+													</div>
+													<div className="item">
+														<div className="left">{intl.formatMessage({ id: 'home.lp.direct.users' })}
+														</div>
+														<div className="right">{item.num}</div>
+													</div>
+													<div className="item">
+														<div className="left">{intl.formatMessage({ id: 'home.lp.dividend.ratio' })}</div>
+														<div className="right">{item.ratio}%</div>
+													</div>
+													<div className="item">
+														<div className="left"> {intl.formatMessage({ id: 'home.lp.performance.requirement' })}</div>
+														<div className="right">{formatNumber(item.service_charge)} LP</div>
+													</div>
+													<div className="item">
+														<div className="left"> {intl.formatMessage({ id: 'home.lp.performance.type' })}</div>
+														<div className="right">{typeTitle}</div>
+													</div>
+												</div>
+											</Swiper.Item>
+										)
+									})
+								}
+							</Swiper>
+						</div>
+						<div className="mine-lp">
+							<div className="mine-lp-title">
+								<div className="title">{intl.formatMessage({ id: 'home.lp.my' })}</div>
+							</div>
+							<div className="mine-lp-value">
+								<div className="text">
+									{BigNumber(lpInfo?.lpinfo.mynumber || 0).toFormat()}LP
+								</div>
+								<Button type="danger" round={true} className="primary-button" onClick={() => {
+									window.open('https://pancakeswap.finance/swap?utm_source=tokenpocket')
+								}}>{intl.formatMessage({ id: 'home.lp.add.liquidity' })}</Button>
+							</div>
+						</div>
+					</div>
+				</div>:<></>
+			}
 
 
 			<div className="card mv20 problem">
 				<div className="top">
 					<div className="title">
-						{intl.formatMessage({id:'home.faq.title'})}
+						{intl.formatMessage({ id: 'home.faq.title' })}
 					</div>
 					<div className="desc">
-						{intl.formatMessage({id:'home.faq.subtitle'})}
+						{intl.formatMessage({ id: 'home.faq.subtitle' })}
 
 					</div>
 				</div>
@@ -410,7 +416,7 @@ const Home:React.FC = () =>{
 				<div className="main">
 					<Collapse>
 						{
-							problems?.map((item)=>{
+							problems?.map((item) => {
 								const title = item?.[`title_${language}`] || item?.[`title`]
 								const content = item?.[`content_${language}`] || item?.[`content`]
 								return <CollapseItem title={title} key={item.id} name={item.id}>
@@ -442,23 +448,23 @@ const Home:React.FC = () =>{
 					</div>
 				</div>
 				<div className="info">
-					{intl.formatMessage({id:'home.footer.disclaimer'})}
+					{intl.formatMessage({ id: 'home.footer.disclaimer' })}
 				</div>
 
 				<div className="foot-logo">
 					<img src={logo} alt="" />
-					<span>{intl.formatMessage({id:'app.name'})}</span>
+					<span>{intl.formatMessage({ id: 'app.name' })}</span>
 				</div>
 
 				<div className="copy">
-					{intl.formatMessage({id:'home.footer.copyright'})}
+					{intl.formatMessage({ id: 'home.footer.copyright' })}
 
 				</div>
 
 				<div className="secret">
-					<div>{intl.formatMessage({id:'home.footer.privacy'})}</div>
+					<div>{intl.formatMessage({ id: 'home.footer.privacy' })}</div>
 					<span>•</span>
-					<div>{intl.formatMessage({id:'home.footer.terms'})}</div>
+					<div>{intl.formatMessage({ id: 'home.footer.terms' })}</div>
 				</div>
 			</div>
 			<Popup
@@ -466,9 +472,13 @@ const Home:React.FC = () =>{
 				visible={menuVisable === 'left'}
 				style={{ width: '80%', height: '100%' }}
 				position='left'
-				onClose={()=>{setMenuVisable('')}}
+				onClose={() => {
+					setMenuVisable('')
+				}}
 			>
-				<Menus close={()=>{setMenuVisable('')}} />
+				<Menus close={() => {
+					setMenuVisable('')
+				}} />
 			</Popup>
 
 
@@ -476,28 +486,22 @@ const Home:React.FC = () =>{
 				visible={visible}
 				showCancelButton={false}
 				showConfirmButton={false}
-				onConfirm={() => {
-					Toast.info('点击确认按钮')
-					setVisible(false)
-				}}
-				onCancel={() => setVisible(false)}
 			>
 				<div className="parent-link">
 					<div className="title">
-						确认上级
+						{intl.formatMessage({id:'bind.invite.title'})}
 					</div>
 					<div className="main">
 						<div className="input">
-							<input value={invite||''} onInput={(e:any)=>{
+							<input value={invite || ''} onInput={(e: any) => {
 								console.log(e);
 								setInvite(e.target.value)
-							}} placeholder={'请确认上级邀请码'}/>
+							}} placeholder={intl.formatMessage({id:'bind.invite.placeholder'})} />
 						</div>
 						<div className="info">
-							注：<br/>
-							註冊前請確認上級邀請碼，謹防關係綁定錯誤。
+							{intl.formatMessage({id:'bind.invite.tip'})}
 						</div>
-						<div className="button" onClick={bindInvite}>签名注册</div>
+						<div className="button" onClick={bindInvite}>{intl.formatMessage({id:'bind.invite.button'})}</div>
 					</div>
 				</div>
 

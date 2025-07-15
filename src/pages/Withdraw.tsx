@@ -91,7 +91,7 @@ const Withdraw = ()=>{
       const hex = generateRandomString(32)
       const signed  = await signMessageAsync({message:hex})
       await withdrawSubmit({hex,signed,amount})
-      Toast.success('success')
+      Toast.success(intl.formatMessage({id:'common.success'}))
       await fetchData()
       await onRefresh();
     }catch (e:any) {

@@ -1,12 +1,12 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import './Lp.scss';
-import { ArrowRightLeft, Minus, Plus, TrendingUp } from 'lucide-react';
 import { useEffect, useState } from 'react';
 import { List, PullRefresh } from 'react-vant';
 import { getLpList, LpListItemInterface } from '@/service/home.ts';
 import dayjs from 'dayjs';
-import {BigNumber} from 'bignumber.js'
+import { BigNumber } from 'bignumber.js';
+import Iconfont from '@/component/Iconfont.tsx';
 
 const LP = ()=>{
   const intl = useIntl();
@@ -32,19 +32,19 @@ const LP = ()=>{
   const iconMap:any = {
     '1':{
       color:'#4ade80',
-      icon:<Plus size={16} color="#4ade80" />,
+      icon:<Iconfont icon={'icon-tianjia'} />,
       label:intl.formatMessage({id:'lp.type.add'})
 
     },
     '2':{
       color:"#FF2020",
-      icon:<Minus size={16} color="#f87171" />,
+      icon:<Iconfont icon={'icon-zhuanyi'} />,
       label:intl.formatMessage({id:'lp.type.remove'})
 
     },
     '3':{
       color:"#266DFF",
-      icon:<ArrowRightLeft size={16} color="#fbbf24" />,
+      icon:<Iconfont icon={'icon-yichu'} />,
       label:intl.formatMessage({id:'lp.type.transfer'})
 
     }
@@ -103,7 +103,7 @@ const LP = ()=>{
   return <Layouts title={intl.formatMessage({ id: 'nav.lp' })}>
 
     <div className="lp-info card bd">
-      <TrendingUp size={32} color="#FC6612" />
+      <Iconfont icon={'icon-rise'}/>
       <div className="title">{intl.formatMessage({id:'lp.total'})}</div>
       <div className="value">{BigNumber(myLp).toFormat()} LP</div>
     </div>

@@ -21,11 +21,6 @@ const myRoutes: MyRoutesItem[] = [
 		name: 'Home',
 	},
 	{
-		path: "/about",
-		component: './About',
-		name: 'About',
-	},
-	{
 		path: "/assets",
 		component: './Assets',
 		name: 'Assets',

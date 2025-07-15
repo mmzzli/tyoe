@@ -86,7 +86,7 @@ const Staking = ()=>{
 
     try{
       await buyProduct({id:nodeFees[selectedGoodsIndex].id,amount:stakingValue.toString(),hex:hex,signed:signed})
-      Toast.success('购买成功')
+      Toast.success(intl.formatMessage({id:'common.success'}))
       await getStakeInfo()
     }catch (e:any) {
       Toast(e)

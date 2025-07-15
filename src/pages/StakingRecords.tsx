@@ -101,7 +101,10 @@ const StakingRecords = () =>{
                 <Iconfont icon="icon-DaLat"></Iconfont>
                 <div className={'order-info'}>
                   <div className="up">
-                    {intl.formatMessage({ id: 'staking.order.id' })} {item.order_no}
+                    {intl.formatMessage({ id: 'staking.order.id' })}
+                  </div>
+                  <div className="middle">
+                    {item.order_no}
                   </div>
                   <div className="down">
                     {tab?.icon} {tab?.label}

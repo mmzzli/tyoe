@@ -1,6 +1,6 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
-import { formatAddress, formatNumber } from '@/utils/common.ts';
+import { copyText, formatAddress, formatNumber } from '@/utils/common.ts';
 import './Node.scss';
 import { useEffect, useState } from 'react';
 import { getNodeInfo, getNodeRecordsList, NodeInfoInterface, NodeRecordInterface } from '@/service/node.ts';
@@ -91,7 +91,9 @@ const Node = ()=>{
           <div className="text">{intl.formatMessage({ id: 'node.contract' })}</div>
           <div className="node-info-details-value">
             <div className="left">{formatAddress(data?.nodeInfo?.payTokenAddress||'')}</div>
-            <Iconfont icon={'icon-fuzhi'}/>
+            <Iconfont icon={'icon-fuzhi'} onClick={()=>{
+              copyText(data?.nodeInfo?.payTokenAddress||'')
+            }}/>
           </div>
         </div>
       </div>

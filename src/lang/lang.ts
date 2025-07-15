@@ -1,154 +1,4 @@
 export const translations:any = {
-  zh: {
-    // Common
-    'app.name': '大叻火车',
-    'common.copy': '复制',
-    'common.enter': '进入',
-    'common.confirm': '确认',
-    'common.cancel': '取消',
-    'common.back': '返回',
-    'common.loading': '加载中...',
-    'common.search': '搜索',
-    'common.all': '全部',
-    'common.completed': '已完成',
-    'common.ongoing': '进行中',
-    'common.pending': '待审核',
-    'common.processing': '进行中',
-    'common.failed': '失败',
-    'common.address': '地址',
-    'common.superior': '上级',
-    'common.invite.code': '邀请码',
-
-    // Navigation
-    'nav.home': '首页',
-    'nav.assets': '资产',
-    'nav.team': '我的团队',
-    'nav.node': '节点中心',
-    'nav.lp': 'LP流动性记录',
-    'nav.staking': '基金值质押',
-    'nav.announcement': '平台公告',
-    'nav.announcement.detail': '公告详情',
-
-    // Homepage
-    'home.announcement': '平台公告',
-    'home.invite.title': '邀请好友',
-    'home.invite.link': '个人邀请链接',
-    'home.token.info': 'Token信息',
-    'home.token.name': '代币名称',
-    'home.token.address': '合约地址',
-    'home.token.supply': '发行数量',
-    'home.token.price': '实时价格',
-    'home.token.change': '涨跌幅',
-    'home.token.burned': '昨日燃烧代币',
-    'home.token.fund.pool': '基金池余额',
-    'home.token.destroyed': '销毁数量',
-    'home.lp.title': 'LP信息公示',
-    'home.lp.expected.dividend': '预计下周分红',
-    'home.lp.yesterday.dividend': '昨日静态分红',
-    'home.lp.pool': '分红池',
-    'home.lp.direct.users': '直推用户',
-    'home.lp.dividend.ratio': '分红占比',
-    'home.lp.performance.requirement': '业绩要求',
-    'home.lp.performance.type': '业绩类型',
-    'home.lp.district.performance': '小区业绩',
-    'home.lp.total.performance': '总业绩',
-    'home.lp.my': '我的LP',
-    'home.lp.add.liquidity': '前往PancakeSwap添加流动性',
-    'home.faq.title': '常见问题',
-    'home.faq.subtitle': '您有问题吗，我们有答案！探索我们的常见问题解答，了解大叻火车项目的一切',
-    'home.footer.disclaimer': '加密货币的价值可能会波动，请谨慎投资和理性看待',
-    'home.footer.copyright': '@ Da Lat 2025. 保留所有权利',
-    'home.footer.privacy': '隐私政策',
-    'home.footer.terms': '使用条款',
-
-    // Assets
-    'assets.total': '资产总额',
-    'assets.withdraw': '提现',
-    'assets.commission.title': '奖金统计',
-    'assets.commission.static': '静态分佣总和',
-    'assets.commission.dynamic': '动态分佣总和',
-    'assets.commission.node': '节点分佣总和',
-    'assets.commission.fund': '基金池质押分佣',
-    'assets.details': '资产明细',
-
-    // Withdraw
-    'withdraw.title':"提现信息",
-    'withdraw.chain': '链类型',
-    'withdraw.token': '提现token',
-    'withdraw.amount': '提现数量',
-    'withdraw.balance': '余额',
-    'withdraw.fee': '手续费',
-    'withdraw.receive': '到账金额',
-    'withdraw.confirm': '确认提现',
-    'withdraw.records': '提现记录',
-
-    // Team
-    'team.performance': '团队业绩',
-    'team.district.performance': '小区业绩',
-    'team.direct.users': '直推有效用户',
-    'team.team.users': '团队有效用户',
-    'team.effective': '有效',
-    'team.ineffective': '无效',
-    'team.dividend.pool': '所属分红池',
-    'team.dividend.ratio': '分红比',
-    'team.direct.list': '直推列表',
-    'team.registration.time': '注册时间',
-    'team.search.placeholder': '搜索地址或UID',
-
-    // Node
-    'node.identity': '节点身份',
-    'node.type': '节点类型',
-    'node.normal': '普通节点',
-    'node.genesis': '创世节点',
-    'node.total.dividends': '节点分红总额',
-    'node.expiry': '节点到期时间',
-    'node.contract': '节点申请合约地址',
-    'node.fees': '节点费用',
-    'node.price': '价格',
-    'node.duration': '有效期',
-    'node.purchase.limit': '代币购买额度',
-    'node.dividend.records': '节点分红记录',
-    'node.dividend.details': '节点分红',
-
-    // LP
-    'lp.total': '我的LP总额',
-    'lp.type.add': '添加',
-    'lp.type.remove': '移除',
-    'lp.type.transfer': '转移',
-    'lp.records': 'LP记录',
-
-    // Staking
-    'staking.total': '我的质押总额',
-    'staking.fund.commission': '基金池分佣',
-    'staking.fund.total': '基金值',
-    'staking.records': '质押记录',
-    'staking.tiers': '质押档位',
-    'staking.amount.range': '基金值额度',
-    'staking.days': '质押时间',
-    'staking.days.unit': '天',
-    'staking.multiplier': '获得代币倍数',
-    'staking.multiplier.unit': '倍',
-    'staking.daily.rate': '日化',
-    'staking.above': '以上',
-    'staking.operation': '质押操作',
-    'staking.input.amount': '质押金额',
-    'staking.amount.placeholder': '请输入质押金额',
-    'staking.selected.tier.info': '选中档位信息',
-    'staking.time': '质押时间',
-    'staking.token.multiplier': '代币倍数',
-    'staking.daily.yield': '日化收益',
-    'staking.confirm': '确认质押',
-    'staking.order.id': '质押订单ID',
-    'staking.fund.value': '质押基金值',
-    'staking.dalat.amount': '获得Da Lat数量',
-    'staking.pending.dalat': '待释放Da Lat数量',
-    'staking.start.time': '质押时间',
-    'staking.end.time': '到期时间',
-
-    // Sidebar
-    'sidebar.personal.assets': '个人资产',
-    'sidebar.function.menu': '功能菜单',
-  },
   'tw': {
     // Common
     'app.name': '大叻火車',
@@ -168,6 +18,7 @@ export const translations:any = {
     'common.address': '地址',
     'common.superior': '上級',
     'common.invite.code': '邀請碼',
+    'common.success': '成功',
 
     // Navigation
     'nav.home': '首頁',
@@ -210,6 +61,12 @@ export const translations:any = {
     'home.footer.copyright': '@ Da Lat 2025. 保留所有權利',
     'home.footer.privacy': '隱私政策',
     'home.footer.terms': '使用條款',
+
+    'bind.invite.title': '確認上級',
+    'bind.invite.placeholder': '請確認上級邀請碼',
+    'bind.invite.tip': '註：\n註冊前請確認上級邀請碼，謹防關係綁定錯誤',
+    'bind.invite.button': '簽名註冊',
+
 
     // Assets
     'assets.total': '資產總額',
@@ -298,6 +155,7 @@ export const translations:any = {
     // Sidebar
     'sidebar.personal.assets': '個人資產',
     'sidebar.function.menu': '功能選單',
+
   },
   'en': {
     // Common
@@ -315,10 +173,10 @@ export const translations:any = {
     'common.pending': 'Pending',
     'common.processing': 'Processing',
     'common.failed': 'Failed',
-
     'common.address': 'Address',
     'common.superior': 'Superior',
     'common.invite.code': 'Invite Code',
+    'common.success': 'Success',
 
     // Navigation
     'nav.home': 'Home',
@@ -361,6 +219,11 @@ export const translations:any = {
     'home.footer.copyright': '@ Da Lat 2025. All rights reserved.',
     'home.footer.privacy': 'Privacy Policy',
     'home.footer.terms': 'Terms of Use',
+
+    'bind.invite.title': 'Confirm Referrer',
+    'bind.invite.placeholder': 'Please confirm the referrer’s invite code',
+    'bind.invite.tip': 'Note:\nBefore registering, please confirm the referrer’s invite code to avoid incorrect relationship binding',
+    'bind.invite.button': 'Register with Signature',
 
     // Assets
     'assets.total': 'Total Assets',
@@ -469,7 +332,7 @@ export const translations:any = {
     'common.address': 'Địa chỉ',
     'common.superior': 'Cấp trên',
     'common.invite.code': 'Mã mời',
-
+    'common.success': 'Thành công',
     // Navigation
     'nav.home': 'Trang chủ',
     'nav.assets': 'Tài sản',
@@ -511,6 +374,11 @@ export const translations:any = {
     'home.footer.copyright': '@ Da Lat 2025. Bảo lưu mọi quyền.',
     'home.footer.privacy': 'Chính sách bảo mật',
     'home.footer.terms': 'Điều khoản sử dụng',
+
+    'bind.invite.title': 'Xác nhận người giới thiệu',
+    'bind.invite.placeholder': 'Vui lòng xác nhận mã giới thiệu của người trên',
+    'bind.invite.tip': 'Lưu ý:\nTrước khi đăng ký, hãy xác nhận mã giới thiệu để tránh sai sót trong việc liên kết quan hệ',
+    'bind.invite.button': 'Đăng ký với chữ ký',
 
     // Assets
     'assets.total': 'Tổng tài sản',

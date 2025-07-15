@@ -65,6 +65,7 @@
         }
         .label{
           font-size: 24px;
+          text-align: center;
         }
         .value{
           font-size: 30px;
@@ -96,7 +97,7 @@
             height: 30px;
           }
           .label{
-            max-width: 40%;
+            flex: 1;
           }
         }
         .value{
