@@ -33,7 +33,7 @@ export const translations:any = {
     // Homepage
     'home.announcement': '平台公告',
     'home.invite.title': '邀請好友',
-    'home.invite.link': '個人邀請連結',
+    'home.invite.link': '個人邀請鏈接',
     'home.token.info': 'Token資訊',
     'home.token.name': '代幣名稱',
     'home.token.address': '合約地址',
@@ -116,6 +116,8 @@ export const translations:any = {
     'node.purchase.limit': '代幣購買額度',
     'node.dividend.records': '節點分紅記錄',
     'node.dividend.details': '節點分紅',
+    "node.auth.error":"您目前還不是節點身份，請前往申請",
+    "node.auth.expired":"您目前的節點身份已過期",
 
     // LP
     'lp.total': '我的LP總額',
@@ -273,7 +275,8 @@ export const translations:any = {
     'node.purchase.limit': 'Token Purchase Limit',
     'node.dividend.records': 'Node Dividend Records',
     'node.dividend.details': 'Node Dividend',
-
+    "node.auth.error":"You are not currently a node identity. Please go to apply.",
+    "node.auth.expired":"Your current node identity has expired.",
     // LP
     'lp.total': 'My Total LP',
     'lp.type.add': 'Add',
@@ -428,7 +431,8 @@ export const translations:any = {
     'node.purchase.limit': 'Giới hạn mua token',
     'node.dividend.records': 'Hồ sơ cổ tức Node',
     'node.dividend.details': 'Cổ tức Node',
-
+    "node.auth.error":"Bạn hiện tại chưa có danh tính nút, vui lòng đến 申请",
+    "node.auth.expired":"Danh tính nút hiện tại của bạn đã hết hạn",
     // LP
     'lp.total': 'Tổng LP của tôi',
     'lp.type.add': 'Thêm',

@@ -7,7 +7,7 @@ import { getNodeInfo, getNodeRecordsList, NodeInfoInterface, NodeRecordInterface
 import dayjs from 'dayjs';
 import Iconfont from '@/component/Iconfont.tsx';
 import useLanguageStore from '@/store/global.ts';
-import { List, PullRefresh } from 'react-vant';
+import { List, PullRefresh, Toast } from 'react-vant';
 import {BigNumber} from 'bignumber.js'
 
 const Node = ()=>{
@@ -18,7 +18,12 @@ const Node = ()=>{
   useEffect(()=>{
     const fetchData = async ()=>{
       const res = await getNodeInfo()
-      console.log(res);
+      console.log(res,'===========');
+      if(res.nodeInfo.nodetyp === 0){
+        Toast(intl.formatMessage({id:"node.auth.error"}))
+      }else if(res.nodeInfo.nodetyp === 2){
+        Toast(intl.formatMessage({id:"node.auth.expired"}))
+      }
       setData(res)
     }
     fetchData()
@@ -73,7 +78,6 @@ const Node = ()=>{
           <Iconfont icon={'icon-jiedian'}/>
           <div className={"node-info-title"}>
             {intl.formatMessage({ id: 'node.genesis' })}
-            {/*   intl.formatMessage({id:'node.normal'})*/}
           </div>
         </div>
         <div className="info-content">
@@ -85,7 +89,7 @@ const Node = ()=>{
             <Iconfont icon={'icon-shijiankaishishijian'}/>
             {intl.formatMessage({ id: 'node.expiry' })}
           </div>
-          <div className="right">{dayjs(data?.nodeInfo?.endtimestr).format('YYYY-MM-DD HH:mm:ss')}</div>
+          <div className="right">{data?.nodeInfo?.endtimestr != '0000-00-00'? dayjs(data?.nodeInfo?.endtimestr).format('YYYY-MM-DD HH:mm:ss'):'--'}</div>
         </div>
         <div className="node-info-details">
           <div className="text">{intl.formatMessage({ id: 'node.contract' })}</div>

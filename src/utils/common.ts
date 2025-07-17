@@ -1,5 +1,6 @@
 import { Toast } from 'react-vant';
 import copy from 'copy-to-clipboard'
+import {BigNumber} from 'bignumber.js';
 
 export const  formatWithSeparator=(number:string|number, separator = ',') =>{
 	const parts = number.toString().split('.');
@@ -44,3 +45,22 @@ export const generateRandomString = (n:number) => {
 	return parseInt(t.toString())+'_' + result
 }
 
+export const smallNumber = (number:number|string,length=10)=>{
+	const num = BigNumber(number).toFormat(length)
+	// 格式化数字
+	console.log(num,'=======');
+// 	0.0000000645的话 显示为 0.0(7)645
+// 	就是小数点后面的 0 统计下数量
+	let len = 0;
+	let end = ''
+	const alanysisNum = num.split('.')[1]
+	for (let i = 0; i <alanysisNum.length ; i++) {
+		if(alanysisNum[i]==='0'){
+			len ++ ;
+		}else{
+			end = alanysisNum.slice(i)
+			 break
+		}
+	}
+	return `${num.split('.')[0]}.0(${len})${end}`
+}

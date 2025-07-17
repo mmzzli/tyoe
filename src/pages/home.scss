@@ -289,6 +289,10 @@
       justify-content: space-between;
       font-size: 24px;
       color: #1D1D1D;
+      white-space: nowrap;
+      .right{
+        margin-right: -10px;
+      }
     }
   }
   .mine-lp{

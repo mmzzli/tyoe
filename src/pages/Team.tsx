@@ -110,7 +110,7 @@ const Assets = ()=>{
               <div className="label">{intl.formatMessage({ id: 'team.dividend.pool' })}</div>
             </div>
             <div className="value">
-              2号分红池
+              {team.userInfo?.wp_grade}
             </div>
           </div>
 
