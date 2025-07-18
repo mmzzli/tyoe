@@ -166,8 +166,9 @@ const Home:React.FC = () =>{
 		try{
 			const res = await getUserInfo()
 			userStore.setUser(res)
-			if(res.account.toLowerCase() !== address?.toLowerCase()){
+			if(res?.account?.toLowerCase() !== address?.toLowerCase()){
 				clearUser()
+				login()
 			}
 		}catch {
 			clearUser()
@@ -221,13 +222,13 @@ const Home:React.FC = () =>{
 		try{
 			const res:any = await getLoginOrRegister({account:address!,hex:message,signed:data})
 			localStorage.setItem(TOKEN, res)
+			await fetchUserInfo()
 		}catch (e:any) {
 			localStorage.removeItem(TOKEN)
 			userStore.setUser(null)
 			setVisible(false)
 			Toast(e)
 		}
-		await fetchUserInfo()
 	}
 
 	useEffect(() => {

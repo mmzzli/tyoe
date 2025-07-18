@@ -1,5 +1,6 @@
 import axios, { AxiosInstance, AxiosResponse } from 'axios';
 import { LANGUAGE, TOKEN } from '@/utils/const.ts';
+import useUserStore from '@/store/user.ts';
 // 创建 Axios 实例
 const service: AxiosInstance = axios.create({
 	baseURL: import.meta.env.VITE_PROXY_URL,
@@ -29,7 +30,7 @@ service.interceptors.response.use(
 				return data;
 			}else if(code == 302){
 				localStorage.removeItem(TOKEN)
-				location.href = '/'
+				useUserStore().setUser(null)
 			}else{
 				return Promise.reject(message);
 			}
