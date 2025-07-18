@@ -23,6 +23,7 @@ export interface UserAssetsItem{
   statusint:number,
   oldamount:string
   get_type:string|number
+  types:number
 }
 export interface UserAssetsInterface{
   wallet:{

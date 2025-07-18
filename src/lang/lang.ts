@@ -78,6 +78,16 @@ export const translations:any = {
     'assets.commission.fund': '基金池質押分佣',
     'assets.details': '資產明細',
 
+    "assets.type.6":"節點獎勵",
+    "assets.type.7":"提現",
+    "assets.type.8":"LP 靜態",
+    "assets.type.9":"手續費兌換",
+    "assets.type.10":"提現退回",
+    "assets.type.11":"LP 靜態補發",
+    "assets.type.19":"質押消費",
+    "assets.type.20":"質押釋放",
+
+
     // Withdraw
     'withdraw.title':"提現信息",
     'withdraw.chain': '鏈類型',
@@ -237,6 +247,15 @@ export const translations:any = {
     'assets.commission.fund': 'Fund Pool Staking Commission',
     'assets.details': 'Asset Details',
 
+    "assets.type.6":"Node Rewards",
+    "assets.type.7":"Withdrawal",
+    "assets.type.8":"LP Static",
+    "assets.type.9":"Fee Exchange",
+    "assets.type.10":"Withdrawal Refund",
+    "assets.type.11":"LP Static Reissue",
+    "assets.type.19":"Staking Consumption",
+    "assets.type.20":"Staking Release",
+
     // Withdraw
     'withdraw.title':"Withdraw Information",
     'withdraw.chain': 'Chain Type',
@@ -392,6 +411,15 @@ export const translations:any = {
     'assets.commission.node': 'Tổng hoa hồng node',
     'assets.commission.fund': 'Hoa hồng staking quỹ',
     'assets.details': 'Chi tiết tài sản',
+
+    "assets.type.6":"Phần thưởng nút",
+    "assets.type.7":"Rút tiền",
+    "assets.type.8":"LP Tĩnh",
+    "assets.type.9":"Đổi phí giao dịch",
+    "assets.type.10":"Hoàn trả rút tiền",
+    "assets.type.11":"Phát lại LP Tĩnh",
+    "assets.type.19":"Tiêu dùng cầm cố",
+    "assets.type.20":"Giải phóng cầm cố",
 
     // Withdraw
     'withdraw.title':"Số",

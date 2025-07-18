@@ -31,6 +31,17 @@ const Assets = ()=>{
       icon:<Iconfont icon={'icon-jijinfenyong-2'}></Iconfont>
     }
   ]
+
+  const typeMap = {
+    "assets.type.6":intl.formatMessage({id:"assets.type.6"}),
+    "assets.type.7":intl.formatMessage({id:"assets.type.7"}),
+    "assets.type.8":intl.formatMessage({id:"assets.type.8"}),
+    "assets.type.9":intl.formatMessage({id:"assets.type.9"}),
+    "assets.type.10":intl.formatMessage({id:"assets.type.10"}),
+    "assets.type.11":intl.formatMessage({id:"assets.type.11"}),
+    "assets.type.19":intl.formatMessage({id:"assets.type.19"}),
+    "assets.type.20":intl.formatMessage({id:"assets.type.20"}),
+  }
   const [type,setType] = useState(tabs[0].value)
   const [assets,setAssets] = useState<UserAssetsInterface|null>(null)
   const [finished, setFinished] = useState<boolean>(false)
@@ -175,7 +186,7 @@ const Assets = ()=>{
                     {tab?.icon}
                   </div>
                   <div className="box">
-                    <div className="up">{tab?.label }</div>
+                    <div className="up">{typeMap[`assets.type.${item.types}` as keyof typeof typeMap]}</div>
                     <div className="time">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</div>
                   </div>
                 </div>
