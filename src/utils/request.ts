@@ -27,6 +27,9 @@ service.interceptors.response.use(
 			const {code,data,msg:message} = response.data;
 			if(code === 200){
 				return data;
+			}else if(code == 302){
+				localStorage.removeItem(TOKEN)
+				location.href = '/'
 			}else{
 				return Promise.reject(message);
 			}

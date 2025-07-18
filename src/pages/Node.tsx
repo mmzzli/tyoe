@@ -7,8 +7,8 @@ import { getNodeInfo, getNodeRecordsList, NodeInfoInterface, NodeRecordInterface
 import dayjs from 'dayjs';
 import Iconfont from '@/component/Iconfont.tsx';
 import useLanguageStore from '@/store/global.ts';
-import { List, PullRefresh, Toast } from 'react-vant';
-import {BigNumber} from 'bignumber.js'
+import { List, PullRefresh } from 'react-vant';
+import { BigNumber } from 'bignumber.js';
 
 const Node = ()=>{
   const intl = useIntl();
@@ -18,12 +18,6 @@ const Node = ()=>{
   useEffect(()=>{
     const fetchData = async ()=>{
       const res = await getNodeInfo()
-      console.log(res,'===========');
-      if(res.nodeInfo.nodetyp === 0){
-        Toast(intl.formatMessage({id:"node.auth.error"}))
-      }else if(res.nodeInfo.nodetyp === 2){
-        Toast(intl.formatMessage({id:"node.auth.expired"}))
-      }
       setData(res)
     }
     fetchData()
@@ -77,26 +71,38 @@ const Node = ()=>{
         <div className="top">
           <Iconfont icon={'icon-jiedian'}/>
           <div className={"node-info-title"}>
-            {intl.formatMessage({ id: 'node.genesis' })}
+            {
+              data?.nodeInfo?.nodeint === 0 && intl.formatMessage({ id: 'node.auth.error' })
+            }
+            {
+              data?.nodeInfo.nodeint === 2 && intl.formatMessage({ id: 'node.genesis' })
+            }
+            {
+              data?.nodeInfo.nodeint === 1 && intl.formatMessage({ id: 'node.normal' })
+            }
           </div>
         </div>
         <div className="info-content">
           <div className="h4">{intl.formatMessage({ id: 'node.total.dividends' })}</div>
           <div className="value">${formatNumber(data?.nodeInfo?.totalmoney||0)}</div>
         </div>
-        <div className="middle">
-          <div className="left">
-            <Iconfont icon={'icon-shijiankaishishijian'}/>
-            {intl.formatMessage({ id: 'node.expiry' })}
+        {
+          data?.nodeInfo?.nodeint !== 0 && <div className="middle">
+            <div className="left">
+              <Iconfont icon={'icon-shijiankaishishijian'} />
+              {intl.formatMessage({ id: 'node.expiry' })}
+            </div>
+            <div
+              className="right">{data?.nodeInfo?.endtimestr != '0000-00-00' ? dayjs(data?.nodeInfo?.endtimestr).format('YYYY-MM-DD HH:mm:ss') : '--'}</div>
           </div>
-          <div className="right">{data?.nodeInfo?.endtimestr != '0000-00-00'? dayjs(data?.nodeInfo?.endtimestr).format('YYYY-MM-DD HH:mm:ss'):'--'}</div>
-        </div>
+        }
+
         <div className="node-info-details">
           <div className="text">{intl.formatMessage({ id: 'node.contract' })}</div>
           <div className="node-info-details-value">
-            <div className="left">{formatAddress(data?.nodeInfo?.payTokenAddress||'')}</div>
-            <Iconfont icon={'icon-fuzhi'} onClick={()=>{
-              copyText(data?.nodeInfo?.payTokenAddress||'')
+            <div className="left">{formatAddress(data?.nodeInfo?.payTokenAddress || '')}</div>
+            <Iconfont icon={'icon-fuzhi'} onClick={() => {
+              copyText(data?.nodeInfo?.payTokenAddress || '');
             }}/>
           </div>
         </div>

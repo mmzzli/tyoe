@@ -47,9 +47,8 @@ const Home:React.FC = () =>{
 	const [tokenInfo, setTokenInfo] =useState<TokenInfoType|null>(null)
 	const [lpInfo,setLpInfo] = useState<LpInfoInterface|null>(null)
 	const navigate = useNavigate();
-	const { address, isConnected } = useAccount()
+	const { address, isConnected,isConnecting, isReconnecting } = useAccount()
 	const {signMessageAsync} = useSignMessage()
-	const [isSigned,setSigned] = useState(false)
 	const userStore = useUserStore()
 	const [visible, setVisible] = useState(false)
 	const [invite,setInvite]  = useState(searchParams.get('invite')||'')
@@ -157,21 +156,42 @@ const Home:React.FC = () =>{
 	document.title = intl.formatMessage({id:'app.name'})
 
 	const clearUser = ()=>{
+		console.log(88888888);
 		localStorage.removeItem(TOKEN)
 		userStore.setUser(null)
 		setVisible(false)
-		setSigned(false)
 	}
-	// 用户和地址不匹配
-	useEffect(() => {
-		if(userStore.user && address){
-			if(userStore.user?.account !== address){
-				clearUser();
+
+	const fetchUserInfo = async ()=>{
+		try{
+			const res = await getUserInfo()
+			userStore.setUser(res)
+			if(res.account.toLowerCase() !== address?.toLowerCase()){
+				clearUser()
 			}
-		}else{
-			clearUser();
+		}catch {
+			clearUser()
 		}
-	}, [userStore.user,address]);
+	}
+
+	useEffect(() => {
+		if (isConnecting || isReconnecting) {
+		  return;
+		}
+		if (!isConnected || !address) {
+			console.log(9999999,'=======');
+			clearUser();
+		  return;
+		}
+		if(isConnected && address){
+			if(localStorage.getItem(TOKEN)){
+				fetchUserInfo()
+			}else{
+				login()
+			}
+		}
+}, [isConnected, address, isConnecting, isReconnecting]);
+
 
 
 	// 绑定上级
@@ -198,7 +218,6 @@ const Home:React.FC = () =>{
 	const login = async () => {
 		const message = generateRandomString(32)
 		const data  = await signMessageAsync({message})
-		setSigned(true)
 		try{
 			const res:any = await getLoginOrRegister({account:address!,hex:message,signed:data})
 			localStorage.setItem(TOKEN, res)
@@ -208,29 +227,8 @@ const Home:React.FC = () =>{
 			setVisible(false)
 			Toast(e)
 		}
-
-		try{
-			const res = await getUserInfo()
-			userStore.setUser(res)
-		}catch  {
-			localStorage.removeItem(TOKEN)
-		}
+		await fetchUserInfo()
 	}
-
-	// 如果有用户信息不需要再登录
-	useEffect(() => {
-		if(userStore.user?.id) return
-		if (isConnected && !isSigned) {
-			login()
-		}
-	}, [isConnected,userStore.user,isSigned])
-
-	useEffect(() => {
-		if(!address){
-			clearUser();
-		}
-	}, [address]);
-
 
 	useEffect(() => {
 		const fetchLp = async ()=>{
@@ -431,18 +429,18 @@ const Home:React.FC = () =>{
 					<div className="main">
 						<div className="profit">
 							<div className="profit-title">
-								{intl.formatMessage({ id: 'home.lp.expected.dividend' })}
+								{intl.formatMessage({ id: 'home.lp.yesterday.dividend' })}
 							</div>
 							<div className="profit-value">
-								{BigNumber(lpInfo?.lpinfo?.nextnumber || 0).toFormat()} Da Lat
-							</div>
-						</div>
-						<div className="profit-clean">
-							<div className="left">{intl.formatMessage({ id: 'home.lp.yesterday.dividend' })}：</div>
-							<div className="right">
 								{BigNumber(lpInfo?.lpinfo?.yestodaynumber || 0).toFormat()} Da Lat
 							</div>
 						</div>
+						{/*<div className="profit-clean">*/}
+						{/*	<div className="left">{intl.formatMessage({ id: 'home.lp.yesterday.dividend' })}：</div>*/}
+						{/*	<div className="right">*/}
+						{/*		{BigNumber(lpInfo?.lpinfo?.yestodaynumber || 0).toFormat()} Da Lat*/}
+						{/*	</div>*/}
+						{/*</div>*/}
 					</div>
 					<div className="top">
 						<div className="title">

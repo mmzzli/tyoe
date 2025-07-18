@@ -6,34 +6,58 @@ import { useAccount } from 'wagmi';
 import useUserStore from '@/store/user.ts';
 import { TOKEN } from '@/utils/const.ts';
 import Iconfont from '@/component/Iconfont.tsx';
+import { getUserInfo } from '@/service/user.ts';
 
 const Layouts:FC<{
   children:React.ReactNode|undefined|React.ReactNode[],
   title:string,
   right?:React.ReactNode|null|React.ReactNode[]
 }> = ({children,title,right=null}) => {
-  const { address, isConnected } = useAccount()
+  const { address, isConnected,isConnecting,isReconnecting } = useAccount()
   const navigation = useNavigate()
-  const {user,setUser} = useUserStore()
+  const {setUser} = useUserStore()
 
   const intl = useIntl()
   document.title = intl.formatMessage({id:'app.name'})
   // 如果断开连接直接回首页
-
-  const clearUser = ()=>{
+  const clearUser = ()=> {
     localStorage.removeItem(TOKEN)
     setUser(null)
+    navigation('/')
   }
+
+
+  const fetchUserInfo = async ()=>{
+    try{
+      const res = await getUserInfo()
+      setUser(res)
+      if(res.account.toLowerCase() !== address?.toLowerCase()){
+        clearUser()
+        console.log(55555);
+      }
+    }catch {
+      console.log(66666);
+      clearUser()
+    }
+  }
+
   useEffect(() => {
-    if(!isConnected || !user?.account || !address){
-      clearUser()
-      navigation('/')
+    // 只要还在连接中，不做任何跳转
+    if (isConnecting || isReconnecting) {
+      return;
     }
-    if(user?.account !== address){
-      clearUser()
-      navigation('/')
+
+    if (!isConnected || !address) {
+      clearUser();
+      return;
     }
-  }, [isConnected,user?.account,address]);
+    if (localStorage.getItem(TOKEN)) {
+      fetchUserInfo();
+    } else {
+      clearUser();
+    }
+  }, [isConnected, address, isConnecting, isReconnecting]);
+
   return (
     <>
       <div className="layout-container">

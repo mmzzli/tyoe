@@ -18,6 +18,7 @@ export interface NodeInfoInterface{
     endtimestr:string,
     payTokenAddress:string,
     nodetyp:number
+    nodeint:number
   },
   nodeList:NodeFeeItemInterface[]
 }
