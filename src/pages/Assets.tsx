@@ -1,7 +1,6 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import './Assets.scss';
-import { formatNumber } from '@/utils/common.ts';
 import { useEffect, useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import { getUserAssets, UserAssetsInterface, UserAssetsItem } from '@/service/user.ts';
@@ -98,17 +97,17 @@ const Assets = ()=>{
         {intl.formatMessage({ id: 'assets.total' })}
       </div>
       <div className="value">
-        ${formatNumber(assets?.wallet?.toUsdtCost||0)}
+        ${BigNumber(assets?.wallet?.toUsdtCost||0).toFormat()}
       </div>
       <div className="list">
         <div className="list-item">
           <div className="top">Da Lat</div>
-          <div className="bottom">{formatNumber(assets?.wallet?.usdt_num||0)}</div>
+          <div className="bottom">{BigNumber(assets?.wallet?.usdt_num||0).toFormat()}</div>
         </div>
 
         <div className="list-item">
           <div className="top">{intl.formatMessage({ id: 'staking.fund.total' })}</div>
-          <div className="bottom">{formatNumber(assets?.wallet?.wp_num||0)}</div>
+          <div className="bottom">{BigNumber(assets?.wallet?.wp_num||0).toFormat()}</div>
         </div>
       </div>
       <div className="button" onClick={()=>{navigator('/withdraw')}}>{intl.formatMessage({id:'assets.withdraw'})}</div>

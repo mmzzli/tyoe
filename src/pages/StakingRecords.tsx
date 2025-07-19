@@ -111,7 +111,7 @@ const StakingRecords = () =>{
                   </div>
                 </div>
               </div>
-              <div className="right">{item.remark}</div>
+              <div className="right">{item.remark} % {intl.formatMessage({id:'staking.daily.rate'})}</div>
             </div>
             <div className="ul-list">
               <div className="item">
@@ -130,10 +130,14 @@ const StakingRecords = () =>{
                 <div className="left">{intl.formatMessage({ id: 'staking.start.time' })}</div>
                 <div className="right">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</div>
               </div>
-              <div className="item">
-                <div className="left">{intl.formatMessage({ id: 'staking.end.time' })}</div>
-                <div className="right">{item.confirm_time?dayjs(item.confirm_time).format('YYYY-MM-DD HH:mm'):''}</div>
-              </div>
+              {
+                item.confirm_time && <div className="item">
+                  <div className="left">{intl.formatMessage({ id: 'staking.end.time' })}</div>
+                  <div
+                    className="right">{item.confirm_time ? dayjs(item.confirm_time).format('YYYY-MM-DD HH:mm') : ''}</div>
+                </div>
+              }
+
             </div>
           </div>;
           ;

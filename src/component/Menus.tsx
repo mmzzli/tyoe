@@ -6,8 +6,9 @@ import './Menu.scss';
 import { useIntl } from 'react-intl';
 import { useNavigate } from 'react-router-dom';
 import useUserStore from '@/store/user.ts';
-import { copyText, formatAddress, formatNumber } from '@/utils/common.ts';
+import { copyText, formatAddress } from '@/utils/common.ts';
 import Iconfont from '@/component/Iconfont.tsx';
+import {BigNumber} from 'bignumber.js';
 
 const Menus:React.FC<{close:()=>void}> = ({close})=>{
   const intl = useIntl();
@@ -123,19 +124,19 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
           </div>
           <div className="user-asset-value">
             <div className="text">
-              $ {formatNumber(userStore?.user?.toUsdtCost||0)}
+              $ {BigNumber(userStore?.user?.toUsdtCost||0).toFormat()}
             </div>
             <ChevronRight size={20} color="#fc6612" />
           </div>
 
           <div className="asset-item">
-            Da Lat:{formatNumber(userStore.user?.usdt_num || 0)}
+            Da Lat:{BigNumber(userStore.user?.usdt_num || 0).toFormat()}
 
           </div>
 
           <div className="asset-item">
             {intl.formatMessage({id:'staking.fund.total'})}:
-            {formatNumber(userStore.user?.wp_num || 0)}
+            {BigNumber(userStore.user?.wp_num || 0).toFormat()}
           </div>
         </div>
 

@@ -1,7 +1,7 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import './Staking.scss';
-import { formatNumber, generateRandomString } from '@/utils/common.ts';
+import { generateRandomString } from '@/utils/common.ts';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useMemo, useState } from 'react';
 import {
@@ -14,6 +14,7 @@ import {
 import Iconfont from '@/component/Iconfont.tsx';
 import { useSignMessage } from 'wagmi';
 import { Toast } from 'react-vant';
+import {BigNumber} from 'bignumber.js';
 
 const Staking = ()=>{
   const intl = useIntl();
@@ -52,7 +53,7 @@ const Staking = ()=>{
   }, [nodeFees, selectedGoodsIndex]);
 
   const handleStaking =  (e:any) => {
-    setStakingValue(parseInt(e.target.value))
+    setStakingValue(parseInt(e.target.value)||0)
   }
 
   // 选择一个产品，没有选产品就是 true
@@ -64,7 +65,7 @@ const Staking = ()=>{
 
 
   useEffect(() => {
-    const value = Number(stakingValue)
+    const value = Number(stakingValue)||0
     if(value){
       clearTimeout(timeout)
       timeout = setTimeout(()=>{
@@ -106,7 +107,7 @@ const Staking = ()=>{
             {intl.formatMessage({ id: 'staking.total' })}
           </div>
           <div className="value">
-            $ {formatNumber(Number(stakeInfo?.pledgetotal||0))}
+            $ {BigNumber(Number(stakeInfo?.pledgetotal||0)).toFormat()}
           </div>
         </div>
 
@@ -118,7 +119,7 @@ const Staking = ()=>{
             {intl.formatMessage({ id: 'staking.fund.commission' })}
           </div>
           <div className="value">
-            $ {formatNumber(Number(stakeInfo?.pledgegetmoney||0))}
+            $ {BigNumber(Number(stakeInfo?.pledgegetmoney||0)).toFormat()}
           </div>
         </div>
 
@@ -130,7 +131,7 @@ const Staking = ()=>{
             {intl.formatMessage({ id: 'staking.fund.total' })}
           </div>
           <div className="value">
-            {formatNumber(Number(stakeInfo?.pledgeNumber||0))}
+            {BigNumber(Number(stakeInfo?.pledgeNumber||0)).toFormat()}
           </div>
         </div>
       </div>
@@ -152,7 +153,7 @@ const Staking = ()=>{
             return <div className={`table-row-td ${selectedGoodsIndex === index ? 'active':''}`} onClick={()=>{setSelectedGoodsIndex(index)}} key={item.id}>
               <div className="td">{item.name}</div>
               <div className="td">{Number(item.total)}倍</div>
-              <div className="td">{Number(item.reward)}%</div>
+              <div className="td">{Number(item.reward)*100}%</div>
             </div>;
           })
         }
