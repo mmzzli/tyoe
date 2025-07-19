@@ -78,6 +78,7 @@ export const translations:any = {
     'assets.commission.fund': '基金池質押分佣',
     'assets.details': '資產明細',
 
+    "assets.type.5":"動態獎勵",
     "assets.type.6":"節點獎勵",
     "assets.type.7":"提現",
     "assets.type.8":"LP 靜態",
@@ -247,6 +248,7 @@ export const translations:any = {
     'assets.commission.fund': 'Fund Pool Staking Commission',
     'assets.details': 'Asset Details',
 
+    "assets.type.5":"Dynamic Rewards",
     "assets.type.6":"Node Rewards",
     "assets.type.7":"Withdrawal",
     "assets.type.8":"LP Static",
@@ -412,6 +414,7 @@ export const translations:any = {
     'assets.commission.fund': 'Hoa hồng staking quỹ',
     'assets.details': 'Chi tiết tài sản',
 
+    "assets.type.5":"Phần thưởng Động thái",
     "assets.type.6":"Phần thưởng nút",
     "assets.type.7":"Rút tiền",
     "assets.type.8":"LP Tĩnh",

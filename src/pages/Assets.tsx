@@ -32,6 +32,7 @@ const Assets = ()=>{
   ]
 
   const typeMap = {
+    "assets.type.5":intl.formatMessage({id:"assets.type.5"}),
     "assets.type.6":intl.formatMessage({id:"assets.type.6"}),
     "assets.type.7":intl.formatMessage({id:"assets.type.7"}),
     "assets.type.8":intl.formatMessage({id:"assets.type.8"}),
