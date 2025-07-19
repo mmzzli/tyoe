@@ -22,11 +22,11 @@ const LP = ()=>{
     },
     {
       value:2,
-      label:intl.formatMessage({id:'lp.type.remove'})
+      label:intl.formatMessage({id:'lp.type.transfer'})
     },
     {
       value:3,
-      label:intl.formatMessage({id:'lp.type.transfer'})
+      label:intl.formatMessage({id:'lp.type.remove'})
     }
   ]
   const iconMap:any = {
