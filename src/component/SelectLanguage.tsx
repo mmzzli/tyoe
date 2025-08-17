@@ -13,7 +13,8 @@ interface LanguageOption {
 const languageOptions: LanguageOption[] = [
   { code: language.tw, name: '繁體中文', flag: '🇨🇳' },
   { code: language.en, name: 'English', flag: '🇺🇸' },
-  { code: language.vt, name: 'Tiếng Việt', flag: '🇻🇳' },
+  { code: language.ko, name: '한국어', flag: '🇰🇷' },
+  { code: language.ja, name: '日本語', flag: '🇯🇵' },
 ];
 
 const SelectLanguage = () =>{
@@ -21,7 +22,7 @@ const SelectLanguage = () =>{
   const store = useLanguageStore()
   return (
     <>
-      <Iconfont onClick={()=>setVisible(true)} icon={'icon-duoyuyan'}></Iconfont>
+      <Iconfont onClick={()=>setVisible(true)} icon={'icon-yuyan'}></Iconfont>
       <ActionSheet visible={visible} onCancel={()=>{setVisible(false)}}>
         <div className="languages-container">
           <div className="title">选择语言 / Select Language</div>

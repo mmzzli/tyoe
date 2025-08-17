@@ -1,64 +1,105 @@
-@mixin flex-center{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-@mixin flex-between{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-@mixin flex-column{
-  display: flex;
-  flex-direction: column;
-}
-.staking-records-list{
-  @include flex-column;
+.staking-records-detail{
+  padding:0 40px 40px;
+  @include flex-between;
   gap: 20px;
-  .list-item{
+  &-card{
+    border: 1px solid $card-border;
+    border-radius: 20px;
+    flex:1;
+    @include flex-column;
+    justify-content: center;
+    align-items: center;
+    padding: 40px 0;
+    gap: 20px;
+    .title{
+      color: $text-muted;
+    }
+    .content{
+      color: $text-primary;
+      font-size: 32px;
+      font-weight: bold;
+      &.success{
+        color: $success;
+      }
+    }
+  }
+}
+
+
+.staking-records-list{
+  margin:0 40px 40px;
+  border: 1px solid $card-border;
+  border-radius: 20px;
+  padding: 40px;
+  .title{
+    font-weight: bold;
+    font-size: 36px;
+    margin-bottom: 40px;
+  }
+  .staking-records-list-box{
+    @include flex-column;
+    gap: 20px;
+  }
+  .staking-records-list-item{
+    border-radius: 16px;
+    padding: 30px;
+    background: $background-secondary;
+    @include flex-column;
+    gap: 24px;
     .top{
-      height: 90px;
       @include flex-between;
       .left{
-        display: flex;
-        gap: 10px;
-        align-items: center;
-        .icon{
-          width: 30px;
-          height: 30px;
-        }
-        .order-info{
-          @include flex-column;
-          gap: 10px;
-          .up{
-            font-weight: bold;
-          }
-          .down{
-            @include flex-center;
-            justify-content: flex-start;
-            font-size: 20px;
-            color: #787878;
-            gap: 10px;
-            .icon{
-              width: 24px;
-              height: 24px;
-            }
-          }
-        }
+        font-size: 24px;
+        color: $text-primary;
+        font-weight: bold;
       }
       .right{
-        white-space: nowrap;
-        color: #fc6612;
+        div{
+          border-radius: 40px;
+          font-size: 24px;
+          padding: 10px 20px;
+          color: $text-primary;
+
+        }
+        .processing{
+          background: $success;
+        }
+        .finished{
+          background: $text-muted;
+        }
       }
     }
-    .ul-list{
-      margin-top: 20px;
+    .middle{
       @include flex-column;
       gap: 30px;
-      .item{
-        @include flex-between
+      &-item{
+        @include flex-between;
+        font-size: 26px;
+        .left{
+          @include flex-center;
+          gap: 10px;
+          color: $text-secondary;
+        }
+        .right{
+          color: $text-primary;
+          font-weight: bold;
+          &.success{
+            color:$success;
+          }
+        }
       }
     }
-
+    .bottom{
+      button{
+        @include flex-center;
+        width: 100%;
+        height: 88px;
+        background: $error;
+        border: none;
+        font-size: 30px;
+        color: $text-white;
+        border-radius: 10px;
+      }
+    }
   }
 }

@@ -3,10 +3,8 @@ import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
 import './StakingRecords.scss';
 import { getStakingRecord, StakingRecordInterface } from '@/service/staking.ts';
-import { List, PullRefresh } from 'react-vant';
-import dayjs from 'dayjs';
 import Iconfont from '@/component/Iconfont.tsx';
-import {BigNumber} from 'bignumber.js'
+import dayjs from 'dayjs';
 
 const StakingRecords = () =>{
   const intl = useIntl()
@@ -77,74 +75,127 @@ const StakingRecords = () =>{
   }, [type]);
 
   return <Layouts title={intl.formatMessage({id:'staking.records'})}>
-    <div style={{margin:'20px'}}>
-      <div className="tabs">
-      {
-        tabs.map((item, index) => {
-          return <div className={`tab-item ${item.value === type ? 'active' : ''}`} key={index}
-                      onClick={() => setType(item.value)}>
-            {item.label}
-          </div>;
-        })
-      }
+    <div className="staking-records-detail">
+      <div className="staking-records-detail-card">
+        <div className="title">{intl.formatMessage({ id: 'staking.detail.total.amount' })}</div>
+        <div className="content">25,000 TYOE</div>
+      </div>
+      <div className="staking-records-detail-card">
+        <div className="title">{intl.formatMessage({ id: 'staking.detail.total.reward' })}</div>
+        <div className="content success">430 TYOE</div>
+      </div>
     </div>
-    </div>
-    <div className="list ">
-      <PullRefresh onRefresh={onRefresh}>
-      <List finished={finished} onLoad={onLoad} className="staking-records-list">
-      {
-        list.map((item) => {
-          const tab = tabs.find((tab) => Number(tab.value) === Number(item.status_name))
-          return <div className="list-item card" key={item.id}>
-            <div className="top">
-              <div className="left">
-                <Iconfont icon="icon-DaLat"></Iconfont>
-                <div className={'order-info'}>
-                  <div className="up">
-                    {intl.formatMessage({ id: 'staking.order.id' })}
-                  </div>
-                  <div className="middle">
-                    {item.order_no}
-                  </div>
-                  <div className="down">
-                    {tab?.icon} {tab?.label}
-                  </div>
-                </div>
-              </div>
-              <div className="right">{item.remark} % {intl.formatMessage({id:'staking.daily.rate'})}</div>
+    <div className="staking-records-list">
+      <div className="title">
+        {intl.formatMessage({ id: 'staking.records' })}(3)
+      </div>
+      <div className="staking-records-list-box">
+      <div className="staking-records-list-item">
+        <div className="top">
+          <div className="left">
+            {intl.formatMessage({ id: 'common.order.no' })}:STK001234567890
+          </div>
+          <div className="right">
+            <div className="processing">{intl.formatMessage({ id: 'common.order.processing' })}</div>
+          </div>
+        </div>
+        <div className="middle">
+          <div className="middle-item">
+            <div className="left">
+              <Iconfont icon={'icon-daojishi'}></Iconfont>
+              {intl.formatMessage({ id: "staking.detail.day.reward" })}
             </div>
-            <div className="ul-list">
-              <div className="item">
-                <div className="left">{intl.formatMessage({ id: 'staking.fund.value' })}</div>
-                <div className="right">{BigNumber(item.buy_price).toFormat()}</div>
-              </div>
-              <div className="item">
-                <div className="left">{intl.formatMessage({ id: 'staking.dalat.amount' })}</div>
-                <div className="right">{BigNumber(item.total_money).toFormat()} Da Lat</div>
-              </div>
-              <div className="item">
-                <div className="left">{intl.formatMessage({ id: 'staking.pending.dalat' })}</div>
-                <div className="right">{Number(item.core_num)-Number(item.total_money)} Da Lat</div>
-              </div>
-              <div className="item">
-                <div className="left">{intl.formatMessage({ id: 'staking.start.time' })}</div>
-                <div className="right">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm')}</div>
-              </div>
-              {
-                item.confirm_time && <div className="item">
-                  <div className="left">{intl.formatMessage({ id: 'staking.end.time' })}</div>
-                  <div
-                    className="right">{item.confirm_time ? dayjs(item.confirm_time).format('YYYY-MM-DD HH:mm') : ''}</div>
-                </div>
-              }
+            <div className="right">
+              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
+            </div>
+          </div>
 
+          <div className="middle-item">
+            <div className="left">
+              <Iconfont icon={'icon-meijin'}></Iconfont>
+              {intl.formatMessage({ id: "staking.detail.amount" })}
             </div>
-          </div>;
-          ;
-        })
-      }
-      </List>
-      </PullRefresh>
+            <div className="right">
+              10,000 TYOE
+            </div>
+          </div>
+
+          <div className="middle-item">
+            <div className="left">
+              <Iconfont icon={'icon-rise'}></Iconfont>
+              {intl.formatMessage({ id: "staking.detail.day.reward" })}
+            </div>
+            <div className="right">
+              0.5%
+            </div>
+          </div>
+
+          <div className="middle-item">
+            <div className="left">
+              {intl.formatMessage({ id: "staking.detail.calc.reward" })}
+            </div>
+            <div className="right success">
+              250 TYOE
+            </div>
+          </div>
+        </div>
+        <div className="bottom">
+          <button>{intl.formatMessage({ id: "staking.detail.Withdraw" })}</button>
+        </div>
+      </div>
+
+      <div className="staking-records-list-item">
+        <div className="top">
+          <div className="left">
+            {intl.formatMessage({ id: 'common.order.no' })}:STK001234567890
+          </div>
+          <div className="right">
+            <div className="finished">{intl.formatMessage({ id: 'common.order.processing' })}</div>
+          </div>
+        </div>
+        <div className="middle">
+          <div className="middle-item">
+            <div className="left">
+              <Iconfont icon={'icon-daojishi'}></Iconfont>
+              {intl.formatMessage({ id: "staking.detail.day.reward" })}
+            </div>
+            <div className="right">
+              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
+            </div>
+          </div>
+
+          <div className="middle-item">
+            <div className="left">
+              <Iconfont icon={'icon-meijin'}></Iconfont>
+              {intl.formatMessage({ id: "staking.detail.amount" })}
+            </div>
+            <div className="right">
+              10,000 TYOE
+            </div>
+          </div>
+
+          <div className="middle-item">
+            <div className="left">
+              <Iconfont icon={'icon-rise'}></Iconfont>
+              {intl.formatMessage({ id: "staking.detail.day.reward" })}
+            </div>
+            <div className="right">
+              0.5%
+            </div>
+          </div>
+
+          <div className="middle-item">
+            <div className="left">
+              {intl.formatMessage({ id: "staking.detail.calc.reward" })}
+            </div>
+            <div className="right success">
+              250 TYOE
+            </div>
+          </div>
+        </div>
+
+      </div>
+      </div>
     </div>
   </Layouts>
 }

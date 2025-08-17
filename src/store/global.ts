@@ -3,9 +3,10 @@ import { LANGUAGE } from '@/utils/const.ts';
 export enum language {
 	'tw' = 'tw',
 	'en' = 'en',
-	'vt' = 'vt'
+	'ko' = 'ko',
+	'ja' = 'ja'
 }
-type LanguageType = 'tw' | 'en' | 'vt';
+type LanguageType = 'tw' | 'en' | 'ko' | 'ja';
 
 interface GlobalStore{
 	language:LanguageType

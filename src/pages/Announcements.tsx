@@ -1,12 +1,13 @@
 import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
-import './Announcements.scss'
-import { Calendar, ChevronRight } from 'lucide-react';
+import './Announcements.scss';
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import { AnnouncementInterface, getAnnouncementList } from '@/service/announcement.ts';
 import dayjs from 'dayjs';
 import useLanguageStore from '@/store/global.ts';
+import Iconfont from '@/component/Iconfont.tsx';
+
 const Announcements = ()=>{
   const intl = useIntl()
   const navigate = useNavigate()
@@ -23,25 +24,29 @@ const Announcements = ()=>{
   }, []);
 
   return <Layouts title={intl.formatMessage({id:'nav.announcement'})}>
-    <div className="announcement-container">
+    <div className="announcement-container pv20" >
       {
         announcements.map((item)=>{
           const title = item?.[`title_${language}`] || item.title
           const content = item?.[`content_${language}`] || item.content
           return <>
             <div className="card " key={item.id} onClick={() => {
-              navigate(`/announcement-detail?id=${item.id}`)
+              navigate(`/announcement-detail?id=${item.id}`);
             }}>
               <div className="top">
-                <div className="left">
-                  <Calendar size={16} color="#FC6612" />
-                  <span>{dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}</span>
-                </div>
-                <ChevronRight size={20} color="#151515" />
+                <h3>{title}</h3>
+                <Iconfont className={'icon-right-arrow'} icon={'icon-right'} />
               </div>
               <div className="bottom">
-                <h3>{title}</h3>
                 <p>{content}</p>
+              </div>
+              <div className="announcement-footer">
+                <div className={'time'}>
+                  <Iconfont icon={'icon-calendar'}></Iconfont>
+                  {dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
+                <div className="right">
+                  <span>重要</span>
+                </div>
               </div>
             </div>
           </>
@@ -52,4 +57,4 @@ const Announcements = ()=>{
     </div>
   </Layouts>
 }
-export default Announcements
+export default Announcements;

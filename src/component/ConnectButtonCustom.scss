@@ -1,0 +1,14 @@
+.connect-button{
+  background: $button-primary;
+  border: none;
+  height: 64px;
+  border-radius: 64px;
+  padding: 20px;
+  font-size: 28px;
+  @include flex-center;
+  gap: 5px;
+  .icon-connect-button{
+    width: 24px;
+    height: 24px;
+  }
+}

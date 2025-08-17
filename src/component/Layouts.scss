@@ -1,18 +1,30 @@
 .layout-container{
   font-size: 24px;
   min-height: 100vh;
-  background: #F5F5F5;
+  background: #fff;
+  padding-top: 40px;
 }
 .header-container{
+  position: fixed;
+  left: 0;
+  top: 0;
+  width: 100%;
+  z-index: 999;
+  border-bottom: 1px solid $card-border;
+  box-sizing: border-box;
   padding: 0 20px;
   display: flex;
   align-items: center;
   justify-content: space-between;
   height: 136px;
   font-size: 36px;
+  background: white;
 }
 .layout-icon{
   padding: 0 20px;
   width: 40px;
   height: 40px;
+}
+.layout-container-body{
+  margin-top: 136px;
 }

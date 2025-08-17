@@ -1,74 +1,147 @@
-@mixin flex-center{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-@mixin flex-between{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-@mixin flex-column{
-  display: flex;
-  flex-direction: column;
-}
 .withdraw-info{
+
+  padding: 40px;
   margin-bottom: 20px;
+  border: 1px solid $card-border;
+  border-radius: 30px;
   .card-title{
-    font-size: 30px;
-    color: #fc6612;
+    font-size: 36px;
+    font-weight: bold;
   }
   .form-item{
     .label{
       @include flex-between;
       align-items: center;
+      color: $text-muted;
+      font-size: 28px;
+    }
+    .right{
+      @include flex-center;
+      gap: 10px;
     }
     .input{
       box-sizing: border-box;
       @include flex-center;
       justify-content: flex-start;
       padding-left: 30px;
+      border-radius: 10px;
+      height: 100px;
+      font-weight: bold;
+      font-size: 26px;
+      background: $background-secondary;
+      &.input-between{
+        @include flex-between;
+        padding-right: 30px;
+        .r{
+          font-size: 24px;
+          padding: 10px 20px;
+          background: $background-tertiary;
+          border-radius: 10px;
+          color: $primary;
+
+        }
+      }
       input{
         text-indent: 0;
       }
       .btn{
         margin: 2px;
-        background: #fc6612;
-        height: 58px;
+        background: $button-primary;
+        height: 80px;
         @include flex-center;
         padding: 0 20px;
         color: #fff;
-        border-radius: 58px;
+        margin-right: 10px;
+        border-radius: 20px;
       }
     }
   }
   .other-info{
-    margin: 40px 20px;
-    color: #787878;
+    padding: 40px;
+    background: $background-secondary;
+    margin: 40px 0;
+    border-radius: 16px;
+    color: $text-secondary;
     @include flex-column;
     gap: 20px;
+    font-size: 28px;
     .item{
       @include flex-between;
+    }
+    .right{
+      font-weight: bold;
+      color: $text-primary;
+      &.success{
+        color:$success;
+      }
     }
   }
 }
 .withdraw-list{
+  border: 1px solid $card-border;
+  padding: 40px;
   .top{
     .title{
-      font-size: 30px;
-      color: #fc6612;
+      font-size: 36px;
+      font-weight: bold;
+      color: $text-primary;
     }
   }
-  .record-list-item{
-    .tip{
-      display: flex;
-      justify-content: flex-end;
-      gap: 10px;
-      align-items: center;
+  .record-list-item-li{
+      border-radius: 16px;
+      padding: 30px;
+      background: $background-secondary;
+      @include flex-column;
+      gap: 24px;
+      .top{
+        @include flex-between;
+        .left{
+          font-size: 28px;
+          color: $text-primary;
+          font-weight: bold;
+        }
+        .right{
+          div{
+            border-radius: 40px;
+            font-size: 24px;
+            padding: 10px 20px;
+            color: $text-primary;
+
+          }
+          .processing{
+            background: $warning;
+          }
+          .successed{
+            background: $success;
+          }
+          .failed{
+            background: $error;
+          }
+
+        }
+      }
+    .hash{
+      color: $text-muted;
     }
-    .icon{
-      width: 35px;
-      height: 35px;
-    }
+      .middle{
+        @include flex-column;
+        gap: 30px;
+        &-item{
+          @include flex-between;
+          font-size: 28px;
+          .left{
+            @include flex-center;
+            gap: 10px;
+            color: $text-secondary;
+          }
+          .right{
+            color: $text-primary;
+            font-weight: bold;
+            &.success{
+              color:$success;
+            }
+          }
+        }
+      }
   }
 }

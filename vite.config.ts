@@ -16,9 +16,15 @@ export default defineConfig(()=>{
       preprocessorOptions:{
         scss:{
           additionalData: `
-        @use "@/style/reset.scss";
-        @use "@/style/mixin.scss";
-        `
+            @use "@/style/color.scss" as *;
+            @use "@/style/reset.scss" as *;
+            @use "@/style/mixin.scss" as *;
+          `,
+          // 确保 SCSS 编译选项
+          sassOptions: {
+            outputStyle: 'compressed',
+            includePaths: [path.resolve(__dirname, 'src/style')]
+          }
         }
       }
     }

@@ -1,25 +1,12 @@
+// 全局样式文件
+// 注意：color.scss, reset.scss, mixin.scss 已在 vite.config.ts 中预处理
+
 html,body{
   width: 100%;
   overflow-x: hidden;
   font-size: 30px;
 }
-@mixin flex-center{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-@mixin flex-between{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-@mixin flex-column{
-  display: flex;
-  flex-direction: column;
-}
-.text-white{
-  color: #fff;
-}
+
 
 .font-size-tip{
   font-size: 24px !important;
@@ -177,10 +164,12 @@ html,body{
 
 .button-block{
   @include flex-center;
-  height: 70px;
-  background: #fc6612;
-  border-radius: 70px;
-  color: #fff;
+  height: 128px;
+  background: $button-primary;
+  border-radius: 20px;
+  color: $text-primary;
+  font-size: 34px;
+  font-weight: bold;
   width: 100%;
   position: relative;
 }

@@ -23,7 +23,7 @@ const Layouts:FC<{
   const clearUser = ()=> {
     localStorage.removeItem(TOKEN)
     setUser(null)
-    navigation('/')
+    // navigation('/')
   }
 
 
@@ -63,12 +63,14 @@ const Layouts:FC<{
       <div className="layout-container">
         <div className="header-container">
           <div className="left" onClick={()=>navigation(-1)}>
-            <Iconfont icon={'icon-fanhuijiantou'}/>
+            <Iconfont icon={'icon-left-arrow'}/>
           </div>
           <div className="title">{title}</div>
           <div className="right">{right}</div>
         </div>
-        {children}
+        <div className="layout-container-body">
+          {children}
+        </div>
       </div>
     </>
   )

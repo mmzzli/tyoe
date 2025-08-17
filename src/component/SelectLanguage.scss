@@ -5,7 +5,7 @@
   .title{
     text-align: center;
     font-size: 30px;
-    color: #fc6612;
+    color: $primary;
   }
   .languages{
     margin-top: 54px;
@@ -21,7 +21,7 @@
       height: 70px;
       justify-content: space-between;
       &.active{
-        background: #FFF2E8;
+        background: $button-primary;
       }
       .left{
         display: flex;

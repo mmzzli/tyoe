@@ -2,7 +2,6 @@
    v2.0 | 20110126
    License: none (public domain)
 */
-
 html, body, div, span, applet, object, iframe,
 h1, h2, h3, h4, h5, h6, p, blockquote, pre,
 a, abbr, acronym, address, big, cite, code,
@@ -47,10 +46,25 @@ table {
   border-collapse: collapse;
   border-spacing: 0;
 }
+.pv20{
+  padding: 20px 0;
+}
 
 .container{
-  background: #F5F5F5;
+  background: #fff;
   min-height: 100vh;
   min-width: 100vw;
   font-size: 30px;
+}
+
+.m20{
+  margin: 20px;
+}
+.mv20{
+  margin: 20px 0;
+}
+.icon-right-arrow{
+  width: 40px;
+  height: 40px;
+  stroke: rgb(107, 114, 128);
 }

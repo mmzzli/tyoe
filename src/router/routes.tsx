@@ -21,11 +21,6 @@ const myRoutes: MyRoutesItem[] = [
 		name: 'Home',
 	},
 	{
-		path: "/assets",
-		component: './Assets',
-		name: 'Assets',
-	},
-	{
 		path: "/announcements",
 		component: './Announcements',
 		name: 'Announcements',
@@ -36,24 +31,9 @@ const myRoutes: MyRoutesItem[] = [
 		name: 'AnnouncementDetail',
 	},
 	{
-		path: "/team",
-		component: './Team',
-		name: 'Team',
-	},
-	{
-		path: "/node",
-		component: './Node',
-		name: 'Node',
-	},
-	{
 		path: "/withdraw",
 		component: './Withdraw',
 		name: 'Withdraw',
-	},
-	{
-		path: "/lp",
-		component: './Lp',
-		name: 'Lp',
 	},
 	{
 		path: "/staking",

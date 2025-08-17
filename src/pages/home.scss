@@ -1,26 +1,40 @@
+.container{
+  margin-top: 120px;
+}
 .navbar{
-  padding: 40px;
+  border-bottom: 1px solid rgb(229, 231, 235);
   display: flex;
+  position: fixed;
+  top: 0;
+  z-index: 80;
+  background: $text-white;
+  left: 0;
+  width: 100%;
+  box-sizing: border-box;
   justify-content: space-between;
   align-items: center;
-  height: 52px;
+  padding: 0 40px;
+  height: 120px;
   .icon{
     width: 40px;
     height: 40px;
   }
   .left{
-    width: 52px;
-    height: 52px;
+    height: 64px;
     display: flex;
     justify-content: center;
     align-items: center;
+    img{
+      width: auto;
+      height: 128px;
+    }
 
   }
   .right{
-    width: 52px;
+    width: 128px;
     height: 52px;
     display: flex;
-    justify-content: center;
+    justify-content: flex-end;
     align-items: center;
 
   }
@@ -45,12 +59,10 @@
 }
 .swiper{
   overflow: hidden;
-  margin: 0 20px;
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: 20px;
-  border-radius: 30px;
   height: 100%;
   img{
     width: 100%;
@@ -58,391 +70,346 @@
     object-fit: cover;
     display: block;
   }
-}
-.notice{
-  .main{
-    div{
-      font-size: 24px !important;
-    }
-  }
-}
-.m20{
-  margin: 20px;
-}
-.mv20{
-  margin: 20px 0;
-}
-.card{
-  background: #fff;
-  border-radius: 30px;
-  .top{
-    display: flex;
-    justify-content: space-between;
-    padding:20px;
-    .title{
-      font-weight: bold;
-      font-size: 30px;
-      color: #fc6612;
-    }
-  }
-  .main{
-    padding: 0 20px 20px;
-    .swiper{
-      height: 60px;
-    }
-    .text{
-      font-size: 24px;
-      line-height: 30px;
-    }
-  }
-}
-.invite{
-  background: linear-gradient(90deg, #FC6612 0%, #f88400 100%);
-  border-radius: 20px;
-  overflow: hidden;
-  color: #fff;
-  .top{
-    .title{
-      color: #fff;
-    }
-  }
-
-  .main{
-    display: flex;
-    gap: 20px;
-    justify-content: space-between;
-    .left{
-      width: 132px;
-      height: 132px;
-      img{
-        width: 100%;
-        height: auto;
-
-      }
-    }
-    .right{
-      margin-top: 20px;
-      display: flex;
-      flex: 1;
-      flex-direction: column;
-      justify-content: center;
-      gap: 10px;
-      .text{
-        font-size: 30px;
-
-      }
-      .link{
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-      }
-      .link-text{
-        font-size: 24px;
-      }
-    }
-  }
-}
-
-.token-info{
-  .list-wrapper{
-    display: flex;
-    flex-direction: column;
-    gap: 30px;
-    .list{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .right{
-        display: flex;
-        gap: 5px;
-        align-items: center;
-      }
-    }
-
-  }
-  .price{
-    margin-top: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fff;
-    width: 100%;
-    height: 220px;
+  .img-box{
     position: relative;
-    img{
+    .img-info{
+      background: rgba(0,0,0,0.3);
+      padding: 30px;
+      color: $text-white;
       position: absolute;
+      bottom: 0;
       left: 0;
-      top: 0;
-    }
-    &-main{
-      position: relative;
-      z-index: 2;
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      justify-content: center;
-      gap: 15px;
+      width: 100%;
+      box-sizing: border-box;
+      @include flex-column;
+      gap: 20px;
       .title{
         font-size: 30px;
         font-weight: bold;
       }
-      .price-box{
-        color: #fc6612;
-        font-family: arial;
-        font-weight: bold;
-      }
-      .price-rise{
-        color: #45E780;
-        font-family: Arial;
-      }
-      .price-down{
-        color: #E74558FF;
-        font-family: Arial;
-      }
-    }
-  }
-  .swap{
-    margin-top: 80px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    color: #fc6612;
-    gap: 10px;
-  }
-  .pools{
-    margin-top:40px;
-    display: flex;
-    justify-content: space-between;
-    &-item{
-      text-align: center;
-      .top{
+      .desc{
         font-size: 24px;
       }
-      .value{
-        font-size: 30px;
-      }
     }
   }
 
 }
 
-.lp-info{
-  .main{
-    .profit{
-      height: 150px;
-      display: flex;
-      align-items: center;
-      width: 100%;
-      flex-direction: column;
-      justify-content: center;
-      border: 1px solid #fc6612;
+.airdop-box{
+  margin: 40px;
+  border-radius: 24px;
+  padding: 40px;
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow:  0 2px 3.84px rgba(0, 0, 0, 0.1);
+  .title{
+    @include flex-between;
+    margin-bottom: 40px;
+    .left{
+      font-size: 40px;
+      font-weight: bold;
+
+    }
+    .right{
+      white-space: nowrap;
+      box-sizing: border-box;
+      @include flex-center;
+      gap: 5px;
+      padding: 20px;
+      height: 60px;
+      background: $button-primary;
       border-radius: 30px;
-      background: #F5F5F5;
+      font-size: 24px;
+    }
+  }
+  .desc{
+    color: $text-secondary;
+    font-size: 28px;
+    line-height: 1.4em;
+  }
+  .check-nft-button{
+    margin: 40px  0 ;
+    button{
+      @include flex-center;
       gap: 20px;
-      font-size: 30px;
-      .profit-value{
-        color: #fc6612;
+      width: 100%;
+      border: none;
+      background: $button-primary;
+      color: $text-primary;
+      height: 108px;
+      font-size: 32px;
+      border-radius:16px;
+      font-width: bold;
+    }
+  }
+  .check-nft-info{
+    margin-bottom: 20px;
+    @include flex-between;
+    gap: 20px;
+    border: 1px solid $warning;
+    padding: 40px ;
+    background: $background-secondary;
+    border-radius:16px ;
+    font-size: 24px;
+    color: $text-secondary;
+    line-height: 1.4em;
+    svg{
+      width: 48px;
+      height: 48px;
+    }
+  }
+  .card-box{
+    @include flex-between;
+    gap: 20px;
+    margin-top: 40px;
+    &-item{
+      border: 1px solid $card-border;
+      background: $background-secondary;
+      flex: 1;
+      border-radius:16px ;
+      @include flex-column;
+      padding: 40px;
+      font-size: 24px;
+      gap: 10px;
+      justify-content: center;
+      align-items: center;
+      &-title{
+        color: $text-muted;
+      }
+
+      &-percent{
+        color: $text-muted;
+      }
+      &-middle{
+        margin: 10px 0;
+        color: $text-primary;
+        font-weight: bold;
+        font-size: 30px;
+      }
+    }
+  }
+
+  .airdop-rule{
+    margin-top: 40px;
+    padding:0 40px 40px;
+    border-radius: 16px;
+    background: $background-secondary;
+    &-title{
+      padding: 40px 0;
+      font-size: 40px;
+    }
+    &-item{
+      @include flex-center;
+      justify-content: flex-start;
+      gap: 30px;
+      font-size: 28px;
+      line-height: 1.4em;
+      align-items: flex-start;
+      margin-bottom: 10px;
+      color: $text-secondary;
+      flex:1;
+      &:before{
+        content: attr(data-num);
+        font-size: 30px;
+        font-weight: bold;
+        color:$primary;
+      }
+    }
+  }
+  .check-nft-result{
+    margin-top: 40px;
+    padding:0 40px 40px;
+    border-radius: 16px;
+    background: $background-secondary;
+    &-title{
+      padding: 40px 0;
+      font-size: 40px;
+    }
+    &-item{
+      @include flex-between;
+      gap: 30px;
+     .middle{
+       flex:1;
+       @include flex-column;
+       gap: 10px;
+       .bottom{
+         color: $success;
+         font-size: 24px;
+       }
+     }
+      .right{
+        color: $success;
+      }
+    }
+  }
+}
+
+.whitelist-container{
+  margin: 40px;
+  border-radius: 24px;
+  padding: 40px;
+  border: 1px solid rgb(229, 231, 235);
+  box-shadow:  0 2px 3.84px rgba(0, 0, 0, 0.1);
+  .title{
+    @include flex-between;
+    margin-bottom: 40px;
+    .left{
+      font-size: 40px;
+      font-weight: bold;
+    }
+    .right{
+      box-sizing: border-box;
+      @include flex-center;
+      gap: 5px;
+      padding: 20px;
+      height: 60px;
+      background: $background-secondary;
+      border-radius: 30px;
+      font-size: 24px;
+      color:$text-muted
+    }
+  }
+  .whitelist-tabs{
+    .tabs{
+      @include flex-center;
+      gap: 20px;
+      .tab-label{
+        width: 180px;
+        height: 100px;
+        @include flex-center;
+        border-radius: 16px;
+        background: $background-secondary;
+        border: 1px solid $card-border;
+        margin-bottom: 40px;
+        &.active{
+          border: 1px solid transparent;
+          background: $button-primary;
+        }
+      }
+    }
+    .tabs-container{
+      @include flex-column;
+      gap: 30px;
+      &-item{
+        @include flex-between;
+        .left{
+          @include flex-center;
+          gap: 10px;
+          color: $text-secondary;
+
+        }
+        .right{
+          color: $text-primary;
+          font-weight: bold;
+        }
+      }
+      .progress-container{
+        .progress{
+          width: 100%;
+          height: 16px;
+          background: $background-secondary;
+          &-bar{
+            margin-top: 20px;
+            background: $primary;
+            border-radius: 16px;
+            height: 100%;
+          }
+        }
+        .number{
+          @include flex-center;
+          justify-content: flex-end;
+          font-size: 24px;
+          color: $text-muted;
+          margin-top: 10px;
+        }
+
+      }
+    }
+    .phase-records{
+      &-title{
+        font-size: 30px;
         font-weight: bold;
       }
+      .lists{
+        margin-top: 30px;
+        padding: 40px;
+        border-radius: 16px;
+        background: $background-secondary;
+        @include flex-column;
+        gap: 26px;
 
-    }
-    .profit-clean{
-      display: flex;
-      justify-content: space-between;
-      margin-top: 20px;
-      .right{
-        color: #fc6612;
+      }
+      .list-item{
+        height: 30px;
+        line-height: 30px;
+        @include flex-between;
+        .address{
+          font-weight: bold;
+          font-size: 30px;
+          color: $text-primary;
+        }
+        .time{
+          color: $text-muted;
+          font-size: 24px;
+        }
       }
     }
-  }
-
-  .list-item{
-    display: flex;
-    flex-direction: column;
-    margin:0 10px;
-    border-radius: 20px;
-    gap: 20px;
-    padding:20px 20px 40px;
-    &-1{
-      background: #FFEFE7;
-      border: 1px solid #FEAB4F;
-    }
-    &-2{
-      background: #ECF8F0;
-      border: 1px solid #3FB66A;
-
-    }
-    &-3{
-      background: #E9F0FF;
-      border: 1px solid #3274FF;
-    }
-    .top-title{
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 30px;
-      color: #1D1D1D;
-      margin-bottom: 10px;
-    }
-    .item{
-      display: flex;
-      justify-content: space-between;
-      font-size: 24px;
-      color: #1D1D1D;
-      white-space: nowrap;
-      .right{
-        margin-right: -10px;
+    .controls{
+      @include flex-between;
+      gap: 20px;
+      button{
+        @include flex-center;
+        flex: 1;
+        border: none;
+        height: 128px;
+        border-radius: 8px;
+        background: $background-secondary;
+        color: $text-muted;
       }
     }
-  }
-  .mine-lp{
-    margin-top: 20px;
-    line-height: 30px;
-    font-size: 24px;
-    display: flex;
-    flex-direction: column;
-    gap: 10px;
-    .mine-lp-value{
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      .text{
-        font-size: 30px;
-        color: #fc6612;
-      }
-
-    }
-  }
-}
-
-.problem{
-  .top{
-    flex-direction: column;
-    gap: 20px;
-    .desc{
-      font-size: 24px;
-      line-height: 30px;
-    }
-  }
-  .main{
-    svg{
-      fill: #fc6612;
-    }
-    .rv-cell,.rv-collapse-item__content{
-      padding-left: 0;
-      padding-right: 0;
-    }
-
   }
 }
 
 .footer{
-  padding: 80px 20px 20px;
+  @include flex-column;
+  border-top: 1px solid $divider;
+  padding: 40px 0 ;
+  justify-content: center;
+  align-items: center;
+  color: $text-secondary;
+  font-size: 28px;
+  .media-list{
+    @include flex-center;
+    gap: 20px;
+    margin: 30px;
+    svg{
+      width: 50px;
+      height: 50px;
+    }
+  }
   .link{
+    @include flex-column;
     justify-content: center;
     align-items: center;
-    gap: 30px;
-    display: flex;
-    .link-item{
-      width: 60px;
-      height: 60px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      font-size: 34px;
-      background: #F5F5F5;
-      border-radius: 60px;
-    }
-  }
-  .info{
-    margin: 30px 0;
-    text-align: center;
-    font-size: 20px;
-  }
-  .foot-logo{
-    margin: 20px 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    gap: 3px;
-    color: #fc6612;
-    font-size: 30px;
-    img{
-      width: 62px;
-      height: 62px;
-    }
-  }
-  .copy{
-    margin: 20px 0;
+    gap: 20px;
     font-size: 24px;
-    text-align: center;
-    color: #787878;
-  }
-  .secret{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    margin: 40px 0;
-    font-size: 24px;
-    div{
-      color: #fc6612;
+    color: $text-muted;
+    .link-text{
+      font-size: 28px;
     }
-    span{
-      color: #787878;
-      margin: 0 15px;
-    }
-
-  }
-}
-.parent-link{
-  padding: 60px 20px;
-  .title{
-    text-align: center;
-    color: #fc6612;
-  }
-  width: 100%;
-  box-sizing: border-box;
-  .main{
-    padding: 40px 0 0px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: center;
-    .info{
-      text-align: left;
-      width: 100%;
-      margin-top: 20px;
-      margin-left: 20px;
-      color: #FF2020;
-      line-height: 1.2em;
-      font-size: 18px;
-      white-space: pre-wrap;
-      overflow-wrap: break-word
-    }
-    .button{
-      margin-top: 40px;
-      background: #fC6612;
-      color: #fff;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      border-radius: 70px;
-      height: 70px;
-      width: 100%;
+    .link-button{
+      button{
+        gap: 8px;
+        @include flex-center;
+        border: 2px solid $button-primary;
+        width: 280px;
+        height: 100px;
+        background:transparent;
+        border-radius: 16px;
+        color: $primary;
+        svg{
+          fill: $text-muted;
+        }
+      }
     }
   }
-  .input{
-    text-indent: 0.3em;
-    width: 100%;
-    background: #F5F5F5;
-    height: 70px;
-    border-radius: 10px;
-    input{
-      border: none;
-      background: none;
-      height: 100%;
-      width: 100%;
-    }
-  }
-
 }
