@@ -84,7 +84,7 @@ const Node = ()=>{
         </div>
         <div className="info-content">
           <div className="h4">{intl.formatMessage({ id: 'node.total.dividends' })}</div>
-          <div className="value">${formatNumber(data?.nodeInfo?.totalmoney||0)}</div>
+          <div className="value">Da lat{formatNumber(data?.nodeInfo?.totalmoney||0)}</div>
         </div>
         {
           data?.nodeInfo?.nodeint !== 0 && <div className="middle">

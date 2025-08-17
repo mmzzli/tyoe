@@ -189,7 +189,7 @@ const Staking = ()=>{
             </div>
             <div className="list-item">
               <div className="top">{intl.formatMessage({ id: 'staking.daily.yield' })}</div>
-              <div className="value">{Number(curSelectedGood.reward)}%</div>
+              <div className="value">{Number(curSelectedGood.reward)*100}%</div>
             </div>
           </div>
         }
