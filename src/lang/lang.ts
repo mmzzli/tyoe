@@ -1,21 +1,21 @@
 export const translations:any = {
   'tw': {
 
-    "nav.announcement":"系统公告",
-    "nav.announcement.detail":"公告详情",
-    "nav.withdraw":"提现",
+    "nav.announcement":"系統公告",
+    "nav.announcement.detail":"公告詳情",
+    "nav.withdraw":"提現",
 
     "common.warning":"注意",
-    "common.wan":"万",
+    "common.wan":"萬",
     'app.name':"TYOE",
 
-    "connect-wallet-button":"连接钱包",
+    "connect-wallet-button":"連接錢包",
     'airdop.title':"空投認購",
     "airdop.unclamied":"未領取空投",
     "airdop.clamied":"已領取空投",
     'airdop.check.nft':"檢測 NFT",
     'airdop.check.desc':"點擊檢測按鈕自動檢測您錢包中的 NFT，符合條件的 NFT 可獲得 100 TYOE 空投獎勵",
-    'airdop.check.nft.info':"每枚NFT 編碼地址仅能領取一次",
+    'airdop.check.nft.info':"每枚NFT 編碼地址僅能領取一次",
 
 
     'airdop.check.nft.result':"檢測結果",
@@ -29,14 +29,14 @@ export const translations:any = {
     'token.left.percent':"剩餘",
 
     'airdop.rule.title':"空投規則",
-    'airdop.rule.1':"持有以太坊10周年纪念NFT可獲得空投獎勵",
+    'airdop.rule.1':"持有以太坊10週年紀念NFT可獲得空投獎勵",
     'airdop.rule.2':"每枚NFT 和錢包地址僅限領取一次",
-    'airdop.rule.3':"檢測成功後 TYOE 代幣將自動發放到您的錢包",
-    'airdop.rule.4':"空投活動最終解釋權歸 TYOE 項目方所有",
+    'airdop.rule.3':"空投活動最終解釋權歸 TYOE 基金會所有",
+    'airdop.rule.4':"檢測成功後 TYOE 代幣將自動發放到您的錢包",
 
 
     'whitelist.title':'白名單認購',
-    "whitelist.title.not.user":'非白名單用戶',
+    "whitelist.title.not.user":'白名單用戶',
     'whitelist.tab.phase':'第{num}期',
     'whitelist.countdown':'倒計時',
     'whitelist.current.price':'當前價格',
@@ -53,33 +53,33 @@ export const translations:any = {
 
 
 
-    "staking.records":"质押记录",
-    "staking.detail.total.amount":"总质押金额",
-    "staking.detail.total.reward":"总累计收益",
-    "staking.detail.time":"质押时间",
-    "staking.detail.amount":"质押金额",
+    "staking.records":"質押記錄",
+    "staking.detail.total.amount":"總質押金額",
+    "staking.detail.total.reward":"總累計收益",
+    "staking.detail.time":"質押時間",
+    "staking.detail.amount":"質押金額",
     "staking.detail.day.reward":"日化收益",
-    "staking.detail.calc.reward":"累计收益",
-    "staking.detail.Withdraw":"赎回",
+    "staking.detail.calc.reward":"累計收益",
+    "staking.detail.Withdraw":"贖回",
 
-    "common.order.no":"订单号",
-    "common.order.processing":"进行中",
+    "common.order.no":"訂單號",
+    "common.order.processing":"進行中",
 
 
 
-    "withdraw.title":"提现申请",
-    "withdraw.address":"提现地址",
-    "withdraw.amount":"提现金额",
-    "withdraw.placeholder.amount":"提现金额",
-    "withdraw.balance":"余额",
-    "withdraw.fee":"手续费",
-    "withdraw.receive":"预计到帐",
-    "withdraw.confirm":"确认提现",
-    "withdraw.records":"提现记录",
+    "withdraw.title":"提現申請",
+    "withdraw.address":"提現地址",
+    "withdraw.amount":"提現金額",
+    "withdraw.placeholder.amount":"提現金額",
+    "withdraw.balance":"餘額",
+    "withdraw.fee":"手續費",
+    "withdraw.receive":"預計到帳",
+    "withdraw.confirm":"確認提現",
+    "withdraw.records":"提現記錄",
     "withdraw.hash":"哈希",
     "withdraw.status.success":"已完成",
-    "withdraw.status.processing":"提现中",
-    "withdraw.status.reject":"已拒绝",
+    "withdraw.status.processing":"提現中",
+    "withdraw.status.reject":"已拒絕",
 
 
   },
@@ -116,7 +116,7 @@ export const translations:any = {
     "airdop.rule.4":"Final interpretation rights of the airdrop belong to the TYOE project team",
 
     "whitelist.title":"Whitelist Subscription",
-    "whitelist.title.not.user":"Not a Whitelist User",
+    "whitelist.title.not.user":"Whitelist User",
     "whitelist.tab.phase":"Phase {num}",
     "whitelist.countdown":"Countdown",
     "whitelist.current.price":"Current Price",
@@ -190,7 +190,7 @@ export const translations:any = {
     "airdop.rule.4":"에어드롭 최종 해석권은 TYOE 프로젝트팀에 있음",
 
     "whitelist.title":"화이트리스트 청약",
-    "whitelist.title.not.user":"화이트리스트 유저 아님",
+    "whitelist.title.not.user":"화이트리스트 사용자",
     "whitelist.tab.phase":"{num}기",
     "whitelist.countdown":"카운트다운",
     "whitelist.current.price":"현재 가격",
@@ -264,7 +264,7 @@ export const translations:any = {
     "airdop.rule.4":"エアドロップの最終的な解釈権はTYOEプロジェクトチームにあります",
 
     "whitelist.title":"ホワイトリスト購読",
-    "whitelist.title.not.user":"ホワイトリストユーザーではありません",
+    "whitelist.title.not.user":"ホワイトリストユーザー",
     "whitelist.tab.phase":"第{num}期",
     "whitelist.countdown":"カウントダウン",
     "whitelist.current.price":"現在価格",

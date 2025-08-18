@@ -5,7 +5,12 @@ import { Swiper } from 'react-vant';
 import SelectLanguage from '@/component/SelectLanguage.tsx';
 import { useIntl } from 'react-intl';
 import bannerUrl from '@/assets/images/banner.png';
-import logoUrl from '@/assets/images/TYOE.png';
+import banner01Url from '@/assets/images/banner01.jpg';
+import banner02Url from '@/assets/images/banner02.jpg';
+import banner03Url from '@/assets/images/banner03.jpg';
+import banner04Url from '@/assets/images/banner04.jpg';
+import banner05Url from '@/assets/images/banner05.jpg';
+import logoUrl from '@/assets/images/logo.png';
 import { ConnectButtonCustom } from '@/component/ConnectButtonCustom.tsx';
 import Iconfont from '@/component/Iconfont.tsx';
 import WhitePhaseItem, { PhaseItemProps } from '@/component/PhaseItem.tsx';
@@ -14,6 +19,11 @@ const Home:React.FC = () =>{
 	const intl = useIntl()
 	const banner = [
 		{ urlimg: bannerUrl },
+		{ urlimg: banner01Url },
+		{ urlimg: banner02Url },
+		{ urlimg: banner03Url },
+		{ urlimg: banner04Url },
+		{ urlimg: banner05Url },
 	]
 
 
@@ -156,9 +166,9 @@ const Home:React.FC = () =>{
 					<div className="airdop-rule-item" data-num={2}>
 						{intl.formatMessage({ id: 'airdop.rule.2' })}
 					</div>
-					{/*<div className="airdop-rule-item" data-num={3}>*/}
-					{/*	{intl.formatMessage({ id: 'airdop.rule.3' })}*/}
-					{/*</div>*/}
+					<div className="airdop-rule-item" data-num={3}>
+						{intl.formatMessage({ id: 'airdop.rule.3' })}
+					</div>
 					{/*<div className="airdop-rule-item" data-num={4}>*/}
 					{/*	{intl.formatMessage({ id: 'airdop.rule.4' })}*/}
 					{/*</div>*/}
@@ -199,9 +209,10 @@ const Home:React.FC = () =>{
 					{intl.formatMessage({id:'footer.social.media'})}
 				</div>
 				<div className="media-list">
-					<Iconfont icon={'icon-tuite1'}></Iconfont>
-					<Iconfont icon={'icon-telegram'}></Iconfont>
-					<Iconfont icon={'icon-discard'}></Iconfont>
+					<a href="https://x.com/ethdotorg" target="_blank"><Iconfont icon={'icon-tuite1'}></Iconfont></a>
+					<a href="" target="_blank"><Iconfont icon={'icon-telegram'}></Iconfont></a>
+					<a href="https://ethereum.org/" target="_blank"><Iconfont icon={'icon-ethereum'}></Iconfont></a>
+					<a href="https://discord.com/invite/ethereum-org" target={'_blank'}>					<Iconfont icon={'icon-discard'}></Iconfont></a>
 				</div>
 				<div className="link">
 					<div className="invite">
@@ -216,16 +227,54 @@ const Home:React.FC = () =>{
 							<Iconfont icon={'icon-share'}></Iconfont>
 							{intl.formatMessage({id:'footer.copy.link'})}
 							<Iconfont icon={'icon-fuzhi'}></Iconfont></button>
-
-
 					</div>
 				</div>
+
+				<ul className="other-link">
+					<li>
+						<a href="https://ethereum.org/zh/about/" target="_blank">关于我们</a>
+					</li>
+					<li>
+						<a href="https://ethereum.org/zh/assets/" target="_blank">以太坊品牌资产</a>
+
+
+					</li>
+					<li>
+						<a href="https://ethereum.org/zh/community/code-of-conduct/" target="_blank">行为守则</a>
+
+
+					</li>
+					<li>
+						<a href="https://ethereum.org/zh/about/#open-jobs" target="_blank">工作机会</a>
+
+
+					</li>
+					<li>
+						<a href="https://ethereum.org/zh/privacy-policy/" target="_blank">隐私政策</a>
+
+
+					</li>
+					<li>
+						<a href="https://ethereum.org/zh/terms-of-use/" target="_blank">使用条款</a>
+
+
+					</li>
+					<li>
+						<a href="https://ethereum.org/zh/cookie-policy/" target="_blank">Cookie 政策</a>
+
+
+					</li>
+					<li>
+						<a href="mailto:press@ethereum.org" target="_blank">媒体联系方式</a>
+
+
+					</li>
+				</ul>
 			</div>
 		</div>
 
 	)
 }
-
 
 
 export default Home

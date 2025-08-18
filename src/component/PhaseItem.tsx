@@ -105,6 +105,11 @@ const WhitePhaseItem:React.FC<PhaseItemProps>  = ({ countdown,priceUSD,totalSlot
       </div>
     </div>
 
+    <div className="controls">
+      <button>{intl.formatMessage({ id: "whitelist.subscribe" })}</button>
+      <button>{intl.formatMessage({ id: "whitelist.claim" })}</button>
+    </div>
+
     <div className="phase-records">
       <div className="phase-records-title">{intl.formatMessage({ id: 'whitelist.participation.records' })}</div>
       <div className="lists">
@@ -193,10 +198,7 @@ const WhitePhaseItem:React.FC<PhaseItemProps>  = ({ countdown,priceUSD,totalSlot
       </div>
     </div>
 
-    <div className="controls">
-      <button>{intl.formatMessage({ id: "whitelist.subscribe" })}</button>
-      <button>{intl.formatMessage({ id: "whitelist.claim" })}</button>
-    </div>
+
   </>
 }
 export default WhitePhaseItem
