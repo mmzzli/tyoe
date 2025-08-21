@@ -1,6 +1,7 @@
 import { Toast } from 'react-vant';
 import copy from 'copy-to-clipboard'
 import {BigNumber} from 'bignumber.js';
+import { decodeErrorResult } from 'viem';
 
 export const  formatWithSeparator=(number:string|number, separator = ',') =>{
 	const parts = number.toString().split('.');
@@ -63,4 +64,32 @@ export const smallNumber = (number:number|string,length=10)=>{
 		}
 	}
 	return `${num.split('.')[0]}.0(${len})${end}`
+}
+
+
+export const getContractErrorInfo = async (publicClient:any,tx:any) =>{
+	console.log(tx,'======');
+	try {
+		// 2. 用 call 重放
+		await publicClient.call({
+			to: tx.to,
+			data: tx.input,
+			from: tx.from,
+			value: tx.value,
+		})
+	} catch (err: any) {
+		console.log(err);
+		// 3. 从 error.data 中提取 reason
+		if (err.cause?.data) {
+			try {
+				const decoded = decodeErrorResult({
+					data: err.cause.data,
+				})
+				return decoded
+			} catch {
+				return `Raw revert data: ${err.cause.data}`
+			}
+		}
+		return 'No revert reason'
+	}
 }

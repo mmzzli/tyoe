@@ -14,17 +14,18 @@ import logoUrl from '@/assets/images/logo.png';
 import { ConnectButtonCustom } from '@/component/ConnectButtonCustom.tsx';
 import Iconfont from '@/component/Iconfont.tsx';
 import WhitePhaseItem, { PhaseItemProps } from '@/component/PhaseItem.tsx';
-import { useAccount, usePublicClient, useSignMessage, useWriteContract } from 'wagmi';
+import { useAccount, usePublicClient, useSignMessage, useSwitchChain, useWalletClient, useWriteContract } from 'wagmi';
 import { contract } from '@/wagmi.ts';
 import { manager, nft, token } from '@/abi/tyoe.ts';
 import useUserStore from '@/store/user.ts';
 import { TOKEN } from '@/utils/const.ts';
 import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
-import { formatAddress, generateRandomString } from '@/utils/common.ts';
+import { copyText, formatAddress, generateRandomString, getContractErrorInfo } from '@/utils/common.ts';
 import { useLocation } from 'react-router-dom';
 import { getWhitelistRecords, WhiteListItem, whitelistPhaseList, whitelistSubmit } from '@/service/home.ts';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
+import { bscTestnet } from 'wagmi/chains';
 
 const banner = [
 	{ urlimg: bannerUrl },
@@ -43,7 +44,9 @@ const Home:React.FC = () =>{
 	const publicClient = usePublicClient()
 	const location = useLocation();
 	const searchParams = new URLSearchParams(location.search);
-	const { address, isConnected,isConnecting, isReconnecting } = useAccount()
+	const { switchChainAsync } = useSwitchChain()
+	const { data: walletClient } = useWalletClient()
+	const { address, isConnected,isConnecting, isReconnecting,chainId } = useAccount()
 	const [visible, setVisible] = useState(false)
 	const {signMessageAsync} = useSignMessage()
 
@@ -162,6 +165,24 @@ const Home:React.FC = () =>{
 		featchWhitelist()
 		fetchWhitelistPhases()
 	}, []);
+
+
+	useEffect(() => {
+		const chainSet  = async () =>{
+				try{
+					await switchChainAsync({ chainId: bscTestnet.id })
+
+				}catch {
+					if(walletClient){
+						await walletClient.addChain({chain: bscTestnet})
+					}
+				}
+		}
+		if(isConnected && chainId !== bscTestnet.id){
+			chainSet()
+		}
+
+	}, [isConnected,chainId]);
 
 	useEffect(() => {
 		const fetchPhaseIdInfo = async () =>{
@@ -302,7 +323,11 @@ const Home:React.FC = () =>{
 				}))
 			}
 			const ids:any = await Promise.all(requestNFTids) || []
-
+			console.log(ids);
+			if(!ids.length){
+				Toast('没有 NFT');
+				return;
+			}
 			setNFTs({
 				balance: Number(nftBalance),
 				balanceNo: ids.map((item:any)=>Number(item)),
@@ -396,13 +421,17 @@ const Home:React.FC = () =>{
 			await whitelistSubmit({hex:message,signed,hash:tx})
 			await featchWhitelist()
 
-		}catch (e) {
+			Toast('认购成功')
+
+		}catch (e:any) {
+			Toast(`认购失败${e.shortMessage || e.message}`)
 			console.log(e);
 		}
 
 
 	}
 	const handlerGet = async ()=>{
+		try{
 			const tx = await writeContractAsync({
 				address: contract.dev.manager as `0x${string}`,
 				abi: manager,
@@ -410,9 +439,20 @@ const Home:React.FC = () =>{
 				args: [],
 			})
 			const clamRes = await publicClient.waitForTransactionReceipt({hash:tx})
-
-			console.log(clamRes);
+			console.log(clamRes,'clamRes');
+			if(clamRes.status === "reverted"){
+				const res = await getContractErrorInfo(publicClient,clamRes)
+				console.log(res);
+				return Toast(res)
+			}
+			Toast('领取成功')
+		}catch (e:any) {
+			console.log(e);
+			console.log(e.shortMessage || e.message);
+			Toast(e.shortMessage || e.message)
 		}
+
+	}
 
 	return(
 		<>
@@ -612,14 +652,16 @@ const Home:React.FC = () =>{
 						{intl.formatMessage({ id: 'footer.invite.link' })}
 					</div>
 					<div className="link-text">
-						https://tyoe.io/invite/abc***xyz
+						{`https://www.tyoe.net?invite=${userStore.user?.invit}`}
 					</div>
 
 					<div className="link-button">
 						<button>
 							<Iconfont icon={'icon-share'}></Iconfont>
 							{intl.formatMessage({ id: 'footer.copy.link' })}
-							<Iconfont icon={'icon-fuzhi'}></Iconfont></button>
+							<Iconfont icon={'icon-fuzhi'} onClick={()=>{
+								copyText(`https://www.tyoe.net?invite=${userStore.user?.invit}`)
+							}}></Iconfont></button>
 					</div>
 				</div>
 

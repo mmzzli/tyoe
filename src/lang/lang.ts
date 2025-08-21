@@ -100,6 +100,12 @@ export const translations:any = {
     "common.wan":"Ten Thousand",
     "app.name":"TYOE",
 
+
+    "bind.invite.title": "Confirm Upline",
+    "bind.invite.placeholder": "Please confirm your upline invitation code",
+    "bind.invite.tip": "Note:\nBefore registering, please confirm your upline invitation code to avoid binding errors.",
+    "bind.invite.button": "Sign & Register",
+
     "connect-wallet-button":"Connect Wallet",
     "airdop.title":"Airdrop Subscription",
     "airdop.unclamied":"Unclaimed Airdrop",
@@ -174,6 +180,11 @@ export const translations:any = {
     "common.wan":"만",
     "app.name":"TYOE",
 
+    "bind.invite.title": "상위 추천인 확인",
+    "bind.invite.placeholder": "상위 추천인의 초대 코드를 확인하세요",
+    "bind.invite.tip": "주의:\n가입 전에 상위 추천인의 초대 코드를 확인하여 잘못된 연결을 방지하세요.",
+    "bind.invite.button": "서명 후 가입",
+
     "connect-wallet-button":"지갑 연결",
     "airdop.title":"에어드롭 청약",
     "airdop.unclamied":"미수령 에어드롭",
@@ -247,6 +258,11 @@ export const translations:any = {
     "common.warning":"注意",
     "common.wan":"万",
     "app.name":"TYOE",
+
+    "bind.invite.title": "上位紹介者を確認",
+    "bind.invite.placeholder": "上位紹介者の招待コードを確認してください",
+    "bind.invite.tip": "注意：\n登録前に上位紹介者の招待コードを確認し、誤った紐付けにご注意ください。",
+    "bind.invite.button": "署名して登録",
 
     "connect-wallet-button":"ウォレット接続",
     "airdop.title":"エアドロップ購読",
