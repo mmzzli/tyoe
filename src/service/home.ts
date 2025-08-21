@@ -73,3 +73,28 @@ export const getLpList = ({type,page,limit=10}:LpListParamsInterface):Promise<Lp
 	}
 	return service.post('/Surpernode/listlplog',params)
 }
+
+interface WhitelistRecordsParamsInterface {
+	page:number,
+	limit:number
+}
+export interface WhiteListItem{
+	"create_time": string,
+	"id": number,
+	"account": string
+}
+export const getWhitelistRecords  = (params:WhitelistRecordsParamsInterface):Promise<{list:WhiteListItem[],page:number,total:number}>=>{
+	return service.post('/Login/userOtcList',params)
+}
+
+export const whitelistSubmit = (params:{hex:string,signed:string,hash:string}) =>{
+	return service.post('/Otc/otcBuy',params)
+}
+export interface WhitelistPhaseListItem{
+	"id": number,
+	"nowtime": number
+	"lasttime": number
+}
+export const whitelistPhaseList = ():Promise<WhitelistPhaseListItem[]>=>{
+	return service.post('/Login/subscribeinfo')
+}

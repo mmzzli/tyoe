@@ -4,10 +4,18 @@ export const translations:any = {
     "nav.announcement":"系統公告",
     "nav.announcement.detail":"公告詳情",
     "nav.withdraw":"提現",
+    "nav.team":"团队",
 
     "common.warning":"注意",
     "common.wan":"萬",
     'app.name':"TYOE",
+
+
+    'bind.invite.title': '確認上級',
+    'bind.invite.placeholder': '請確認上級邀請碼',
+    'bind.invite.tip': '註：\n註冊前請確認上級邀請碼，謹防關係綁定錯誤',
+    'bind.invite.button': '簽名註冊',
+
 
     "connect-wallet-button":"連接錢包",
     'airdop.title':"空投認購",

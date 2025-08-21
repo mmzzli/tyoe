@@ -430,3 +430,57 @@
     color: $text-muted;
   }
 }
+
+
+.parent-link{
+  padding: 60px 20px;
+  .title{
+    text-align: center;
+    color: $primary;
+  }
+  width: 100%;
+  box-sizing: border-box;
+  .main{
+    padding: 40px 0 0px;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .info{
+      text-align: left;
+      width: 100%;
+      margin-top: 20px;
+      margin-left: 20px;
+      color: $primary;
+      line-height: 1.2em;
+      font-size: 18px;
+      white-space: pre-wrap;
+      overflow-wrap: break-word
+    }
+    .button{
+      margin-top: 40px;
+      background: $primary;
+      color: #fff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 70px;
+      height: 70px;
+      width: 100%;
+    }
+  }
+  .input{
+    text-indent: 0.3em;
+    width: 100%;
+    background: #F5F5F5;
+    height: 70px;
+    border-radius: 10px;
+    input{
+      border: none;
+      background: none;
+      height: 100%;
+      width: 100%;
+    }
+  }
+
+}

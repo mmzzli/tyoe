@@ -21,6 +21,11 @@ const myRoutes: MyRoutesItem[] = [
 		name: 'Home',
 	},
 	{
+		path: "/assets",
+		component: './Assets',
+		name: 'Assets',
+	},
+	{
 		path: "/announcements",
 		component: './Announcements',
 		name: 'Announcements',
@@ -29,6 +34,11 @@ const myRoutes: MyRoutesItem[] = [
 		path: "/announcement-detail",
 		component: './AnnouncementDetail',
 		name: 'AnnouncementDetail',
+	},
+	{
+		path: "/team",
+		component: './Team',
+		name: 'Team',
 	},
 	{
 		path: "/withdraw",

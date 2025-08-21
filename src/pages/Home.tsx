@@ -1,7 +1,7 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import './home.scss';
-import { Swiper } from 'react-vant';
+import { Dialog, Swiper, Toast } from 'react-vant';
 import SelectLanguage from '@/component/SelectLanguage.tsx';
 import { useIntl } from 'react-intl';
 import bannerUrl from '@/assets/images/banner.png';
@@ -14,57 +14,408 @@ import logoUrl from '@/assets/images/logo.png';
 import { ConnectButtonCustom } from '@/component/ConnectButtonCustom.tsx';
 import Iconfont from '@/component/Iconfont.tsx';
 import WhitePhaseItem, { PhaseItemProps } from '@/component/PhaseItem.tsx';
+import { useAccount, usePublicClient, useSignMessage, useWriteContract } from 'wagmi';
+import { contract } from '@/wagmi.ts';
+import { manager, nft, token } from '@/abi/tyoe.ts';
+import useUserStore from '@/store/user.ts';
+import { TOKEN } from '@/utils/const.ts';
+import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
+import { formatAddress, generateRandomString } from '@/utils/common.ts';
+import { useLocation } from 'react-router-dom';
+import { getWhitelistRecords, WhiteListItem, whitelistPhaseList, whitelistSubmit } from '@/service/home.ts';
+import BigNumber from 'bignumber.js';
+import dayjs from 'dayjs';
+
+const banner = [
+	{ urlimg: bannerUrl },
+	{ urlimg: banner01Url },
+	{ urlimg: banner02Url },
+	{ urlimg: banner03Url },
+	{ urlimg: banner04Url },
+	{ urlimg: banner05Url },
+]
+
 
 const Home:React.FC = () =>{
 	const intl = useIntl()
-	const banner = [
-		{ urlimg: bannerUrl },
-		{ urlimg: banner01Url },
-		{ urlimg: banner02Url },
-		{ urlimg: banner03Url },
-		{ urlimg: banner04Url },
-		{ urlimg: banner05Url },
-	]
+	const userStore = useUserStore()
+	const [claimed,setClaimed] = useState(false)
+	const publicClient = usePublicClient()
+	const location = useLocation();
+	const searchParams = new URLSearchParams(location.search);
+	const { address, isConnected,isConnecting, isReconnecting } = useAccount()
+	const [visible, setVisible] = useState(false)
+	const {signMessageAsync} = useSignMessage()
+
+	const [invite,setInvite]  = useState(searchParams.get('invite')||'')
+	const [whitelistRecords,setWhitelistRecords] = useState<WhiteListItem[]>([])
+	const [whiteList,setWhiteList] = useState<PhaseItemProps[]>([])
+	const [phases,setPhases] = useState<any[]>([])
+	const [activeId,setActiveId] = useState<number|null>(null)
+
+
+
+	const [nfts,setNFTs] = useState<{balance:number,balanceNo:number[],show:boolean}>({
+		balance:0,
+		balanceNo:[],
+		show: false
+	})
 
 
 	document.title = intl.formatMessage({id:'app.name'})
 
+	// 绑定上级
+	const bindInvite = async () => {
+		if(!invite.trim()){
+			Toast(intl.formatMessage({id:'bind.invite.placeholder'}))
+			return;
+		}
+		try{
+			// 发起请求
+			await setInviteLink(invite)
+			setVisible(false)
+			try{
+				const res = await getUserInfo()
+				userStore.setUser(res)
+			}catch  {
+				localStorage.removeItem(TOKEN)
+			}
+		}catch (e:any) {
+			Toast(e)
+		}
+	}
 
-	const phases: PhaseItemProps[]= [
-		{
-			phase: 1,
-			duration: 10,
-			priceUSD: 100,
-			totalSlots: 2000,
-			availableSlots: 1450,
-			countdown: '2025-10-31 23:59:59',
-		},
-		{
-			phase: 2,
-			duration: 10,
-			priceUSD: 120,
-			totalSlots: 3000,
-			availableSlots: 3000,
-			countdown: '2025-11-31 23:59:59',
-		},
-		{
-			phase: 3,
-			duration: 10,
-			priceUSD: 150,
-			totalSlots: 5000,
-			availableSlots: 5000,
-			countdown: '2025-12-31 23:59:59',
-		},
-	];
+	const login = async () => {
+		const message = generateRandomString(32)
+		const data  = await signMessageAsync({message})
+		try{
+			const res:any = await getLoginOrRegister({account:address!,hex:message,signed:data})
+			localStorage.setItem(TOKEN, res)
+			await fetchUserInfo()
+		}catch (e:any) {
+			localStorage.removeItem(TOKEN)
+			userStore.setUser(null)
+			setVisible(false)
+			Toast(e)
+		}
+	}
 
-	const [curPhase,setCurPhase] = useState(phases[0])
+	const clearUser = ()=>{
+		console.log(88888888);
+		localStorage.removeItem(TOKEN)
+		userStore.setUser(null)
+		setVisible(false)
+	}
+
+	const fetchUserInfo = async ()=>{
+		try{
+			const res = await getUserInfo()
+			userStore.setUser(res)
+			if(res?.account?.toLowerCase() !== address?.toLowerCase()){
+				clearUser()
+				login()
+			}
+		}catch {
+			clearUser()
+		}
+	}
+	useEffect(() => {
+		if (isConnecting || isReconnecting) {
+			return;
+		}
+		if (!isConnected || !address) {
+			console.log(9999999,'=======');
+			clearUser();
+			return;
+		}
+		if(isConnected && address){
+			if(localStorage.getItem(TOKEN)){
+				fetchUserInfo()
+			}else{
+				login()
+			}
+		}
+	}, [isConnected, address, isConnecting, isReconnecting]);
+
+
+
+	useEffect(() => {
+		// 当前登录且没有绑定 PID
+		if(userStore.user?.id && !userStore.user.pid && address){
+			// 绑定 pid
+			setVisible(true)
+		}
+
+	}, [userStore.user,address]);
+
+	const featchWhitelist  = async () =>{
+		const res = await getWhitelistRecords({page:1,limit:10})
+		setWhitelistRecords(res.list)
+	}
+
+	// 获取认购白名单倒计时
+	const fetchWhitelistPhases = async () =>{
+		const res = await whitelistPhaseList()
+		setPhases(res)
+	}
+	useEffect(() => {
+		featchWhitelist()
+		fetchWhitelistPhases()
+	}, []);
+
+	useEffect(() => {
+		const fetchPhaseIdInfo = async () =>{
+			const res =  await phases.map(async (item) =>{
+				const [usdtPrice,maxSlots,currentSlots,active] = await publicClient.readContract({
+					address: contract.dev.manager as `0x${string}`,
+					abi: manager,
+					functionName: 'getSubscriptionRoundInfo',
+					args: [item.id],
+				});
+				console.log(item,'-----nowTime')
+				return {
+					usdtPrice:BigNumber(usdtPrice).dividedBy(10 ** 18).toString(),
+					maxSlots:BigNumber(maxSlots).toNumber(),
+					currentSlots:BigNumber(currentSlots).toNumber(),
+					active,
+					phase:item.id,
+					nowTime:item.nowtime,
+					lastTime:item.lasttime
+				} as any
+			})
+			const data = await Promise.all(res)
+			setWhiteList(data)
+
+		}
+
+		if(phases.length && activeId){
+			// 合约获取相关的详情
+			// 例如继续读取该轮信息
+			fetchPhaseIdInfo()
+
+		}
+	}, [phases,activeId]);
+
+
+	const curWhitelistItem  = useMemo(() => {
+		if(whiteList.length && activeId){
+			return whiteList.find(item => item.phase === activeId)
+		}
+		return {}
+	}, [whiteList,activeId]);
+
+
+
+	//  是否领取过空投
+	useEffect(() => {
+		const fetch = async ()=>{
+			// 是否领取过
+			const claimed = await publicClient.readContract({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'addressClaimed',
+				args:[address],
+			})
+			console.log(claimed);
+			setClaimed(Boolean(claimed))
+		}
+		fetch()
+	}, [address,nfts]);
+
+
+	useEffect(() => {
+		const featch = async ()=>{
+			const roundId = await publicClient.readContract({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'getCurrentActiveRound',
+			}) as bigint;
+			setActiveId(Number(roundId))
+		}
+		featch()
+	}, []);
+
+	useEffect(()=>{
+		// 通过合约查询当前的 records 的信息
+	},[whitelistRecords])
+
+
+	// 是否为白名单用户
+	const [isWhiteListUser,setIsWhiteListUser] = useState(false)
+	useEffect(() => {
+			const fetch = async ()=>{
+				// 是否为白名单用户
+				const isWhiteListUser = await publicClient.readContract({
+					address: contract.dev.manager as `0x${string}`,
+					abi: manager,
+					functionName: 'userTotalSubscriptions',
+					args:[address],
+				})
+				console.log(isWhiteListUser);
+				setIsWhiteListUser(Boolean(isWhiteListUser))
+			}
+			fetch()
+		}, [address]
+	)
 
 
 
 
+	const {writeContractAsync} = useWriteContract()
 
+	const handlerCheckNft =async () =>{
+		try{
+			setNFTs({
+				balance:0,
+				balanceNo:[],
+				show: false
+			})
+			if(!address){
+				Toast('请先连接钱包');
+				return;
+			}
+			if(!publicClient){
+				Toast('网络未就绪');
+				return;
+			}
+			// 1. 获取 NFT 合约地址
+			const nftAddress = await publicClient.readContract({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'nftContract',
+			}) as `0x${string}`
+			// 2. 检测是否有 nft
+			const nftBalance = await publicClient.readContract({
+				address: nftAddress,
+				abi: nft,
+				functionName: 'balanceOf',
+				args:[address],
+			}) as bigint
+
+			const requestNFTids = []
+			for (let i = 0; i< Number(nftBalance); i++) {
+				requestNFTids.push(publicClient.readContract({
+					address: nftAddress,
+					abi: nft,
+					functionName: 'tokenOfOwnerByIndex',
+					args:[address,i],
+				}))
+			}
+			const ids:any = await Promise.all(requestNFTids) || []
+
+			setNFTs({
+				balance: Number(nftBalance),
+				balanceNo: ids.map((item:any)=>Number(item)),
+				show: true
+			})
+			// 3. 开始空投
+			const res = await writeContractAsync({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'claimAirdrop',
+				args: [],
+			})
+			const txState = await publicClient.waitForTransactionReceipt({hash:res})
+			console.log(txState);
+			if(txState.status==='reverted'){
+				Toast('空投失败');
+			}
+			Toast('空投领取成功')
+		}catch (e) {
+			console.log(e);
+		}
+
+	}
+
+	const handlerClam = async () =>{
+		try{
+			// 获取签名
+			const message = generateRandomString(32)
+			const signed  = await signMessageAsync({message})
+
+
+			//  查询当前活跃期数
+			const roundId = await publicClient.readContract({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'getCurrentActiveRound',
+			}) as bigint;
+
+
+			// 例如继续读取该轮信息
+			const [usdtPrice] = await publicClient.readContract({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'getSubscriptionRoundInfo',
+				args: [roundId],
+			});
+
+			console.log(Number(usdtPrice));
+
+			const price = BigNumber(usdtPrice).dividedBy(10 ** 18).toString()
+			console.log(price);
+
+			const allowance = await publicClient.readContract({
+				address: contract.dev.usdt as `0x${string}`,
+				abi:token,
+				functionName: 'allowance',
+				args: [address, contract.dev.manager],
+			})
+
+			console.log(allowance);
+
+			if((allowance||0) <usdtPrice){
+				//   查询自己有多少 usdt
+				const balance = await publicClient.readContract({
+					address: contract.dev.usdt as `0x${string}`,
+					abi: token,
+					functionName: 'balanceOf',
+					args: [address],
+				})
+				console.log(balance);
+				//   授权
+				const tx = await writeContractAsync({
+					address: contract.dev.usdt as `0x${string}`,
+					abi: token,
+					functionName: 'approve',
+					args: [contract.dev.manager, balance],
+				})
+				console.log(tx);
+			}
+
+			//  查询 当前活跃基数的详情
+			// 查询 是否已经授权过，且额度是否正确
+			const tx = await writeContractAsync({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'subscribe',
+				args: [],
+			})
+			// 发送给后端
+			const clamRes = await publicClient.waitForTransactionReceipt({hash:tx})
+			await whitelistSubmit({hex:message,signed,hash:tx})
+			await featchWhitelist()
+
+		}catch (e) {
+			console.log(e);
+		}
+
+
+	}
+	const handlerGet = async ()=>{
+			const tx = await writeContractAsync({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'claimSubscriptionTokens',
+				args: [],
+			})
+			const clamRes = await publicClient.waitForTransactionReceipt({hash:tx})
+
+			console.log(clamRes);
+		}
 
 	return(
+		<>
 		<div className="container">
 			<div className="navbar">
 				<div className="left">
@@ -104,45 +455,55 @@ const Home:React.FC = () =>{
 					<div className="left">
 						{intl.formatMessage({id:'airdop.title'})}
 					</div>
-					<div className="right">
-							<Iconfont icon={'icon-lipin'}></Iconfont>
-							{intl.formatMessage({id:'airdop.unclamied'})}
+					<div className="right" style={{opacity:claimed?'1':'0.7'}}>
+						<Iconfont icon={'icon-lipin'}></Iconfont>
+						{
+							claimed ? (
+								<div>{intl.formatMessage({id:'airdop.clamied'})}</div>
+							) : (
+								<div>{intl.formatMessage({id:'airdop.unclamied'})}</div>
+							)
+						}
 					</div>
 				</div>
 				<p className="desc">
 					{intl.formatMessage({id:'airdop.check.desc'})}
 				</p>
-				<div className="check-nft-button">
-					<button>
+				<div className="check-nft-button ">
+					<button onClick={handlerCheckNft} disabled={claimed}>
 						<Iconfont icon={'icon-sousuo'}></Iconfont>
 						{intl.formatMessage({id:'airdop.check.nft'})}</button>
 				</div>
 
-				<div className="check-nft-info">
+				<div className="check-nft-info" >
 					<Iconfont icon={'icon-zhuyi'} ></Iconfont>
 					<p>
-					{intl.formatMessage({id:'common.warning'})}：{intl.formatMessage({id:'airdop.check.nft.info'})}
+						{intl.formatMessage({id:'common.warning'})}：{intl.formatMessage({id:'airdop.check.nft.info'})}
 					</p>
 				</div>
 
-				<div className="check-nft-result">
-					<div className="check-nft-result-title">{intl.formatMessage({id:'airdop.check.nft.result'})}</div>
-					<div className="check-nft-result-item">
-						<Iconfont icon={'icon-a-circle-check1'}></Iconfont>
-						<div className="middle">
-							<div className="top">
-								0x1234....5678
-							</div>
-							<div className="bottom">
-								{intl.formatMessage({id:'airdop.check.nft.result.reward'})}:100 TYOE
+				{
+					nfts.show && !claimed && (
+						<div className="check-nft-result">
+							<div className="check-nft-result-title">{intl.formatMessage({ id: 'airdop.check.nft.result' })}</div>
+							<div className="check-nft-result-item">
+								<Iconfont icon={'icon-a-circle-check1'}></Iconfont>
+								<div className="middle">
+									<div className="top">
+										{nfts.balanceNo[0]}
+									</div>
+									<div className="bottom">
+										{intl.formatMessage({ id: 'airdop.check.nft.result.reward' })}:100 TYOE
+									</div>
+								</div>
+								<div className="right">
+									{intl.formatMessage({ id: 'airdop.check.nft.result.success' })}
+								</div>
 							</div>
 						</div>
-						<div className="right">
-							{intl.formatMessage({id:'airdop.check.nft.result.success'})}
-						</div>
+					)
+				}
 
-					</div>
-				</div>
 
 				{/*<div className="card-box">*/}
 				{/*	<div className="card-box-item">*/}
@@ -182,41 +543,73 @@ const Home:React.FC = () =>{
 						{intl.formatMessage({id:'whitelist.title'})}
 					</div>
 					<div className="right">
-						<Iconfont icon={'icon-start-outline'}/>
+						{isWhiteListUser ? <Iconfont icon={'icon-star'}/>:<Iconfont icon={'icon-start-outline'}/>}
 						{intl.formatMessage({id:'whitelist.title.not.user'})}
 					</div>
 				</div>
 				<div className="whitelist-tabs">
 					<div className="tabs">
 						{
-							phases.map(item=> {
-								return <div className={['tab-label', curPhase.phase === item.phase ? 'active' : ''].join(' ')} onClick={()=>{setCurPhase(item)}} key={`${item.phase}-label`}>
+							curWhitelistItem  ?
+							whiteList.map(item=> {
+								return <div className={["tab-label", curWhitelistItem.phase === item.phase ? 'active' : ''].join(' ')} onClick={()=>{setActiveId(item.phase)}} key={`${item.phase}-label`}>
 									{intl.formatMessage({ id: 'whitelist.tab.phase' }, { num: item.phase })}
 								</div>;
 							})
+							:""
 						}
 					</div>
 					<div className="tabs-container">
-						<WhitePhaseItem {...curPhase} ></WhitePhaseItem>
+						{
+							curWhitelistItem ?
+									<WhitePhaseItem {...curWhitelistItem} ></WhitePhaseItem>
+								:''
+						}
+
+						<div className="controls">
+							<button onClick={handlerClam}>{intl.formatMessage({ id: 'whitelist.subscribe' })}</button>
+							<button onClick={handlerGet}>{intl.formatMessage({ id: 'whitelist.claim' })}</button>
+						</div>
+
+						<div className="phase-records">
+							<div className="phase-records-title">{intl.formatMessage({ id: 'whitelist.participation.records' })}</div>
+							<div className="lists">
+								{
+									whitelistRecords.map(item=> {
+										return <div className="list-item" key={item.id}>
+											<div className="address">
+												{formatAddress(item.account)}
+											</div>
+											<div className="time">
+												{dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}
+											</div>
+										</div>;
+									})
+								}
+
+
+							</div>
+						</div>
+
 					</div>
 				</div>
 			</div>
 
 
-
 			<div className="footer">
 				<div className="media">
-					{intl.formatMessage({id:'footer.social.media'})}
+					{intl.formatMessage({ id: 'footer.social.media' })}
 				</div>
 				<div className="media-list">
 					<a href="https://x.com/ethdotorg" target="_blank"><Iconfont icon={'icon-tuite1'}></Iconfont></a>
 					<a href="" target="_blank"><Iconfont icon={'icon-telegram'}></Iconfont></a>
 					<a href="https://ethereum.org/" target="_blank"><Iconfont icon={'icon-ethereum'}></Iconfont></a>
-					<a href="https://discord.com/invite/ethereum-org" target={'_blank'}>					<Iconfont icon={'icon-discard'}></Iconfont></a>
+					<a href="https://discord.com/invite/ethereum-org" target={'_blank'}> <Iconfont
+						icon={'icon-discard'}></Iconfont></a>
 				</div>
 				<div className="link">
 					<div className="invite">
-						{intl.formatMessage({id:'footer.invite.link'})}
+						{intl.formatMessage({ id: 'footer.invite.link' })}
 					</div>
 					<div className="link-text">
 						https://tyoe.io/invite/abc***xyz
@@ -225,7 +618,7 @@ const Home:React.FC = () =>{
 					<div className="link-button">
 						<button>
 							<Iconfont icon={'icon-share'}></Iconfont>
-							{intl.formatMessage({id:'footer.copy.link'})}
+							{intl.formatMessage({ id: 'footer.copy.link' })}
 							<Iconfont icon={'icon-fuzhi'}></Iconfont></button>
 					</div>
 				</div>
@@ -272,7 +665,31 @@ const Home:React.FC = () =>{
 				</ul>
 			</div>
 		</div>
+			<Dialog
+				visible={visible}
+				showCancelButton={false}
+				showConfirmButton={false}
+			>
+				<div className="parent-link">
+					<div className="title">
+						{intl.formatMessage({ id: 'bind.invite.title' })}
+					</div>
+					<div className="main">
+						<div className="input">
+							<input value={invite || ''} onInput={(e: any) => {
+								setInvite(e.target.value);
+							}} placeholder={intl.formatMessage({ id: 'bind.invite.placeholder' })} />
+						</div>
+						<div className="info">
+							{intl.formatMessage({ id: 'bind.invite.tip' })}
+						</div>
+						<div className="button" onClick={bindInvite}>{intl.formatMessage({ id:'bind.invite.button'})}</div>
+					</div>
+				</div>
 
+
+			</Dialog>
+		</>
 	)
 }
 
