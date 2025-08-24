@@ -68,7 +68,7 @@ const StakingRecords = () =>{
   const statusTypes:any = {
     0: <div className="waiting">{intl.formatMessage({ id: 'common.order.waiting' })}</div>,
     1: <div className="processing">{intl.formatMessage({ id: 'common.order.processing' })}</div>,
-    2: <div className="finished">{intl.formatMessage({ id: 'common.order.done' })}</div>,
+    3: <div className="finished">{intl.formatMessage({ id: 'common.order.done' })}</div>,
   }
 
   const handlerUnStaking = async (item:StakingRecordInterface)=>{
