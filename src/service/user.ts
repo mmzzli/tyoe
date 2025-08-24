@@ -18,11 +18,12 @@ export const setInviteLink  = (invit:string)=>{
 export interface UserAssetsItem{
   id:number,
   amount:string,
+  account:string,
   create_time:string,
   status:string,
   statusint:number,
   oldamount:string
-  get_type:string|number
+  comment:string
   types:number
 }
 export interface UserAssetsInterface{
@@ -32,26 +33,19 @@ export interface UserAssetsInterface{
     toUsdtCost:number
   },
   reward:{
-    stateMoney:number,
-    trendsMoney:number,
-    nodeMoney:number,
-    pondMoney:number
+    totalMoney:number,
+    pledgeMoney:number,
+    pondMoney:number,
   },
   list:UserAssetsItem[]
   page:number
   total:number
 }
 
-export const getUserAssets = ({page=1,limit=10,types='all'}):Promise<UserAssetsInterface> =>{
+export const getUserAssets = ({page=1,limit=10}):Promise<UserAssetsInterface> =>{
   const params = {
     page,
     limit,
-    types:Number(types)
-  }
-  if(types==='all'){
-    // eslint-disable-next-line @typescript-eslint/ban-ts-comment
-    // @ts-expect-error
-    delete params.types
   }
   return service.post("/User/myUsdtReward",params);
 }

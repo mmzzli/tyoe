@@ -46,9 +46,9 @@ const myRoutes: MyRoutesItem[] = [
 		name: 'Withdraw',
 	},
 	{
-		path: "/staking",
-		component: './Staking',
-		name: 'Staking',
+		path:'/website',
+		component:"./Website",
+		name:'Website',
 	},
 	{
 		path: "/staking-records",

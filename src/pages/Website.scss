@@ -1,0 +1,298 @@
+.website-container{
+  background: #F2F0FE;
+  min-height: 100vh;
+  .top-banner{
+    width: 100%;
+    height: auto;
+    img{
+      width: 100%;
+      height: auto;
+    }
+  }
+  .h1-title{
+    margin-top: 72px;
+    margin-bottom: 42px;
+    @include flex-column;
+    align-items: center;
+    gap: 12px;
+    h1{
+      color: $text-primary;
+      font-size: 48px;
+      line-height: 68px;
+    }
+    .h1-desc{
+      color: $text-muted;
+      font-size: 24px;
+      line-height: 34px;
+    }
+  }
+  .staking-container{
+    margin: 0 32px;
+    background: #FFFFFF;
+    box-shadow: 0px 4px 20px 1px rgba(71,27,104,0.1);
+    border-radius: 32px 32px 32px 32px;
+    padding: 40px;
+    height: 647px;
+    box-sizing: border-box;
+    .title{
+      @include flex-between;
+      align-items: center;
+      margin-bottom: 47px;
+      height: 50px;
+      .icon-zhiya{
+        width:40px ;
+        height: 40px;
+      }
+      .left{
+        @include flex-center;
+        gap: 12px;
+        h2{
+          font-size: 36px;
+          color: $text-primary;
+        }
+      }
+      .right{
+        padding:9px 14px;
+        background: #F2ECFF;
+        border-radius: 25px 25px 25px 25px;
+        @include flex-center;
+        gap: 5px;
+        color: #A271FF;
+        font-size: 24px;
+      }
+      .icon-jilu{
+        width: 32px;
+        height: 32px;
+      }
+    }
+    .body{
+      @include flex-column;
+      gap: 20px;
+      .form-item{
+        @include flex-column;
+        gap: 16px;
+        .label{
+          font-size: 24px;
+          line-height: 34px;
+          color: $text-muted;
+          margin: 0;
+        }
+        .value{
+          color: $text-primary;
+          font-size: 36px;
+          line-height: 50px;
+        }
+        .input{
+          background: #fff;
+          border: 1px solid $input-border;
+          height: 88px;
+          input{
+            font-size: 28px;
+          }
+        }
+        .button{
+          margin-top: 0;
+          button{
+            width: 606px;
+            height: 88px;
+            background: linear-gradient( 105deg, #A271FF 0%, #7840ED 100%);
+            border-radius: 47px 47px 47px 47px;
+            border: none;
+            color: $text-white;
+            font-size: 32px;
+          }
+        }
+      }
+    }
+    &-footer{
+      @include flex-between;
+      margin-top: 28px;
+      .item{
+        width: 50%;
+        @include flex-column;
+        align-items: center;
+        gap: 10px;
+        .top{
+          color: $text-muted;
+          font-size: 24px;
+        }
+        .bottom{
+          color: $text-success;
+          font-weight: bold;
+          font-size: 32px;
+        }
+      }
+    }
+  }
+  .news-container{
+    margin-top: 72px;
+    background: #fff;
+    padding: 0 32px;
+    .title{
+      padding: 72px 0 40px;
+      color: $text-primary;
+      font-size: 54px;
+      @include flex-center;
+     font-weight: bold;
+    }
+    .swiper{
+      .swiper-item{
+        border-radius: 32px;
+        overflow: hidden;
+        padding: 44px 0 ;
+      }
+      .rv-swiper__indicator{
+        margin-top: 32px;
+        position: static;
+        transform: none;
+      }
+      .rv-indicator{
+        width: 100%;
+        height: 12px;
+        @include flex-center;
+        gap: 10px;
+      }
+
+      .rv-indicator__dot{
+        opacity: 1;
+        margin-right: 0;
+        transition: none;
+        background: #cfcfcf;
+        &.rv-indicator__dot--active{
+          background: $button-primary;
+        }
+      }
+    }
+    .img-info{
+      @include flex-column;
+      margin-top: 32px;
+      gap: 12px;
+      align-items: center;
+      position: static !important;
+      background: none !important;
+      &-title{
+        font-size: 32px;
+        color: $text-primary;
+        font-weight: bold;
+        line-height: 50px;
+
+      }
+      &-desc{
+        padding: 0 36px;
+        font-size: 24px;
+        color: $text-muted;
+        line-height: 34px;
+      }
+    }
+  }
+  .system-container{
+    background: #fff;
+    &-body{
+      padding: 0 36px;
+      @include flex-between;
+      flex-wrap: wrap;
+      .item{
+        width: 50%;
+        margin-bottom: 48px;
+        @include flex-column;
+        gap: 7px;
+        .top{
+          line-height: 62px;
+          font-size: 44px;
+          color: $text-primary;
+        }
+        .desc{
+          line-height: 34px;
+          color: $text-muted;
+          font-size: 24px;
+        }
+
+      }
+    }
+  }
+  .build-container{
+    padding-bottom: 72px;
+    .video{
+      padding: 0 36px;
+      overflow: hidden;
+      position: relative;
+    }
+  }
+  .problem-container{
+    background: #fff;
+    .problem-body{
+      padding: 0 36px;
+      @include flex-column;
+      .item{
+        @include flex-column;
+        gap: 8px;
+        border-bottom: 1px solid $divider;
+        &:last-of-type{
+          border-bottom: 0;
+        }
+        padding: 24px 0 ;
+        .top{
+          font-size: 44px;
+          color: $text-primary;
+          font-weight: bold;
+          line-height: 62px;
+        }
+        .desc{
+          color: rgba($text-muted,0.7);
+          font-size: 24px;
+          line-height: 34px;
+        }
+      }
+    }
+  }
+  .get-container{
+    padding: 0 36px;
+    &-title{
+      @include flex-column;
+      gap: 12px;
+      .top{
+        font-size: 44px;
+        color: $text-primary;
+        font-weight: bold;
+      }
+      .desc{
+        font-size: 24px;
+        line-height: 34px;
+        color: $text-muted;
+      }
+    }
+    &-body{
+      @include flex-center;
+      flex-wrap: wrap;
+      margin-top: 40px;
+      gap: 20px 40px;
+      .item{
+        margin-bottom: 20px;
+        width: 260px;
+        .top{
+          @include flex-column;
+          align-items: center;
+        }
+
+        img{
+          width: 200px;
+          height: 200px;
+          @include flex-center;
+          gap: 8px;
+        }
+        color: $text-muted;
+        font-size: 28px;
+        line-height: 38px;
+        text-align: center;
+      }
+    }
+  }
+  .common-title{
+    padding: 72px 0 40px;
+    color: $text-primary;
+    font-size: 54px;
+    @include flex-center;
+    font-weight: bold;
+    text-align: center;
+  }
+}

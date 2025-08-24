@@ -23,7 +23,7 @@ const Layouts:FC<{
   const clearUser = ()=> {
     localStorage.removeItem(TOKEN)
     setUser(null)
-    // navigation('/')
+    navigation('/')
   }
 
 

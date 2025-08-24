@@ -14,13 +14,11 @@ export interface StaingGoodsInterface{
 export interface StakingRecordInterface{
 	id:number,
 	order_no:string,
-	total_money:string,
-	core_num:string,
-	status:string,
 	create_time:string,
-	confirm_time:string|number,
-	remark:string,
 	buy_price:string,
+	remark:string,
+	total_money:string,
+	status:string,
 	status_name:number
 }
 
@@ -38,9 +36,7 @@ export const getGoodsList = ():Promise<{list:StaingGoodsInterface[]}> =>{
 	return service.post("/Product/getIndexGoodsList");
 }
 
-export const buyProduct = (data:{id:number,amount:string,hex:string,signed:string})=>{
-	return service.post("/Product/buyProduct",{...data})
-}
+
 
 export const getStakingInfo = ():Promise<StakingInfoInterface> =>{
 	return service.post("/User/levelpromsg");
@@ -51,4 +47,12 @@ interface RecordType extends CommonPage{
 }
 export const getStakingRecord = ({page=1,limit=10,status}:RecordType):Promise<{list:StakingRecordInterface[],page:number,total:number}> =>{
 	return service.post("/Product/getUserOrder",{page,limit,status});
+}
+
+export const buyProduct = async (params:{hash:string,hex:string,signed:string,amount:string}) =>{
+	return service.post("/Product/buyProduct",params)
+}
+
+export const unStake = async (params:{id:number})=>{
+	return service.post('/Product/delOrder',params)
 }

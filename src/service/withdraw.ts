@@ -7,7 +7,7 @@ import { CommonPage } from '@/service/staking.ts';
   "UsdtOutmin": "0.001",
   "UsdtOutmax": "100"*/
 export interface WithdrawInfoInterface{
-  usdt_num:string,
+  wp_num:string,
   UsdtOutFee:string,
   UsdtOutmin:string,
   UsdtOutmax:string
@@ -30,8 +30,10 @@ export interface WithdrawListItemInterface{
   id:number,
   create_time:string,
   num:string,
+  txid:string, //0待审核 ，1成功  2失败
   status:number,
   coinname:string
+  fee:number
 }
 export interface withListDataInterFace{
   list:WithdrawListItemInterface[],

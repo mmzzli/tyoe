@@ -10,11 +10,12 @@ import {
   WithdrawListItemInterface,
   withdrawSubmit,
 } from '@/service/withdraw.ts';
-import { generateRandomString } from '@/utils/common.ts';
+import { formatAddress, generateRandomString } from '@/utils/common.ts';
 import { useSignMessage } from 'wagmi';
 import { List, PullRefresh, Toast } from 'react-vant';
 import dayjs from 'dayjs';
 import Iconfont from '@/component/Iconfont.tsx';
+import useUserStore from '@/store/user.ts';
 
 const Withdraw = ()=>{
   const intl = useIntl();
@@ -26,6 +27,8 @@ const Withdraw = ()=>{
   const [finished, setFinished] = useState<boolean>(false)
   const [,setTotal] = useState(0)
   const [page,setPage] = useState(1)
+  const userStore = useUserStore()
+
   const [loading, setLoading] = useState(false)
   // 请求数据
   const fetchRecords = async (pageNum:number, isRefresh = false) => {
@@ -47,6 +50,11 @@ const Withdraw = ()=>{
     } finally {
       setLoading(false);
     }
+  }
+  const statusTypes:any = {
+    0: <div className="processing">{intl.formatMessage({ id: 'common.order.processing' })}</div>,
+    1: <div className="successed">{intl.formatMessage({ id: 'withdraw.status.success' })}</div>,
+    2: <div className="failed">{intl.formatMessage({ id: 'withdraw.status.reject' })}</div>,
   }
 
   // 下拉刷新
@@ -110,7 +118,7 @@ const Withdraw = ()=>{
         </div>
         <div className="input input-between">
           <div className="l">
-            0x1311....131341
+            {formatAddress(userStore.user?.account||'')}
           </div>
           <div className="r">ERC20</div>
         </div>
@@ -121,11 +129,11 @@ const Withdraw = ()=>{
           <div className="left">{intl.formatMessage({ id: 'withdraw.amount' })}</div>
           <div className="right">
             <Iconfont icon={'icon-qianbao'}/>
-            {intl.formatMessage({ id: 'withdraw.balance' })}:{BigNumber(withdrawInfo?.usdt_num||0).toFormat()}</div>
+            {intl.formatMessage({ id: 'withdraw.balance' })}:{BigNumber(withdrawInfo?.wp_num||0).toFormat()}</div>
         </div>
         <div className="input">
           <input type="number" value={amount} onInput={(e:any)=>{setAmount(e.target.value)}} placeholder={intl.formatMessage({id:'withdraw.placeholder.amount'})} />
-          <div className="btn" onClick={()=>{setAmount(Number(withdrawInfo?.usdt_num).toString()||'0')}}>MAX</div>
+          <div className="btn" onClick={()=>{setAmount(Number(withdrawInfo?.wp_num).toString()||'0')}}>MAX</div>
         </div>
       </div>
       <div className="other-info">
@@ -156,112 +164,55 @@ const Withdraw = ()=>{
       </div>
 
       <div className="record-list">
-        <div className="record-list-item-li">
-          <div className="top">
-            <div className="left">
-              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
-            </div>
-            <div className="right">
-              <div className="processing">{intl.formatMessage({ id: 'common.order.processing' })}</div>
-            </div>
-          </div>
-          <div className="hash">
-            {intl.formatMessage({id:'withdraw.hash'})} 0x13124...1341234
-          </div>
-          <div className="middle">
-            <div className="middle-item">
-              <div className="left">
-                {intl.formatMessage({ id: "withdraw.amount" })}
-              </div>
-              <div className="right">
-                5,000 TYOE
-              </div>
-            </div>
 
-            <div className="middle-item">
-              <div className="left">
-                {intl.formatMessage({ id: "withdraw.fee" })}
+        <PullRefresh onRefresh={onRefresh} className={'record-list'}>
+          <List finished={finished} onLoad={onLoad} className="record-list">
+            {
+              list.map(item=> {
+                return <div className="record-list-item-li" key={item.id}>
+                  <div className="top">
+                    <div className="left">
+                      {dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}
+                    </div>
+                    <div className="right">
+                      {statusTypes[item.status]}
+                    </div>
+                  </div>
+                  {
+                    item.txid && <div className="hash">
+                      {intl.formatMessage({ id: 'withdraw.hash' })} {formatAddress(item.txid || '')}
+                    </div>
+                  }
 
-              </div>
-              <div className="right">
-                50 TYOE
-              </div>
-            </div>
+                  <div className="middle">
+                    <div className="middle-item">
+                      <div className="left">
+                        {intl.formatMessage({ id: "withdraw.amount" })}
+                      </div>
+                      <div className="right">
+                        {BigNumber(item.num).toFormat()} TYOE
+                      </div>
+                    </div>
 
+                    <div className="middle-item">
+                      <div className="left">
+                        {intl.formatMessage({ id: "withdraw.fee" })}
 
-          </div>
-        </div>
-
-        <div className="record-list-item-li">
-          <div className="top">
-            <div className="left">
-              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
-            </div>
-            <div className="right">
-              <div className="successed">{intl.formatMessage({ id: 'withdraw.status.success' })}</div>
-            </div>
-          </div>
-          <div className="hash">
-            {intl.formatMessage({ id: 'withdraw.hash' })} 0x13124...1341234
-          </div>
-          <div className="middle">
-            <div className="middle-item">
-              <div className="left">
-                {intl.formatMessage({ id: 'withdraw.amount' })}
-              </div>
-              <div className="right">
-                5,000 TYOE
-              </div>
-            </div>
-
-            <div className="middle-item">
-              <div className="left">
-                {intl.formatMessage({ id: 'withdraw.fee' })}
-
-              </div>
-              <div className="right">
-                50 TYOE
-              </div>
-            </div>
+                      </div>
+                      <div className="right">
+                        {BigNumber(item.fee).toFormat()} TYOE
+                      </div>
+                    </div>
 
 
-          </div>
-        </div>
-        <div className="record-list-item-li">
-          <div className="top">
-            <div className="left">
-              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
-            </div>
-            <div className="right">
-              <div className="failed">{intl.formatMessage({ id: 'withdraw.status.reject' })}</div>
-            </div>
-          </div>
-          <div className="hash">
-            {intl.formatMessage({ id: 'withdraw.hash' })} 0x13124...1341234
-          </div>
-          <div className="middle">
-            <div className="middle-item">
-              <div className="left">
-                {intl.formatMessage({ id: "withdraw.amount" })}
-              </div>
-              <div className="right">
-                5,000 TYOE
-              </div>
-            </div>
+                  </div>
+                </div>
+              })
+            }
 
-            <div className="middle-item">
-              <div className="left">
-                {intl.formatMessage({ id: "withdraw.fee" })}
+          </List>
+        </PullRefresh>
 
-              </div>
-              <div className="right">
-                50 TYOE
-              </div>
-            </div>
-
-
-          </div>
-        </div>
 
       </div>
     </div>

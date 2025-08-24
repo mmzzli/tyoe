@@ -3,6 +3,7 @@
   @include flex-between;
   gap: 20px;
   &-card{
+    background: #fff;
     border: 1px solid $card-border;
     border-radius: 20px;
     flex:1;
@@ -27,6 +28,7 @@
 
 
 .staking-records-list{
+  background: #fff;
   margin:0 40px 40px;
   border: 1px solid $card-border;
   border-radius: 20px;
@@ -60,6 +62,9 @@
           padding: 10px 20px;
           color: $text-primary;
 
+        }
+        .waiting{
+          background: $warning;
         }
         .processing{
           background: $success;

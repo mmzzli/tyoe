@@ -1,8 +1,7 @@
 import * as React from 'react';
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef, useState } from 'react';
 import './home.scss';
-import { Dialog, Swiper, Toast } from 'react-vant';
-import SelectLanguage from '@/component/SelectLanguage.tsx';
+import { Swiper, Toast } from 'react-vant';
 import { useIntl } from 'react-intl';
 import bannerUrl from '@/assets/images/banner.png';
 import banner01Url from '@/assets/images/banner01.jpg';
@@ -10,8 +9,6 @@ import banner02Url from '@/assets/images/banner02.jpg';
 import banner03Url from '@/assets/images/banner03.jpg';
 import banner04Url from '@/assets/images/banner04.jpg';
 import banner05Url from '@/assets/images/banner05.jpg';
-import logoUrl from '@/assets/images/logo.png';
-import { ConnectButtonCustom } from '@/component/ConnectButtonCustom.tsx';
 import Iconfont from '@/component/Iconfont.tsx';
 import WhitePhaseItem, { PhaseItemProps } from '@/component/PhaseItem.tsx';
 import { useAccount, usePublicClient, useSignMessage, useSwitchChain, useWalletClient, useWriteContract } from 'wagmi';
@@ -25,7 +22,8 @@ import { useLocation } from 'react-router-dom';
 import { getWhitelistRecords, WhiteListItem, whitelistPhaseList, whitelistSubmit } from '@/service/home.ts';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import { bscTestnet } from 'wagmi/chains';
+import { bscTestnet } from '@/config/bscTestNet.ts';
+import NavBar from '@/component/NavBar.tsx';
 
 const banner = [
 	{ urlimg: bannerUrl },
@@ -39,6 +37,7 @@ const banner = [
 
 const Home:React.FC = () =>{
 	const intl = useIntl()
+	const timerRef = useRef<NodeJS.Timeout>();
 	const userStore = useUserStore()
 	const [claimed,setClaimed] = useState(false)
 	const publicClient = usePublicClient()
@@ -47,15 +46,28 @@ const Home:React.FC = () =>{
 	const { switchChainAsync } = useSwitchChain()
 	const { data: walletClient } = useWalletClient()
 	const { address, isConnected,isConnecting, isReconnecting,chainId } = useAccount()
-	const [visible, setVisible] = useState(false)
+	const [, setVisible] = useState(false)
 	const {signMessageAsync} = useSignMessage()
 
-	const [invite,setInvite]  = useState(searchParams.get('invite')||'')
+	const [invite,]  = useState(searchParams.get('invite')||'')
 	const [whitelistRecords,setWhitelistRecords] = useState<WhiteListItem[]>([])
 	const [whiteList,setWhiteList] = useState<PhaseItemProps[]>([])
 	const [phases,setPhases] = useState<any[]>([])
 	const [activeId,setActiveId] = useState<number|null>(null)
 
+	const [subscribeDisabled,setSubscribeDisabled] = useState(false)
+	const [getDisabled,setGetDisabled] = useState(false)
+	useEffect(()=>{
+		const fetchRelease  = async () =>{
+			const res = await publicClient?.readContract({
+				address: contract.dev.manager as `0x${string}`,
+				abi: manager,
+				functionName: 'releaseEnabled',
+			})
+			setGetDisabled(!res)
+		}
+		fetchRelease()
+	},[])
 
 
 	const [nfts,setNFTs] = useState<{balance:number,balanceNo:number[],show:boolean}>({
@@ -87,6 +99,7 @@ const Home:React.FC = () =>{
 			Toast(e)
 		}
 	}
+
 
 	const login = async () => {
 		const message = generateRandomString(32)
@@ -122,6 +135,7 @@ const Home:React.FC = () =>{
 			clearUser()
 		}
 	}
+
 	useEffect(() => {
 		if (isConnecting || isReconnecting) {
 			return;
@@ -144,9 +158,9 @@ const Home:React.FC = () =>{
 
 	useEffect(() => {
 		// 当前登录且没有绑定 PID
-		if(userStore.user?.id && !userStore.user.pid && address){
+		if(userStore.user?.id && !userStore.user.pid && invite){
 			// 绑定 pid
-			setVisible(true)
+			bindInvite()
 		}
 
 	}, [userStore.user,address]);
@@ -162,8 +176,16 @@ const Home:React.FC = () =>{
 		setPhases(res)
 	}
 	useEffect(() => {
-		featchWhitelist()
+		timerRef.current = setInterval(() => {
+			featchWhitelist()
+		}, 2000);
 		fetchWhitelistPhases()
+		return () => {
+			if(timerRef.current){
+				clearInterval(timerRef.current);
+				timerRef.current = undefined
+			}
+		};
 	}, []);
 
 
@@ -186,22 +208,23 @@ const Home:React.FC = () =>{
 
 	useEffect(() => {
 		const fetchPhaseIdInfo = async () =>{
-			const res =  await phases.map(async (item) =>{
-				const [usdtPrice,maxSlots,currentSlots,active] = await publicClient.readContract({
+			const res =  phases.map(async (item) => {
+				// eslint-disable-next-line no-unsafe-optional-chaining
+				const [usdtPrice, maxSlots, currentSlots, active]: any = await publicClient?.readContract({
 					address: contract.dev.manager as `0x${string}`,
 					abi: manager,
 					functionName: 'getSubscriptionRoundInfo',
 					args: [item.id],
 				});
-				console.log(item,'-----nowTime')
+				console.log(item, '-----nowTime')
 				return {
-					usdtPrice:BigNumber(usdtPrice).dividedBy(10 ** 18).toString(),
-					maxSlots:BigNumber(maxSlots).toNumber(),
-					currentSlots:BigNumber(currentSlots).toNumber(),
+					usdtPrice: BigNumber(usdtPrice).dividedBy(10 ** 18).toString(),
+					maxSlots: BigNumber(maxSlots).toNumber(),
+					currentSlots: BigNumber(currentSlots).toNumber(),
 					active,
-					phase:item.id,
-					nowTime:item.nowtime,
-					lastTime:item.lasttime
+					phase: item.id,
+					nowTime: item.nowtime,
+					lastTime: item.lasttime
 				} as any
 			})
 			const data = await Promise.all(res)
@@ -220,33 +243,37 @@ const Home:React.FC = () =>{
 
 	const curWhitelistItem  = useMemo(() => {
 		if(whiteList.length && activeId){
-			return whiteList.find(item => item.phase === activeId)
+			const cur =whiteList.find(item => item.phase === activeId)
+			if(cur){
+				setSubscribeDisabled(!cur.active)
+			}
+			return cur
 		}
-		return {}
+		return null
 	}, [whiteList,activeId]);
 
 
 
 	//  是否领取过空投
+	const fetchClaimed = async ()=>{
+		// 是否领取过
+		const claimed = await publicClient?.readContract({
+			address: contract.dev.manager as `0x${string}`,
+			abi: manager,
+			functionName: 'addressClaimed',
+			args:[address],
+		})
+		console.log(claimed);
+		setClaimed(Boolean(claimed))
+	}
 	useEffect(() => {
-		const fetch = async ()=>{
-			// 是否领取过
-			const claimed = await publicClient.readContract({
-				address: contract.dev.manager as `0x${string}`,
-				abi: manager,
-				functionName: 'addressClaimed',
-				args:[address],
-			})
-			console.log(claimed);
-			setClaimed(Boolean(claimed))
-		}
-		fetch()
+		fetchClaimed()
 	}, [address,nfts]);
 
 
 	useEffect(() => {
 		const featch = async ()=>{
-			const roundId = await publicClient.readContract({
+			const roundId = await publicClient?.readContract({
 				address: contract.dev.manager as `0x${string}`,
 				abi: manager,
 				functionName: 'getCurrentActiveRound',
@@ -256,17 +283,13 @@ const Home:React.FC = () =>{
 		featch()
 	}, []);
 
-	useEffect(()=>{
-		// 通过合约查询当前的 records 的信息
-	},[whitelistRecords])
-
 
 	// 是否为白名单用户
 	const [isWhiteListUser,setIsWhiteListUser] = useState(false)
 	useEffect(() => {
 			const fetch = async ()=>{
 				// 是否为白名单用户
-				const isWhiteListUser = await publicClient.readContract({
+				const isWhiteListUser = await publicClient?.readContract({
 					address: contract.dev.manager as `0x${string}`,
 					abi: manager,
 					functionName: 'userTotalSubscriptions',
@@ -292,11 +315,11 @@ const Home:React.FC = () =>{
 				show: false
 			})
 			if(!address){
-				Toast('请先连接钱包');
+				Toast(intl.formatMessage({id:'toast.connect.wallet'}));
 				return;
 			}
 			if(!publicClient){
-				Toast('网络未就绪');
+				Toast(intl.formatMessage({id:'toast.connect.net.error'}));
 				return;
 			}
 			// 1. 获取 NFT 合约地址
@@ -325,7 +348,7 @@ const Home:React.FC = () =>{
 			const ids:any = await Promise.all(requestNFTids) || []
 			console.log(ids);
 			if(!ids.length){
-				Toast('没有 NFT');
+				Toast(intl.formatMessage({id:"toast.no.nft"}));
 				return;
 			}
 			setNFTs({
@@ -343,24 +366,28 @@ const Home:React.FC = () =>{
 			const txState = await publicClient.waitForTransactionReceipt({hash:res})
 			console.log(txState);
 			if(txState.status==='reverted'){
-				Toast('空投失败');
+				Toast(intl.formatMessage({id:'toast.airdrop.failed'}));
+				return
 			}
-			Toast('空投领取成功')
+			Toast(intl.formatMessage({id:'toast.staking.success'}))
 		}catch (e) {
 			console.log(e);
+		} finally {
+			await fetchClaimed()
 		}
 
 	}
 
 	const handlerClam = async () =>{
 		try{
+			setSubscribeDisabled(true)
 			// 获取签名
 			const message = generateRandomString(32)
 			const signed  = await signMessageAsync({message})
 
 
 			//  查询当前活跃期数
-			const roundId = await publicClient.readContract({
+			const roundId = await publicClient?.readContract({
 				address: contract.dev.manager as `0x${string}`,
 				abi: manager,
 				functionName: 'getCurrentActiveRound',
@@ -368,7 +395,8 @@ const Home:React.FC = () =>{
 
 
 			// 例如继续读取该轮信息
-			const [usdtPrice] = await publicClient.readContract({
+			// eslint-disable-next-line no-unsafe-optional-chaining
+			const [usdtPrice]:any = await publicClient?.readContract({
 				address: contract.dev.manager as `0x${string}`,
 				abi: manager,
 				functionName: 'getSubscriptionRoundInfo',
@@ -380,18 +408,19 @@ const Home:React.FC = () =>{
 			const price = BigNumber(usdtPrice).dividedBy(10 ** 18).toString()
 			console.log(price);
 
-			const allowance = await publicClient.readContract({
+			const allowance = await publicClient?.readContract({
 				address: contract.dev.usdt as `0x${string}`,
 				abi:token,
 				functionName: 'allowance',
 				args: [address, contract.dev.manager],
 			})
 
+
 			console.log(allowance);
 
 			if((allowance||0) <usdtPrice){
 				//   查询自己有多少 usdt
-				const balance = await publicClient.readContract({
+				const balance = await publicClient?.readContract({
 					address: contract.dev.usdt as `0x${string}`,
 					abi: token,
 					functionName: 'balanceOf',
@@ -417,39 +446,44 @@ const Home:React.FC = () =>{
 				args: [],
 			})
 			// 发送给后端
-			const clamRes = await publicClient.waitForTransactionReceipt({hash:tx})
+			await publicClient?.waitForTransactionReceipt({hash:tx})
 			await whitelistSubmit({hex:message,signed,hash:tx})
 			await featchWhitelist()
 
-			Toast('认购成功')
+			Toast(intl.formatMessage({id:'toast.buy.success'}))
 
 		}catch (e:any) {
-			Toast(`认购失败${e.shortMessage || e.message}`)
+			Toast(`${intl.formatMessage({id:'toast.buy.failed'})}${e.shortMessage || e.message}`)
 			console.log(e);
+		}finally {
+			setSubscribeDisabled(false)
 		}
 
 
 	}
 	const handlerGet = async ()=>{
 		try{
+			setGetDisabled(true)
 			const tx = await writeContractAsync({
 				address: contract.dev.manager as `0x${string}`,
 				abi: manager,
 				functionName: 'claimSubscriptionTokens',
 				args: [],
 			})
-			const clamRes = await publicClient.waitForTransactionReceipt({hash:tx})
+			const clamRes = await publicClient?.waitForTransactionReceipt({hash:tx})
 			console.log(clamRes,'clamRes');
-			if(clamRes.status === "reverted"){
-				const res = await getContractErrorInfo(publicClient,clamRes)
+			if(clamRes?.status === "reverted"){
+				const res:any = await getContractErrorInfo(publicClient,clamRes)
 				console.log(res);
 				return Toast(res)
 			}
-			Toast('领取成功')
+			Toast(intl.formatMessage({id:"toast.get.success"}))
 		}catch (e:any) {
 			console.log(e);
 			console.log(e.shortMessage || e.message);
 			Toast(e.shortMessage || e.message)
+		}finally {
+			setGetDisabled(false)
 		}
 
 	}
@@ -457,17 +491,7 @@ const Home:React.FC = () =>{
 	return(
 		<>
 		<div className="container">
-			<div className="navbar">
-				<div className="left">
-					<img src={logoUrl} alt="" />
-				</div>
-				<div className="middle">
-					<ConnectButtonCustom />
-				</div>
-				<div className="right">
-					<SelectLanguage/>
-				</div>
-			</div>
+			<NavBar showMenu={false}/>
 			<div className="swiper">
 				<Swiper autoplay>
 					{
@@ -607,8 +631,8 @@ const Home:React.FC = () =>{
 						}
 
 						<div className="controls">
-							<button onClick={handlerClam}>{intl.formatMessage({ id: 'whitelist.subscribe' })}</button>
-							<button onClick={handlerGet}>{intl.formatMessage({ id: 'whitelist.claim' })}</button>
+							<button disabled={subscribeDisabled} onClick={handlerClam}>{intl.formatMessage({ id: 'whitelist.subscribe' })}</button>
+							<button disabled={getDisabled} onClick={handlerGet}>{intl.formatMessage({ id: 'whitelist.claim' })}</button>
 						</div>
 
 						<div className="phase-records">
@@ -641,29 +665,32 @@ const Home:React.FC = () =>{
 					{intl.formatMessage({ id: 'footer.social.media' })}
 				</div>
 				<div className="media-list">
-					<a href="https://x.com/ethdotorg" target="_blank"><Iconfont icon={'icon-tuite1'}></Iconfont></a>
-					<a href="" target="_blank"><Iconfont icon={'icon-telegram'}></Iconfont></a>
+					<a href="https://x.com/dggg32176891?s=21" target="_blank"><Iconfont icon={'icon-tuite1'}></Iconfont></a>
+					<a href="https://t.me/+cl-P63xZHOowNTY8" target="_blank"><Iconfont icon={'icon-telegram'}></Iconfont></a>
 					<a href="https://ethereum.org/" target="_blank"><Iconfont icon={'icon-ethereum'}></Iconfont></a>
 					<a href="https://discord.com/invite/ethereum-org" target={'_blank'}> <Iconfont
 						icon={'icon-discard'}></Iconfont></a>
 				</div>
-				<div className="link">
-					<div className="invite">
-						{intl.formatMessage({ id: 'footer.invite.link' })}
-					</div>
-					<div className="link-text">
-						{`https://www.tyoe.net?invite=${userStore.user?.invit}`}
-					</div>
+				{userStore.user?.invit && (
+					<div className="link">
+						<div className="invite">
+							{intl.formatMessage({ id: 'footer.invite.link' })}
+						</div>
+						<div className="link-text">
+							{`https://www.tyoe.net?invite=${userStore.user?.invit}`}
+						</div>
 
-					<div className="link-button">
-						<button>
-							<Iconfont icon={'icon-share'}></Iconfont>
-							{intl.formatMessage({ id: 'footer.copy.link' })}
-							<Iconfont icon={'icon-fuzhi'} onClick={()=>{
-								copyText(`https://www.tyoe.net?invite=${userStore.user?.invit}`)
-							}}></Iconfont></button>
+						<div className="link-button">
+							<button>
+								<Iconfont icon={'icon-share'}></Iconfont>
+								{intl.formatMessage({ id: 'footer.copy.link' })}
+								<Iconfont icon={'icon-fuzhi'} onClick={() => {
+									copyText(`https://www.tyoe.net?invite=${userStore.user?.invit}`);
+								}}></Iconfont></button>
+						</div>
 					</div>
-				</div>
+				)}
+
 
 				<ul className="other-link">
 					<li>
@@ -707,30 +734,7 @@ const Home:React.FC = () =>{
 				</ul>
 			</div>
 		</div>
-			<Dialog
-				visible={visible}
-				showCancelButton={false}
-				showConfirmButton={false}
-			>
-				<div className="parent-link">
-					<div className="title">
-						{intl.formatMessage({ id: 'bind.invite.title' })}
-					</div>
-					<div className="main">
-						<div className="input">
-							<input value={invite || ''} onInput={(e: any) => {
-								setInvite(e.target.value);
-							}} placeholder={intl.formatMessage({ id: 'bind.invite.placeholder' })} />
-						</div>
-						<div className="info">
-							{intl.formatMessage({ id: 'bind.invite.tip' })}
-						</div>
-						<div className="button" onClick={bindInvite}>{intl.formatMessage({ id:'bind.invite.button'})}</div>
-					</div>
-				</div>
 
-
-			</Dialog>
 		</>
 	)
 }

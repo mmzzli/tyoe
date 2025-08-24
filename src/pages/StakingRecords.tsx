@@ -2,45 +2,41 @@ import Layouts from '@/component/Layouts.tsx';
 import { useIntl } from 'react-intl';
 import { useEffect, useState } from 'react';
 import './StakingRecords.scss';
-import { getStakingRecord, StakingRecordInterface } from '@/service/staking.ts';
+import {
+  getStakingInfo,
+  getStakingRecord,
+  StakingInfoInterface,
+  StakingRecordInterface,
+  unStake,
+} from '@/service/staking.ts';
 import Iconfont from '@/component/Iconfont.tsx';
 import dayjs from 'dayjs';
+import BigNumber from 'bignumber.js';
+import { List, PullRefresh, Toast } from 'react-vant';
 
 const StakingRecords = () =>{
   const intl = useIntl()
-  const tabs = [
-    {
-      value:'all',
-      label:intl.formatMessage({id:'common.all'}),
-    },
-    {
-      value:'1',
-      label:intl.formatMessage({id:'common.ongoing'}),
-      icon:<Iconfont icon="icon-shijiankaishishijian"></Iconfont>
-    },
-    {
-      value:'3',
-      label:intl.formatMessage({id:'common.completed'}),
-      icon:<Iconfont icon="icon-zhaungtai1"></Iconfont>
-    }
-  ]
-  const [type,setType] = useState(tabs[0].value)
 
   const [list,setList] = useState<StakingRecordInterface[]>([])
   const [finished, setFinished] = useState<boolean>(false)
   const [,setTotal] = useState(0)
   const [page,setPage] = useState(1)
   const [loading, setLoading] = useState(false)
+  const [stakingInfo,setStakingInfo] = useState<StakingInfoInterface|null>(null)
+  const fetchStakingInfo = async ()=>{
+    const res = await getStakingInfo()
+    setStakingInfo(res)
+  }
 
+  useEffect(() => {
+    fetchStakingInfo()
+  }, []);
   // 请求数据
   const fetchRecords = async (pageNum:number, isRefresh = false) => {
     if (loading) return;
     setLoading(true);
     try {
       const params:any = { page: pageNum }
-      if(type!=='all'){
-        params.status = type
-      }
       const res = await getStakingRecord(params)
       setTotal(res.total)
       const newList = isRefresh ? res.list : [...list, ...res.list]
@@ -69,132 +65,108 @@ const StakingRecords = () =>{
     await fetchRecords(page)
   }
 
-  // 切换tab时刷新
-  useEffect(() => {
-    onRefresh()
-  }, [type]);
+  const statusTypes:any = {
+    0: <div className="waiting">{intl.formatMessage({ id: 'common.order.waiting' })}</div>,
+    1: <div className="processing">{intl.formatMessage({ id: 'common.order.processing' })}</div>,
+    2: <div className="finished">{intl.formatMessage({ id: 'common.order.done' })}</div>,
+  }
 
-  return <Layouts title={intl.formatMessage({id:'staking.records'})}>
+  const handlerUnStaking = async (item:StakingRecordInterface)=>{
+    try{
+      await unStake({id:item.id})
+      Toast(intl.formatMessage({id:'staking.back'}))
+      await onRefresh()
+    }catch (e:any) {
+      Toast(e?.message||e)
+      console.log(e);
+    }
+  }
+
+  return <Layouts title={intl.formatMessage({ id: 'staking.records' })}>
     <div className="staking-records-detail">
       <div className="staking-records-detail-card">
         <div className="title">{intl.formatMessage({ id: 'staking.detail.total.amount' })}</div>
-        <div className="content">25,000 TYOE</div>
+        <div className="content">{BigNumber(stakingInfo?.pledgetotal||0).toFormat()} TYOE</div>
       </div>
       <div className="staking-records-detail-card">
         <div className="title">{intl.formatMessage({ id: 'staking.detail.total.reward' })}</div>
-        <div className="content success">430 TYOE</div>
+        <div className="content success">{BigNumber(stakingInfo?.pledgegetmoney||0).toFormat()} TYOE</div>
       </div>
     </div>
     <div className="staking-records-list">
       <div className="title">
-        {intl.formatMessage({ id: 'staking.records' })}(3)
+        {intl.formatMessage({ id: 'staking.records' })}({list.length})
       </div>
       <div className="staking-records-list-box">
-      <div className="staking-records-list-item">
-        <div className="top">
-          <div className="left">
-            {intl.formatMessage({ id: 'common.order.no' })}:STK001234567890
-          </div>
-          <div className="right">
-            <div className="processing">{intl.formatMessage({ id: 'common.order.processing' })}</div>
-          </div>
-        </div>
-        <div className="middle">
-          <div className="middle-item">
-            <div className="left">
-              <Iconfont icon={'icon-daojishi'}></Iconfont>
-              {intl.formatMessage({ id: "staking.detail.day.reward" })}
-            </div>
-            <div className="right">
-              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
-            </div>
-          </div>
+        <PullRefresh onRefresh={onRefresh}>
+          <List finished={finished} onLoad={onLoad} className={'staking-records-list-box'}>
+            {
+              list.map((item) => {
+                return <div key={item.id} className="staking-records-list-item">
+                  <div className="top">
+                    <div className="left">
+                      {intl.formatMessage({ id: 'common.order.no' })}:{item.order_no}
+                    </div>
+                    <div className="right">
+                      {statusTypes[item.status_name]}
+                    </div>
+                  </div>
+                  <div className="middle">
+                    <div className="middle-item">
+                      <div className="left">
+                        <Iconfont icon={'icon-daojishi'}></Iconfont>
+                        {intl.formatMessage({ id: "staking.detail.day.reward" })}
+                      </div>
+                      <div className="right">
+                        {dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}
+                      </div>
+                    </div>
 
-          <div className="middle-item">
-            <div className="left">
-              <Iconfont icon={'icon-meijin'}></Iconfont>
-              {intl.formatMessage({ id: "staking.detail.amount" })}
-            </div>
-            <div className="right">
-              10,000 TYOE
-            </div>
-          </div>
+                    <div className="middle-item">
+                      <div className="left">
+                        <Iconfont icon={'icon-meijin'}></Iconfont>
+                        {intl.formatMessage({ id: "staking.detail.amount" })}
+                      </div>
+                      <div className="right">
+                        {BigNumber(item.buy_price).toFormat()} TYOE
+                      </div>
+                    </div>
 
-          <div className="middle-item">
-            <div className="left">
-              <Iconfont icon={'icon-rise'}></Iconfont>
-              {intl.formatMessage({ id: "staking.detail.day.reward" })}
-            </div>
-            <div className="right">
-              0.5%
-            </div>
-          </div>
+                    <div className="middle-item">
+                      <div className="left">
+                        <Iconfont icon={'icon-rise'}></Iconfont>
+                        {intl.formatMessage({ id: "staking.detail.day.reward" })}
+                      </div>
+                      <div className="right">
+                        {BigNumber(item.remark).multipliedBy(100).toFormat()} %
+                      </div>
+                    </div>
 
-          <div className="middle-item">
-            <div className="left">
-              {intl.formatMessage({ id: "staking.detail.calc.reward" })}
-            </div>
-            <div className="right success">
-              250 TYOE
-            </div>
-          </div>
-        </div>
-        <div className="bottom">
-          <button>{intl.formatMessage({ id: "staking.detail.Withdraw" })}</button>
-        </div>
-      </div>
+                    <div className="middle-item">
+                      <div className="left">
+                        {intl.formatMessage({ id: "staking.detail.calc.reward" })}
+                      </div>
+                      <div className="right success">
+                        {BigNumber(item.total_money).toFormat()} TYOE
+                      </div>
+                    </div>
+                  </div>
 
-      <div className="staking-records-list-item">
-        <div className="top">
-          <div className="left">
-            {intl.formatMessage({ id: 'common.order.no' })}:STK001234567890
-          </div>
-          <div className="right">
-            <div className="finished">{intl.formatMessage({ id: 'common.order.processing' })}</div>
-          </div>
-        </div>
-        <div className="middle">
-          <div className="middle-item">
-            <div className="left">
-              <Iconfont icon={'icon-daojishi'}></Iconfont>
-              {intl.formatMessage({ id: "staking.detail.day.reward" })}
-            </div>
-            <div className="right">
-              {dayjs('2024-01-15 14:30:00').format('YYYY-MM-DD HH:mm:ss')}
-            </div>
-          </div>
+                  {
+                    item.status_name === 1 && <div className="bottom">
+                      <button onClick={() => {
+                        handlerUnStaking(item);
+                      }}>{intl.formatMessage({ id: 'staking.detail.Withdraw' })}</button>
+                    </div>
+                  }
 
-          <div className="middle-item">
-            <div className="left">
-              <Iconfont icon={'icon-meijin'}></Iconfont>
-              {intl.formatMessage({ id: "staking.detail.amount" })}
-            </div>
-            <div className="right">
-              10,000 TYOE
-            </div>
-          </div>
+                </div>
+              })
+            }
 
-          <div className="middle-item">
-            <div className="left">
-              <Iconfont icon={'icon-rise'}></Iconfont>
-              {intl.formatMessage({ id: "staking.detail.day.reward" })}
-            </div>
-            <div className="right">
-              0.5%
-            </div>
-          </div>
 
-          <div className="middle-item">
-            <div className="left">
-              {intl.formatMessage({ id: "staking.detail.calc.reward" })}
-            </div>
-            <div className="right success">
-              250 TYOE
-            </div>
-          </div>
-        </div>
-
-      </div>
+          </List>
+        </PullRefresh>
       </div>
     </div>
   </Layouts>

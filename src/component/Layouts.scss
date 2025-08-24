@@ -26,5 +26,7 @@
   height: 40px;
 }
 .layout-container-body{
-  margin-top: 136px;
+  background: $background-pink;
+  padding-top: 136px;
+  min-height: 100vh;
 }

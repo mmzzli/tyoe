@@ -1,135 +1,133 @@
-@mixin flex-center{
-  display: flex;
-  align-items: center;
-  justify-content: center;
-}
-@mixin flex-between{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-}
-@mixin flex-column{
-  display: flex;
-  flex-direction: column;
-}
-
-.asset-info{
+.asset-info {
   margin-bottom: 20px;
   padding: 40px 20px;
   @include flex-column;
   align-items: center;
-  gap: 20px;
-  .title{
-    color: #fc6612;
-    font-size: 30px;
+  gap: 30px;
+  .icon-qianbao{
+    width: 40px;
+    height: 40px;
+  }
+  .common-title{
+    padding: 0;
+    @include flex-center;
+    gap: 10px;
   }
   .value{
-    color: #fc6612;
-    font-size: 60px;
-    line-height: 80px;
-    font-family: Arial;
-    font-weight: bold;
-  }
-  .list{
-    width: 100%;
-    @include flex-between;
-
-    &-item{
-      @include flex-center;
-      flex-direction: column;
-      gap: 15px;
-      width: 50%;
-
-      .bottom{
-        font-size: 36px;
-        font-family: Arial;
-        font-weight: bold;
-      }
+    @include flex-center;
+    align-items: flex-end;
+    gap: 10px;
+    div{
+      font-size: 64px;
+      color: $primary;
+      font-weight: bold;
+    }
+    span{
+      position: relative;
+      top: -10px;
+      color: $text-muted;
+      font-size: 32px;
     }
   }
-  .button{
-    margin-top: 20px;
-    line-height: 30px;
-    padding: 15px 30px;
+  .usdt{
+
+    font-size: 32px;
+    color: $text-muted;
     @include flex-center;
-    background: #fc6612;
-    color: #fff;
-    font-size: 30px;
+    gap: 10px;
+  }
+  .button{
+    background: $button-primary;
+    width: 50%;
+    height: 80px;
     border-radius: 20px;
+    color: $text-primary;
+    margin-top: 0;
+    @include flex-center;
+    font-size: 28px;
+    .icon-arrow-right-up{
+      width: 40px;
+      height: 40px;
+    }
   }
 }
-.asset-alalysis{
+.asset-all{
   margin-bottom: 20px;
-  padding: 30px 20px;
-  .title{
-    color: #fc6612;
-    font-size: 30px;
-  }
+  padding: 40px;
   .list{
-    @include flex-between;
-    flex-wrap: wrap;
-    margin-bottom: 20px;
+    margin-top: 40px;
+    @include flex-column;
+    gap: 20px;
     &-item{
-      margin-top: 60px;
-      width: 50%;
+      padding: 20px;
+      background: $background-tertiary;
+      @include flex-between;
+      height: 100px;
       box-sizing: border-box;
-      gap: 20px;
-      @include flex-column;
-      justify-content: center;
-      align-items: center;
-      .top{
-        color: #787878;
+      font-size: 24px;
+      color: $text-muted;
+      border-radius: 20px;
+      .left,.middle,.right{
+        flex:1;
       }
-      .bottom{
-        color: #000;
-        font-size: 30px;
-        font-family: Arial;
-        font-weight: bold;
-      }
-      &:nth-of-type(1){
-        .icon{
-          background: #4ADE80;
-        }
-      }
-      &:nth-of-type(2){
-        .icon{
-          background: #FC6613;
-        }
-      }
-      .iconfont{
-        font-size:50px;
-        color: #fff;
-      }
-      .icon{
-        border-radius: 50%;
+      .middle{
         @include flex-center;
-        width: 80px;
-        height: 80px;
+        justify-content: flex-end;
+      }
+      .middle{
+        color: $text-primary;
+        font-size: 26px;
+        font-weight: bold;
       }
     }
   }
 }
 .asset-detail{
-  padding: 30px 20px;
-  .top{
-    @include flex-between;
-  }
-  .title{
-    color: #fc6612;
-    font-size: 30px;
-  }
-  .tabs{
-    margin-top: 20px;
-  }
-}
-.record-list-item{
-  .left{
-    .coin{
-      background:none;
-      .icon{
-        width: 50px;
-        height: 50px;
+  padding: 40px;
+
+  .record-list{
+    @include flex-column;
+    gap: 20px;
+    .item{
+      @include flex-between;
+      gap: 20px;
+      border-bottom: 1px solid $divider;
+      padding: 20px 0;
+      .left{
+        .icon{
+          width: 30px;
+          height: 30px;
+        }
+      }
+      .middle{
+        flex:1;
+        color: $text-muted;
+        font-size: 24px;
+        @include flex-column;
+        gap: 10px;
+        .top{
+          font-weight: bold;
+          font-size: 28px;
+          color: $text-primary;
+        }
+      }
+      .right{
+        @include flex-column;
+        justify-content: flex-end;
+        align-items: flex-end;
+        gap: 10px;
+        .top{
+          font-size: 28px;
+          font-weight: bold;
+        }
+        .bottom{
+          font-size: 24px;
+        }
       }
     }
+  }
+  .common-title{
+    justify-content: flex-start;
+    padding: 0;
   }
 }

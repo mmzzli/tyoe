@@ -22,7 +22,7 @@ const SelectLanguage = () =>{
   const store = useLanguageStore()
   return (
     <>
-      <Iconfont onClick={()=>setVisible(true)} icon={'icon-yuyan'}></Iconfont>
+      <Iconfont onClick={()=>setVisible(true)} icon={'icon-language'}></Iconfont>
       <ActionSheet visible={visible} onCancel={()=>{setVisible(false)}}>
         <div className="languages-container">
           <div className="title">选择语言 / Select Language</div>
