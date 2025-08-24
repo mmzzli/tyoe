@@ -76,6 +76,7 @@ const StakingRecords = () =>{
       await unStake({id:item.id})
       Toast(intl.formatMessage({id:'staking.back'}))
       await onRefresh()
+      await fetchStakingInfo()
     }catch (e:any) {
       Toast(e?.message||e)
       console.log(e);
