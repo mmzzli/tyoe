@@ -197,11 +197,13 @@
         @include flex-column;
         gap: 7px;
         .top{
+          text-align: center;
           line-height: 62px;
           font-size: 44px;
           color: $text-primary;
         }
         .desc{
+          text-align: center;
           line-height: 34px;
           color: $text-muted;
           font-size: 24px;
