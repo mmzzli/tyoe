@@ -668,8 +668,6 @@ const Home:React.FC = () =>{
 					<a href="https://x.com/dggg32176891?s=21" target="_blank"><Iconfont icon={'icon-tuite1'}></Iconfont></a>
 					<a href="https://t.me/+cl-P63xZHOowNTY8" target="_blank"><Iconfont icon={'icon-telegram'}></Iconfont></a>
 					<a href="https://ethereum.org/" target="_blank"><Iconfont icon={'icon-ethereum'}></Iconfont></a>
-					<a href="https://discord.com/invite/ethereum-org" target={'_blank'}> <Iconfont
-						icon={'icon-discard'}></Iconfont></a>
 				</div>
 				{userStore.user?.invit && (
 					<div className="link">

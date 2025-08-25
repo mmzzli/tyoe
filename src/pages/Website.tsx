@@ -9,7 +9,7 @@ import get4Svg from '@/assets/images/website/get4.svg';
 
 import './Website.scss';
 import Iconfont from '@/component/Iconfont.tsx';
-import { Swiper, Toast } from 'react-vant';
+import { Popup, Swiper, Toast } from 'react-vant';
 import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
 import { TOKEN } from '@/utils/const.ts';
 import { generateRandomString } from '@/utils/common.ts';
@@ -20,7 +20,7 @@ import useUserStore from '@/store/user.ts';
 import { contract } from '@/wagmi.ts';
 import { manager, token } from '@/abi/tyoe.ts';
 import BigNumber from 'bignumber.js';
-import { buyProduct, getGoodsList } from '@/service/staking.ts';
+import { buyProduct, getGoodsList, getStakingInfo, StakingInfoInterface } from '@/service/staking.ts';
 import NavBar from '@/component/NavBar.tsx';
 
 
@@ -95,10 +95,15 @@ const Website  = ()=>{
   const [, setVisible] = useState(false)
   const [stakingNumber,setStakingNumber] = useState(1);
   const [balance,setBalance]  = useState(0);
+  const [stakingBalance,setStakingBalance]  = useState(0);
   const [random,setRandom] = useState(0)
   const [stakingBtnDisabled,setStakingDisabled] = useState(true)
   const navigator = useNavigate()
   const [stakingProduct,setStakingProduct] = useState({reward:0,total:0})
+  const [aboutVisable, setAboutVisable] = useState<boolean>(false)
+  const [appVisable, setAppVisable] = useState<boolean>(false)
+  const [stakingInfo,setStakingInfo] = useState<StakingInfoInterface|null>(null)
+
   // 绑定上级
   const bindInvite = async () => {
     if(!invite.trim()){
@@ -205,9 +210,24 @@ const Website  = ()=>{
     return balance || 0;
   }
 
+  const handlerTyoeBalance = async () =>{
+    // eslint-disable-next-line no-unsafe-optional-chaining
+    const [balance]:any = await publicClient?.readContract({
+      address: contract.dev.manager as `0x${string}`,
+      abi: manager,
+      functionName: 'getStakingInfo',
+      args: [address],
+    })
+    // console.log(balance,'balance');
+    setStakingBalance(Number(balance)||0)
+    return balance || 0;
+  }
+
   useEffect(() => {
     handlerGetBalance()
+    handlerTyoeBalance()
   }, [isConnected,address,random]);
+
 
   useEffect(() => {
     setStakingDisabled(balance<=0 || stakingNumber<=0)
@@ -269,65 +289,31 @@ const Website  = ()=>{
   useEffect(() => {
     const fetchStakingReward = async () =>{
       const res = await getGoodsList()
-      console.log(res);
       // eslint-disable-next-line @typescript-eslint/ban-ts-comment
       // @ts-expect-error
       setStakingProduct(res.list[0])
     }
     fetchStakingReward()
   }, []);
+  const fetchStakingInfo = async ()=>{
+    const res = await getStakingInfo()
+    setStakingInfo(res)
+  }
+  useEffect(() => {
+    fetchStakingInfo()
+  }, []);
   return <>
     <div className="website-container">
-      <NavBar/>
+      <NavBar />
       <div className="top-banner">
         <img src={websiteBannerUrl} alt="" />
       </div>
-      <div className="h1-title">
-        <h1 className="h1">{intl.formatMessage({ id: 'website.title' })}</h1>
-        <div className="h1-desc">{intl.formatMessage({ id: 'website.title.desc' })}</div>
-      </div>
 
-      <div className="staking-container">
-        <div className="title">
-          <div className="left">
-            <Iconfont icon="icon-zhiya"></Iconfont>
-            <h2>{intl.formatMessage({ id: 'staking.title' })}</h2>
-          </div>
-          <div className="right" onClick={()=>{navigator('/staking-records')}}>
-            <Iconfont icon="icon-jilu"></Iconfont>
-            {intl.formatMessage({ id: 'staking.record.title' })}
-          </div>
-        </div>
-        <div className="body">
-          <div className="form-item">
-            <div className="label">
-              {intl.formatMessage({ id: "staking.balance.left" })}
-            </div>
-            <div className="value">{BigNumber(balance).div(10**18).toFormat()}</div>
-          </div>
-          <div className="form-item">
-            <div className="label">
-              {intl.formatMessage({ id: "staking.balance" })}
-            </div>
-            <div className="input">
-              <input type="number" value={stakingNumber} onInput={handlerStakingNumberChange} placeholder={intl.formatMessage({ id: "staking.balance.placeholder" })} />
-            </div>
-          </div>
-          <div className="form-item">
-            <div className="button">
-              <button disabled={stakingBtnDisabled} onClick={handlerStaking}>{intl.formatMessage({ id: "staking.button" })}</button>
-            </div>
-          </div>
-        </div>
-        <div className="staking-container-footer">
-          <div className="item">
-            <div className="top">{intl.formatMessage({ id: "staking.day.get" })}</div>
-            <div className="bottom">{BigNumber(stakingProduct.reward*100).toFormat()}%</div>
-          </div>
-          <div className="item">
-            <div className="top">{intl.formatMessage({ id: "staking.year.get" })}</div>
-            <div className="bottom">{BigNumber(stakingProduct.total*100).toFormat()}%</div>
-          </div>
+      <div className="build-container">
+        <div className="common-title">{intl.formatMessage({ id: 'website.build.title' })}</div>
+        <div className="video">
+          <video autoPlay={true} src="https://www.tyoe.net/videobg.mp4" muted={true} controls={false} width={'100%'}
+                 height={'auto'}></video>
         </div>
       </div>
 
@@ -375,13 +361,67 @@ const Website  = ()=>{
         </div>
       </div>
 
-      <div className="build-container">
-        <div className="common-title">{intl.formatMessage({ id: 'website.build.title' })}</div>
-        <div className="video">
-          <video autoPlay={true} src="https://www.tyoe.net/videobg.mp4" muted={true} controls={false} width={'100%'}
-                 height={'auto'}></video>
+      <div className="h1-title">
+        <h1 className="h1">{intl.formatMessage({ id: 'website.title' })}</h1>
+        <div className="h1-desc">{intl.formatMessage({ id: 'website.title.desc' })}</div>
+      </div>
+      <div className="staking-container">
+        <div className="title">
+          <div className="left">
+
+          </div>
+          <div className="right" onClick={() => {
+            navigator('/staking-records')
+          }}>
+            <Iconfont icon="icon-jilu"></Iconfont>
+            {intl.formatMessage({ id: 'staking.record.title' })}
+          </div>
+        </div>
+        <div className="body">
+          <div className="form-item">
+            <div className="label">
+              {intl.formatMessage({ id: 'staking.balance.left' })}
+            </div>
+            <div className="value">{BigNumber(balance).div(10 ** 18).toFormat()}</div>
+          </div>
+          <div className="form-item">
+            <div className="label">
+              {intl.formatMessage({ id: 'staking.balance.tyoe' })}
+            </div>
+            <div className="value">{BigNumber(stakingBalance).div(10 ** 18).toFormat()}</div>
+          </div>
+          <div className="form-item">
+            <div className="label">
+              {intl.formatMessage({ id: 'staking.balance' })}
+            </div>
+            <div className="input">
+              <input type="number" value={stakingNumber} onInput={handlerStakingNumberChange}
+                     placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
+            </div>
+          </div>
+          <div className="form-item">
+            <div className="button">
+              <button disabled={stakingBtnDisabled}
+                      onClick={handlerStaking}>{intl.formatMessage({ id: 'staking.button' })}</button>
+            </div>
+          </div>
+        </div>
+        <div className="staking-container-footer">
+          <div className="item">
+            <div className="top">{intl.formatMessage({ id: 'staking.day.get' })}</div>
+            <div className="bottom">{BigNumber(stakingProduct.reward * 100).toFormat()}%</div>
+          </div>
+          <div className="item">
+            <div className="top">{intl.formatMessage({ id: "staking.year.get" })}</div>
+            <div className="bottom">{BigNumber(stakingInfo?.pledgegetmoney||0).toFormat()}</div>
+          </div>
+        </div>
+        <div className="staking-container-bottom">
+          <div className="item" onClick={()=>setAboutVisable(true)}>{intl.formatMessage({ id: 'staking.footer.item1' })}</div>
+          <div className="item" onClick={()=>setAppVisable(true)}>{intl.formatMessage({ id: 'staking.footer.item2' })}</div>
         </div>
       </div>
+
 
       <div className="problem-container">
         <div className="common-title">{intl.formatMessage({ id: 'website.problem.title' })}</div>
@@ -416,10 +456,73 @@ const Website  = ()=>{
           }
 
         </div>
-
-
       </div>
     </div>
+    <Popup className={'about-staking-popup'} visible={aboutVisable} onClose={() => {
+      setAboutVisable(false);
+    }}>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item1"})}
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item2"})}
+
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item3"})}
+
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item4"})}
+
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item5"})}
+
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item6"})}
+
+      </div>
+      <div className="item">
+        <div className="top">
+          {intl.formatMessage({id:"staking.footer.item1.item7"})}
+
+        </div>
+        <div className="bottom">
+          <div className="bottom-li">
+            {intl.formatMessage({id:"staking.footer.item1.item8"})}
+
+          </div>
+          <div className="bottom-li">
+            {intl.formatMessage({id:"staking.footer.item1.item9"})}
+
+          </div>
+          <div className="bottom-li">
+            {intl.formatMessage({id:"staking.footer.item1.item10"})}
+
+          </div>
+        </div>
+        <div className="footer">
+          {intl.formatMessage({id:"staking.footer.item1.item11"})}
+
+        </div>
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item12"})}
+      </div>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item1.item13"})}
+      </div>
+    </Popup>
+
+    <Popup className={'app-staking-popup'} visible={appVisable} onClose={() => {
+      setAppVisable(false)}}>
+      <div className="item">
+        {intl.formatMessage({id:"staking.footer.item2.item1"})}
+
+      </div>
+    </Popup>
   </>
 }
 
