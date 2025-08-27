@@ -54,7 +54,7 @@ const Menus:React.FC<{close:()=>void}> = ({close})=>{
                     {item.icon}
                     <span>{item.title}</span>
                   </div>
-                  <ChevronRight size={20} color="#fc6612" />
+                  <ChevronRight size={34} color="#fff" />
                 </div>
               )
             })

@@ -10,6 +10,9 @@
     }
   }
   .h1-title{
+    padding: 0 40px;
+    text-align: center;
+    font-weight: bold;
     margin-top: 72px;
     margin-bottom: 42px;
     @include flex-column;
@@ -307,6 +310,7 @@
   .common-title{
     padding: 72px 0 40px;
     color: $text-primary;
+    text-align: center;
     font-size: 54px;
     @include flex-center;
     font-weight: bold;

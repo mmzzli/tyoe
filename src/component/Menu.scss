@@ -1,5 +1,5 @@
 .menu-container{
-  padding: 100px 20px 20px;
+  padding: 80px 20px 20px;
   font-size: 24px;
   display: flex;
   gap: 30px;
@@ -8,6 +8,7 @@
   box-sizing: border-box;
   height: 100%;
   overflow:hidden;
+  background: rgba(0,0,0,0.95);
   .menu-toolbar{
     left: 0;
     width: 100%;
@@ -22,13 +23,26 @@
       color: #fc6612;
       gap: 5px;
     }
+    .right{
+      margin-right: 20px;
+      background: rgba(255,255,255,0.1);
+      padding: 20px;
+      border-radius: 50%;
+      .icon{
+        color: $text-white;
+        width: 50px;
+        height: 50px;
+      }
+    }
   }
   .menu-main{
+    margin-top: 40px;
     display: flex;
     flex-direction: column;
     gap: 35px;
     flex:1;
     overflow-y: auto;
+    color: $text-white;
     .user-info{
       gap: 20px;
       background: #F5F5F5;
@@ -130,8 +144,8 @@
       display: flex;
       justify-content: space-between;
       align-items: center;
-      border-bottom: 1px solid #eee;
-      height: 90px;
+      border-bottom: 1px solid rgba(255,255,255,0.4);
+      height: 140px;
       &:last-of-type{
         border: none;
       }
@@ -140,10 +154,11 @@
         display: flex;
         align-items: center;
         gap: 10px;
-        font-size: 26px;
+        font-size: 40px;
         .icon{
-          width:30px;
-          height: 30px;
+          color: #fff;
+          width:40px;
+          height: 40px;
         }
       }
     }

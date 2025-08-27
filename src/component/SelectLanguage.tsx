@@ -38,7 +38,7 @@ const SelectLanguage = () =>{
                 </div>
                 {
                   option.code === store.language && <div className="right">
-                    <Check size={20} color="#F5A400" />
+                    <Check size={20} color="#8910c9" />
                   </div>
                 }
               </div>

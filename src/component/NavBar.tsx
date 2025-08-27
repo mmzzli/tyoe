@@ -28,9 +28,10 @@ const NavBar: React.FC<{showMenu?:boolean}> = ({showMenu=true}) => {
         </div>
       </div>
       <Popup
-        className={'pop-up-main'}
+        className={'pop-up-main pop-up-menus'}
         visible={menuVisable === 'left'}
-        style={{ width: '80%', height: '100%' }}
+        style={{ width: '100%', height: '100%' }}
+        overlay={false}
         position='left'
         onClose={() => {
           setMenuVisable('')

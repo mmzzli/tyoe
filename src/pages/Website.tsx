@@ -312,8 +312,7 @@ const Website  = ()=>{
       <div className="build-container">
         <div className="common-title">{intl.formatMessage({ id: 'website.build.title' })}</div>
         <div className="video">
-          <video autoPlay={true} src="https://www.tyoe.net/videobg.mp4" muted={true} controls={false} width={'100%'}
-                 height={'auto'}></video>
+          <video autoPlay={true} src="https://www.tyoe.net/videobg.mp4" muted={true}  width={'100%'} playsinline={true} webkit-playsinline x5-playsinline controls={true} height={'auto'}></video>
         </div>
       </div>
 

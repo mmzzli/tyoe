@@ -485,7 +485,6 @@ const Home:React.FC = () =>{
 		}finally {
 			setGetDisabled(false)
 		}
-
 	}
 
 	return(
@@ -513,6 +512,14 @@ const Home:React.FC = () =>{
 				</Swiper>
 			</div>
 
+			<div className="welcome-box">
+				<div className="title">
+					{intl.formatMessage({id:'welcome.title'})}
+				</div>
+				<div className="body">
+					{intl.formatMessage({id:'welcome.body'})}
+				</div>
+			</div>
 
 			<div className="airdop-box">
 				<div className="title">
