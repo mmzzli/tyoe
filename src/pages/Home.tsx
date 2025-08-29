@@ -238,7 +238,7 @@ const Home: React.FC = () => {
         });
         console.log(item, '-----nowTime');
         return {
-          usdtPrice: BigNumber(usdtPrice).dividedBy(10 ** 18).toString(),
+          usdtPrice: BigNumber(usdtPrice).dividedBy(10 ** 18).toFixed(0),
           maxSlots: BigNumber(maxSlots).toNumber(),
           currentSlots: BigNumber(currentSlots).toNumber(),
           active,
@@ -461,7 +461,7 @@ const Home: React.FC = () => {
 
       console.log(Number(usdtPrice));
 
-      const price = BigNumber(usdtPrice).dividedBy(10 ** 18).toString();
+      const price = BigNumber(usdtPrice).dividedBy(10 ** 18).toFixed(0);
       console.log(price);
 
       const allowance = await publicClient?.readContract({
@@ -473,7 +473,7 @@ const Home: React.FC = () => {
 
 
       console.log(allowance);
-      const needUsdt = BigNumber(usdtPrice).multipliedBy(cliamNumber).toString()
+      const needUsdt = BigNumber(usdtPrice).multipliedBy(cliamNumber).toFixed(0)
       console.log(needUsdt,'999999');
       if ((allowance || 0) < needUsdt) {
         //   查询自己有多少 usdt
@@ -698,7 +698,7 @@ const Home: React.FC = () => {
                     whiteList.map(item => {
                       return <div
                         className={['tab-label', curWhitelistItem.phase === item.phase ? 'active' : ''].join(' ')}
-                        onClick={()=>{handlerActived(item)}} key={`${item.phase}-label`}>
+                         key={`${item.phase}-label`}>
                         {intl.formatMessage({ id: 'whitelist.tab.phase' }, { num: item.phase })}
                       </div>;
                     })

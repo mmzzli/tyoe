@@ -27,6 +27,7 @@ export interface StakingInfoInterface{
 	pledgegetmoney:number,
 	pledgetotal:number
 	usdt_num:string
+	toUsdtCost:number
 }
 
 export interface CommonPage{

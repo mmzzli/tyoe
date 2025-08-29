@@ -274,13 +274,15 @@ const Website  = ()=>{
         args: [address, contract.dev.manager],
       })
 
+      console.log(BigNumber(stakingNumber).multipliedBy(BigNumber(10).pow(18)).toFixed(0));
+
       if( BigNumber(allowance).isLessThan(BigNumber(stakingNumber).multipliedBy(10**18))){
         //   授权
         const tx = await writeContractAsync({
           address: contract.dev.token as `0x${string}`,
           abi: token,
           functionName: 'approve',
-          args: [contract.dev.manager, BigNumber(stakingNumber).multipliedBy(10**18).toString()],
+          args: [contract.dev.manager, BigNumber(stakingNumber).multipliedBy(10**18).toFixed(0)],
         })
         console.log(tx);
       }
@@ -289,7 +291,7 @@ const Website  = ()=>{
         address: contract.dev.manager as `0x${string}`,
         abi: manager,
         functionName: 'stake',
-        args: [BigNumber(stakingNumber).multipliedBy(10**18).toString()],
+        args: [BigNumber(stakingNumber).multipliedBy(10**18).toFixed(0)],
       })
 
       const stakingRes = await publicClient?.waitForTransactionReceipt({hash:tx})
@@ -318,7 +320,7 @@ const Website  = ()=>{
       const message = generateRandomString(32)
       const signed  = await signMessageAsync({message})
 
-      await buyProduct({hash:'',hex:message,signed,amount:stakingNumber.toString(),type:2})
+      await buyProduct({hash:'',hex:message,signed,amount:stakingReNumber.toString(),type:2})
       Toast(intl.formatMessage({id:'staking.success'}))
       setStakingVisable(false)
 
