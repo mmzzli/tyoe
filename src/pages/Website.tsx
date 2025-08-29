@@ -604,12 +604,12 @@ const Website  = ()=>{
           <div className="form-item active">
             <div className="label">
               <div className="left">{intl.formatMessage({ id: 'staking.back.balance' })}</div>
-              <div className="right">{BigNumber(userStore.user?.toUsdtCost||0).toFormat()}</div>
+              <div className="right">{BigNumber(userStore.user?.usdt_num||0).toFormat()}</div>
             </div>
             <div className="input">
               <input type="number" value={stakingReNumber} onInput={handlerStakingReNumberChange}
                      placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
-              <div className="max" onClick={() => setStakingReNumber(BigNumber(userStore.user?.toUsdtCost||0).toNumber())}>MAX
+              <div className="max" onClick={() => setStakingReNumber(BigNumber(userStore.user?.usdt_num||0).toNumber())}>MAX
               </div>
             </div>
           </div>
