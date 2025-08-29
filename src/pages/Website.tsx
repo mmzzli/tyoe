@@ -256,9 +256,8 @@ const Website  = ()=>{
   }, [balance,stakingNumber]);
 
   useEffect(() => {
-    if(!stakingInfo?.pledgegetmoney||stakingInfo?.pledgegetmoney==0){
-      setStakingBtnReDisabled(true)
-    }
+
+    setStakingBtnReDisabled(Number(stakingInfo?.toUsdtCost)<=0 || stakingReNumber<=0)
   }, [stakingInfo]);
 
   const handlerStaking = async ()=>{
@@ -314,7 +313,7 @@ const Website  = ()=>{
 
   const handlerReStaking = async ()=>{
     try {
-      setStakingDisabled(true)
+      setStakingBtnReDisabled(true)
       // 获取签名
       const message = generateRandomString(32)
       const signed  = await signMessageAsync({message})
@@ -329,7 +328,7 @@ const Website  = ()=>{
     }finally {
       setRandom(Math.random())
       setStakingNumber(0)
-      setStakingDisabled(false)
+      setStakingBtnReDisabled(false)
       await fetchUserInfo()
     }
 
@@ -618,7 +617,7 @@ const Website  = ()=>{
           </div>
           <div className="form-item">
             <div className="button">
-              <button disabled={stakingBtnDisabled}
+              <button disabled={stakingBtnReDisabled}
                       onClick={handlerReStaking}>确认复投
               </button>
             </div>
