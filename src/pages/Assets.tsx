@@ -21,6 +21,10 @@ const Assets = ()=>{
       label:intl.formatMessage({id:'assets.shuhui'}),
       icon:<Iconfont icon={'icon-rise'}></Iconfont>
     },
+    19:{
+      label:intl.formatMessage({id:'assets.stake'}),
+      icon:<Iconfont icon={'icon-rise'}></Iconfont>
+    },
     7:{
       label:intl.formatMessage({id:'assets.withdraw'}),
       icon:<Iconfont icon={'icon-arrow-right-up-red'}></Iconfont>
