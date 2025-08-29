@@ -60,7 +60,7 @@ const Home: React.FC = () => {
   const [getDisabled, setGetDisabled] = useState(false);
 
   const [clamVisable,setClamVisable] = useState(false);
-  const [cliamNumber,setCliamNumber] = useState(1);
+  const [cliamNumber,setCliamNumber] = useState<null|number>(null);
   const [leftClimed,setLeftClimed] = useState(0);
   useEffect(() => {
     const fetchRelease = async () => {
@@ -832,7 +832,6 @@ const Home: React.FC = () => {
           最小认购份额为 1 次，最大为 50次
         </div>
         <div className={'button'} onClick={handlerClam}>确认</div>
-
       </ActionSheet>
 
     </>

@@ -602,8 +602,8 @@ const Website  = ()=>{
         </div> : <div className="tabs-item">
           <div className="form-item active">
             <div className="label">
-              <div className="left">{intl.formatMessage({ id: 'staking.balance' })}</div>
-              <div className="right">奖励余额:{BigNumber(userStore.user?.toUsdtCost||0).toFormat()}</div>
+              <div className="left">{intl.formatMessage({ id: 'staking.back.balance' })}</div>
+              <div className="right">{BigNumber(userStore.user?.toUsdtCost||0).toFormat()}</div>
             </div>
             <div className="input">
               <input type="number" value={stakingReNumber} onInput={handlerStakingReNumberChange}
@@ -611,9 +611,6 @@ const Website  = ()=>{
               <div className="max" onClick={() => setStakingReNumber(BigNumber(userStore.user?.toUsdtCost||0).toNumber())}>MAX
               </div>
             </div>
-          </div>
-          <div className="info-item">
-            <div className="left">{stakingProduct.price} TYOE</div>
           </div>
           <div className="info-item">
             <div className="left">TYOE平均收益率</div>
