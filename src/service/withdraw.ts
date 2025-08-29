@@ -11,6 +11,7 @@ export interface WithdrawInfoInterface{
   UsdtOutFee:string,
   UsdtOutmin:string,
   UsdtOutmax:string
+  usdt_num:string
 }
 export const getWithdrawInfo = ():Promise<WithdrawInfoInterface> => {
   return service.post("/Coin/transferOutIndex");
@@ -18,7 +19,7 @@ export const getWithdrawInfo = ():Promise<WithdrawInfoInterface> => {
 
 
 export interface widthDrawParams{
-  hex:string,signed:string,amount:string
+  hex:string,signed:string,amount:string,type:number
 }
 
 export const withdrawSubmit = (data:widthDrawParams):Promise<any> => {

@@ -28,6 +28,7 @@ const Withdraw = ()=>{
   const [,setTotal] = useState(0)
   const [page,setPage] = useState(1)
   const userStore = useUserStore()
+  const [type,setType] = useState(3)
 
   const [loading, setLoading] = useState(false)
   // 请求数据
@@ -98,7 +99,7 @@ const Withdraw = ()=>{
       // 签名
       const hex = generateRandomString(32)
       const signed  = await signMessageAsync({message:hex})
-      await withdrawSubmit({hex,signed,amount})
+      await withdrawSubmit({hex,signed,amount,type})
       Toast.success(intl.formatMessage({id:'common.success'}))
       await fetchData()
       await onRefresh();
@@ -107,6 +108,14 @@ const Withdraw = ()=>{
     }
   }
 
+  const balance = useMemo(() => {
+    if(type === 1){
+      return BigNumber(withdrawInfo?.usdt_num || 0)
+    }else{
+      return BigNumber(withdrawInfo?.wp_num || 0)
+    }
+  }, [withdrawInfo,type]);
+
   return <Layouts title={intl.formatMessage({ id: 'nav.withdraw' })}>
     <div className="card withdraw-info">
       <div className="card-title">
@@ -114,11 +123,22 @@ const Withdraw = ()=>{
       </div>
       <div className="form-item">
         <div className="label">
+          {intl.formatMessage({ id: 'withdraw.type' })}
+        </div>
+        <div className="input input-between">
+          <div className="checkbox-tabs">
+            <div onClick={()=>setType(3)} className={`tab-item ${type === 3 ? 'active' : ''}`}>{intl.formatMessage({ id: 'staking.balance' })}</div>
+            <div onClick={()=>setType(1)} className={`tab-item ${type === 1 ? 'active' : ''}`}>{intl.formatMessage({ id: 'staking.back.balance' })}</div>
+          </div>
+        </div>
+      </div>
+      <div className="form-item">
+        <div className="label">
           {intl.formatMessage({ id: 'withdraw.address' })}
         </div>
         <div className="input input-between">
           <div className="l">
-            {formatAddress(userStore.user?.account||'')}
+            {formatAddress(userStore.user?.account || '')}
           </div>
           <div className="r">ERC20</div>
         </div>
@@ -128,12 +148,18 @@ const Withdraw = ()=>{
         <div className="label">
           <div className="left">{intl.formatMessage({ id: 'withdraw.amount' })}</div>
           <div className="right">
-            <Iconfont icon={'icon-qianbao'}/>
-            {intl.formatMessage({ id: 'withdraw.balance' })}:{BigNumber(withdrawInfo?.wp_num||0).toFormat()}</div>
+            <Iconfont icon={'icon-qianbao'} />
+            {intl.formatMessage({ id: 'withdraw.balance' })}:{balance.toFormat()}</div>
         </div>
         <div className="input">
-          <input type="number" value={amount} onInput={(e:any)=>{setAmount(e.target.value)}} placeholder={intl.formatMessage({id:'withdraw.placeholder.amount'})} />
-          <div className="btn" onClick={()=>{setAmount(Number(withdrawInfo?.wp_num).toString()||'0')}}>MAX</div>
+          <input type="number" value={amount} onInput={(e: any) => {
+            setAmount(e.target.value);
+          }} placeholder={intl.formatMessage({ id: 'withdraw.placeholder.amount' })} />
+          <div className="btn" onClick={() => {
+            console.log(balance,'=====balance');
+            setAmount(balance.toString());
+          }}>MAX
+          </div>
         </div>
       </div>
       <div className="other-info">
@@ -141,16 +167,17 @@ const Withdraw = ()=>{
           <div className="left">
             {intl.formatMessage({ id: 'withdraw.fee' })}
           </div>
-          <div className="right" >{withdrawInfo?.UsdtOutFee} TYOE</div>
+          <div className="right">{withdrawInfo?.UsdtOutFee} TYOE</div>
         </div>
         <div className="item">
           <div className="left">
             {intl.formatMessage({ id: 'withdraw.receive' })}
           </div>
-          <div className="right success" >{getOutAmount} TYOE</div>
+          <div className="right success">{getOutAmount} TYOE</div>
         </div>
       </div>
-      <div className={`button-block button ${widthDrawButtonDisabled?'button-disabled':''}`} onClick={handlerWithdraw}>
+      <div className={`button-block button ${widthDrawButtonDisabled ? 'button-disabled' : ''}`}
+           onClick={handlerWithdraw}>
         {intl.formatMessage({ id: 'withdraw.confirm' })}
       </div>
     </div>
@@ -158,7 +185,7 @@ const Withdraw = ()=>{
 
     <div className="card withdraw-list">
       <div className="top">
-      <div className="title">
+        <div className="title">
           {intl.formatMessage({ id: 'withdraw.records' })}
         </div>
       </div>

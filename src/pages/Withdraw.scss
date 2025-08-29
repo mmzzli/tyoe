@@ -8,6 +8,19 @@
     font-size: 36px;
     font-weight: bold;
   }
+  .checkbox-tabs{
+    @include flex-center;
+    .tab-item{
+      font-size: 28px;
+      height: 40px;
+      @include flex-center;
+      padding: 10px 20px;
+      background: $background-pink;
+      &.active{
+        background: $button-primary;
+      }
+    }
+  }
   .form-item{
     .label{
       @include flex-between;

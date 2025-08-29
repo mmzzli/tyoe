@@ -14,17 +14,30 @@
     gap: 10px;
   }
   .value{
-    @include flex-center;
+    @include flex-between;
     align-items: flex-end;
+    width: 100%;
+    justify-content: center;
     gap: 10px;
-    div{
-      font-size: 64px;
-      color: $primary;
+    .value-item{
+      flex: 1;
+      @include flex-column;
       font-weight: bold;
+      align-items: center;
+      gap: 20px;
+    }
+    .top{
+      color: $text-muted;
+    }
+    .bottom{
+      @include flex-center;
+      font-size: 40px;
+      color: $primary;
     }
     span{
+      margin-left: 10px;
       position: relative;
-      top: -10px;
+      top: 5px;
       color: $text-muted;
       font-size: 32px;
     }

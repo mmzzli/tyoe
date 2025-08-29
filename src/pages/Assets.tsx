@@ -91,12 +91,26 @@ const Assets = ()=>{
         {intl.formatMessage({ id: 'assets.balance' })}
       </div>
       <div className="value">
-        <div>{BigNumber(assets?.wallet.wp_num||0).toFormat()}</div> <span>TYOE</span>
+        <div className="value-item">
+          <div className="top">
+            {intl.formatMessage({id:'staking.balance'})}
+          </div>
+          <div className="bottom">
+            {BigNumber(assets?.wallet.wp_num || 0).toFormat()}<span>TYOE</span>
+          </div>
+        </div>
+        <div className="value-item">
+          <div className="top">
+            {intl.formatMessage({id:'staking.back.balance'})}
+          </div>
+          <div className="bottom">
+            {BigNumber(assets?.wallet.usdt_num || 0).toFormat()}<span>TYOE</span>
+          </div>
+        </div>
+
 
       </div>
-      <div className="usdt">
-        ≈ {BigNumber(assets?.wallet.toUsdtCost||0).toFormat()} USDT
-      </div>
+
       <div className="button" onClick={()=>{navigator('/withdraw')}}>
         <Iconfont icon={'icon-arrow-right-up'}></Iconfont>
         {intl.formatMessage({id:'assets.withdraw'})}</div>
@@ -151,10 +165,10 @@ const Assets = ()=>{
               list.map((item) => {
                 return <div className="item" key={item.id}>
                   <div className="left">
-                    {types[item.types].icon}
+                    {types[item.types]?.icon}
                   </div>
                   <div className="middle">
-                    <div className="top">{types[item.types].label}</div>
+                    <div className="top">{types[item.types]?.label}</div>
                     <div className="center">{dayjs(item.create_time).format('YYYY-MM-DD HH:mm:ss')}</div>
                     <div className="bottom">{formatAddress(item.account)}</div>
                   </div>
