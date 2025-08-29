@@ -828,10 +828,11 @@ const Home: React.FC = () => {
           </div>
           <div className="max" onClick={() => setCliamNumber(leftSubNum)}>MAX</div>
         </div>
-        <div className={'button'} onClick={handlerClam}>确认</div>
         <div className={"min-tip"}>
           最小认购份额为 1 次，最大为 50次
         </div>
+        <div className={'button'} onClick={handlerClam}>确认</div>
+
       </ActionSheet>
 
     </>
