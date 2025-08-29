@@ -94,16 +94,19 @@ const Website  = ()=>{
   const [invite]  = useState(searchParams.get('invite')||'')
   const [, setVisible] = useState(false)
   const [stakingNumber,setStakingNumber] = useState(1);
+  const [stakingReNumber,setStakingReNumber] = useState(1);
   const [balance,setBalance]  = useState(0);
   const [stakingBalance,setStakingBalance]  = useState(0);
   const [random,setRandom] = useState(0)
   const [stakingBtnDisabled,setStakingDisabled] = useState(true)
+  const [stakingBtnReDisabled,setStakingBtnReDisabled] = useState(true)
   const navigator = useNavigate()
-  const [stakingProduct,setStakingProduct] = useState({reward:0,total:0})
+  const [stakingProduct,setStakingProduct] = useState({reward:0,total:0,price:0,maxprice:0})
   const [aboutVisable, setAboutVisable] = useState<boolean>(false)
   const [appVisable, setAppVisable] = useState<boolean>(false)
   const [stakingInfo,setStakingInfo] = useState<StakingInfoInterface|null>(null)
-
+  const [stakingVisable,setStakingVisable] = useState(false);
+  const [tabs,setTabs] = useState('1')
   // 绑定上级
   const bindInvite = async () => {
     if(!invite.trim()){
@@ -191,11 +194,30 @@ const Website  = ()=>{
   }, [userStore.user,address]);
 
   const handlerStakingNumberChange = (e:any) =>{
-    if(e.target.value < 1){
-      setStakingNumber(1)
+    if(e.target.value < Number(stakingProduct.price)){
+      setStakingNumber(Number(stakingProduct.price))
       return;
     }
-    setStakingNumber(parseInt(e.target.value))
+    if( BigNumber(balance).div(10 ** 18).isLessThan(e.target.value)){
+      setStakingNumber(BigNumber(balance).div(10 ** 18).toNumber())
+      return;
+    }
+
+    setStakingNumber(Number(e.target.value)||stakingProduct.price)
+  }
+
+  const handlerStakingReNumberChange = (e:any) =>{
+    if(e.target.value < Number(stakingProduct.price)){
+      setStakingNumber(Number(stakingProduct.price))
+      return;
+    }
+
+    if(Number(e.target.value) > Number(userStore.user?.toUsdtCost)){
+      console.log(5555);
+      setStakingReNumber(Number(userStore.user?.toUsdtCost)||0)
+      return;
+    }
+    setStakingReNumber(Number(e.target.value))
   }
 
   const handlerGetBalance = async ()=>{
@@ -233,6 +255,12 @@ const Website  = ()=>{
     setStakingDisabled(balance<=0 || stakingNumber<=0)
   }, [balance,stakingNumber]);
 
+  useEffect(() => {
+    if(!stakingInfo?.pledgegetmoney||stakingInfo?.pledgegetmoney==0){
+      setStakingBtnReDisabled(true)
+    }
+  }, [stakingInfo]);
+
   const handlerStaking = async ()=>{
     try {
       setStakingDisabled(true)
@@ -247,17 +275,13 @@ const Website  = ()=>{
         args: [address, contract.dev.manager],
       })
 
-      if( BigNumber(allowance).isLessThan(BigNumber(1).multipliedBy(10**18))){
-        //   查询自己有多少 token
-        const balance = await handlerGetBalance()
-        console.log(balance,'balance');
-
+      if( BigNumber(allowance).isLessThan(BigNumber(stakingNumber).multipliedBy(10**18))){
         //   授权
         const tx = await writeContractAsync({
           address: contract.dev.token as `0x${string}`,
           abi: token,
           functionName: 'approve',
-          args: [contract.dev.manager, balance],
+          args: [contract.dev.manager, BigNumber(stakingNumber).multipliedBy(10**18).toString()],
         })
         console.log(tx);
       }
@@ -274,17 +298,44 @@ const Website  = ()=>{
         Toast('staking.failed');
         return
       }
-      await buyProduct({hash:tx,hex:message,signed,amount:stakingNumber.toString()})
+      await buyProduct({hash:tx,hex:message,signed,amount:stakingNumber.toString(),type:1})
       Toast(intl.formatMessage({id:'staking.success'}))
+      setStakingVisable(false)
     }catch (e) {
       console.log(e);
       Toast(intl.formatMessage({id:'staking.failed'}))
     }finally {
       setRandom(Math.random())
       setStakingNumber(0)
+      setStakingDisabled(false)
     }
 
   }
+
+  const handlerReStaking = async ()=>{
+    try {
+      setStakingDisabled(true)
+      // 获取签名
+      const message = generateRandomString(32)
+      const signed  = await signMessageAsync({message})
+
+      await buyProduct({hash:'',hex:message,signed,amount:stakingNumber.toString(),type:2})
+      Toast(intl.formatMessage({id:'staking.success'}))
+      setStakingVisable(false)
+
+    }catch (e) {
+      console.log(e);
+      Toast(intl.formatMessage({id:'staking.failed'}))
+    }finally {
+      setRandom(Math.random())
+      setStakingNumber(0)
+      setStakingDisabled(false)
+      await fetchUserInfo()
+    }
+
+  }
+
+
 
   useEffect(() => {
     const fetchStakingReward = async () =>{
@@ -369,11 +420,14 @@ const Website  = ()=>{
           <div className="left">
 
           </div>
-          <div className="right" onClick={() => {
-            navigator('/staking-records')
-          }}>
-            <Iconfont icon="icon-jilu"></Iconfont>
-            {intl.formatMessage({ id: 'staking.record.title' })}
+          <div className="right">
+            <div className="button" onClick={()=>{setStakingVisable(true)}}>{intl.formatMessage({ id: 'staking.button' })}</div>
+            <div className="staking-records" onClick={() => {
+              navigator('/staking-records')
+            }}>
+              <Iconfont icon="icon-jilu"></Iconfont>
+              {intl.formatMessage({ id: 'staking.record.title' })}
+            </div>
           </div>
         </div>
         <div className="body">
@@ -389,21 +443,7 @@ const Website  = ()=>{
             </div>
             <div className="value">{BigNumber(stakingBalance).div(10 ** 18).toFormat()}</div>
           </div>
-          <div className="form-item">
-            <div className="label">
-              {intl.formatMessage({ id: 'staking.balance' })}
-            </div>
-            <div className="input">
-              <input type="number" value={stakingNumber} onInput={handlerStakingNumberChange}
-                     placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
-            </div>
-          </div>
-          <div className="form-item">
-            <div className="button">
-              <button disabled={stakingBtnDisabled}
-                      onClick={handlerStaking}>{intl.formatMessage({ id: 'staking.button' })}</button>
-            </div>
-          </div>
+
         </div>
         <div className="staking-container-footer">
           <div className="item">
@@ -519,9 +559,79 @@ const Website  = ()=>{
       setAppVisable(false)}}>
       <div className="item">
         {intl.formatMessage({id:"staking.footer.item2.item1"})}
-
       </div>
     </Popup>
+
+    <Popup visible={stakingVisable} className={'website-staking-popup'} onClose={() => {
+      setStakingVisable(false);
+    }}>
+      <div className="title">启动验证器</div>
+      <div className="tabs">
+        <div className={`tab ${tabs==='1'?"active":''}`} onClick={()=>setTabs('1')}>
+          质押
+        </div>
+        <div className={`tab ${tabs==='2'?"active":''}`} onClick={()=>setTabs('2')}>
+          复投
+        </div>
+      </div>
+      {
+        tabs === '1' ? <div className="tabs-item">
+          <div className="form-item">
+            <div className="label">
+              <div className="left">{intl.formatMessage({ id: 'staking.balance' })}</div>
+              <div className="right">{BigNumber(balance).div(10 ** 18).toFormat()}</div>
+            </div>
+            <div className="input">
+              <input type="number" value={stakingNumber} onInput={handlerStakingNumberChange}
+                     placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
+              <div className="max" onClick={()=>setStakingNumber(BigNumber(balance).div(10 ** 18).toNumber())}>MAX</div>
+            </div>
+          </div>
+
+          <div className="info-item">
+            <div className="left">TYOE平均收益率</div>
+            <div className="right">{BigNumber(stakingProduct.total * 100).toFormat()}%</div>
+          </div>
+          <div className="form-item">
+            <div className="button">
+              <button disabled={stakingBtnDisabled}
+                      onClick={handlerStaking}>确认启动
+              </button>
+            </div>
+          </div>
+        </div> : <div className="tabs-item">
+          <div className="form-item active">
+            <div className="label">
+              <div className="left">{intl.formatMessage({ id: 'staking.balance' })}</div>
+              <div className="right">奖励余额:{BigNumber(userStore.user?.toUsdtCost||0).toFormat()}</div>
+            </div>
+            <div className="input">
+              <input type="number" value={stakingReNumber} onInput={handlerStakingReNumberChange}
+                     placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
+              <div className="max" onClick={() => setStakingReNumber(BigNumber(userStore.user?.toUsdtCost||0).toNumber())}>MAX
+              </div>
+            </div>
+          </div>
+          <div className="info-item">
+            <div className="left">{stakingProduct.price} TYOE</div>
+          </div>
+          <div className="info-item">
+            <div className="left">TYOE平均收益率</div>
+            <div className="right">{BigNumber(stakingProduct.total * 100).toFormat()}%</div>
+          </div>
+          <div className="form-item">
+            <div className="button">
+              <button disabled={stakingBtnDisabled}
+                      onClick={handlerReStaking}>确认复投
+              </button>
+            </div>
+          </div>
+        </div>
+      }
+
+
+    </Popup>
+
   </>
 }
 

@@ -236,16 +236,17 @@
   }
   .whitelist-tabs{
     .tabs{
-      @include flex-center;
-      gap: 20px;
+      @include flex-column;
+      justify-content: space-around;
+      height: 100%;
       .tab-label{
-        width: 180px;
-        height: 100px;
+        width: 100px;
+        height: 60px;
         @include flex-center;
-        border-radius: 16px;
+        font-size: 24px;
+        border-radius: 8px;
         background: $background-secondary;
         border: 1px solid $card-border;
-        margin-bottom: 40px;
         &.active{
           border: 1px solid transparent;
           background: $button-primary;
@@ -253,6 +254,9 @@
       }
     }
     .tabs-container{
+      flex: 1;
+      margin-left: 10px;
+      box-sizing: border-box;
       @include flex-column;
       gap: 30px;
       &-item{
@@ -336,6 +340,12 @@
         }
       }
     }
+  }
+  .whitelist-show-container{
+    @include flex-between;
+    margin-bottom: 20px;
+    gap: 10px;
+    height: 300px;
   }
 }
 
@@ -450,4 +460,87 @@
     }
   }
 
+}
+
+.cliam-popup{
+  overflow: hidden;
+  position: relative;
+  padding: 40px;
+  box-sizing: border-box;
+  .title{
+    line-height: 50px;
+    margin-bottom: 20px;
+    @include flex-between;
+    .left{
+      font-weight: bold;
+      font-size: 30px;
+    }
+    .right{
+      font-size: 24px;
+    }
+  }
+
+  .button{
+    width: 100%;
+    height: 88px;
+    background: linear-gradient(105deg, #A271FF 0%, #7840ED 100%);
+    border-radius: 2.9375rem 2.9375rem 2.9375rem 2.9375rem;
+    border: none;
+    color: #fff;
+    @include flex-center;
+    font-size: 30px;
+  }
+  .form-item{
+    width: 100%;
+    position: relative;
+    overflow: hidden;
+    @include flex-column;
+    gap: 16px;
+    position: relative;
+    .label{
+      font-size: 24px;
+      line-height: 34px;
+      color: $text-muted;
+      margin: 0;
+      @include flex-between;
+    }
+    .value{
+      color: $text-primary;
+      font-size: 36px;
+      line-height: 50px;
+    }
+    .max{
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      height: 80px;
+      background: $button-primary;
+      color: $text-white;
+      border-radius: 20px;
+      @include flex-center;
+      padding: 0 20px;
+    }
+    .input{
+      box-sizing: border-box;
+      background: #fff;
+      border: 1px solid $input-border;
+      height: 88px;
+      border-radius: 20px;
+      input{
+        font-size: 28px;
+      }
+    }
+    .button{
+      margin-top: 0;
+      button{
+        width: 100%;
+        height: 88px;
+        background: linear-gradient( 105deg, #A271FF 0%, #7840ED 100%);
+        border-radius: 47px 47px 47px 47px;
+        border: none;
+        color: $text-white;
+        font-size: 32px;
+      }
+    }
+  }
 }

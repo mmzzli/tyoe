@@ -57,13 +57,25 @@
         }
       }
       .right{
-        padding:9px 14px;
-        background: #F2ECFF;
-        border-radius: 25px 25px 25px 25px;
-        @include flex-center;
-        gap: 5px;
-        color: #A271FF;
-        font-size: 24px;
+        @include flex-column;
+        gap: 20px;
+        .button{
+          padding:9px 14px;
+          background: #F2ECFF;
+          border-radius: 25px 25px 25px 25px;
+          color: #A271FF;
+          @include flex-center;
+          font-size: 24px;
+        }
+        .staking-records{
+          padding:9px 14px;
+          background: #F2ECFF;
+          border-radius: 25px 25px 25px 25px;
+          @include flex-center;
+          gap: 5px;
+          color: #A271FF;
+          font-size: 24px;
+        }
       }
       .icon-jilu{
         width: 32px;
@@ -332,4 +344,95 @@
 
 .app-staking-popup{
   min-height: auto;
+}
+
+.website-staking-popup{
+  font-size: 26px;
+  .title{
+    font-size: 30px;
+    font-weight: bold;
+  }
+  @include flex-column;
+  gap: 20px;
+  .form-item{
+    @include flex-column;
+    gap: 16px;
+    position: relative;
+    .label{
+      font-size: 24px;
+      line-height: 34px;
+      color: $text-muted;
+      margin: 0;
+      @include flex-between;
+    }
+    .value{
+      color: $text-primary;
+      font-size: 36px;
+      line-height: 50px;
+    }
+    .max{
+      position: absolute;
+      right: 5px;
+      bottom: 5px;
+      height: 80px;
+      background: $button-primary;
+      color: $text-white;
+      border-radius: 20px;
+      @include flex-center;
+      padding: 0 20px;
+    }
+    .input{
+      background: #fff;
+      border: 1px solid $input-border;
+      height: 88px;
+      border-radius: 20px;
+      input{
+        font-size: 28px;
+      }
+    }
+    .button{
+      margin-top: 0;
+      button{
+        width: 100%;
+        height: 88px;
+        background: linear-gradient( 105deg, #A271FF 0%, #7840ED 100%);
+        border-radius: 47px 47px 47px 47px;
+        border: none;
+        color: $text-white;
+        font-size: 32px;
+      }
+    }
+  }
+  width: 90%;
+  border-radius: 20px;
+  padding: 40px;
+  box-sizing: border-box;
+  .tabs{
+    @include flex-between;
+    .tab{
+      font-size: 30px;
+      flex:1;
+      text-align: center;
+      height: 80px;
+      line-height: 80px;
+      &.active{
+        background: $button-primary;
+      }
+    }
+    
+  }
+  .info-item{
+    border-bottom: 1px solid $card-border;
+    @include flex-between;
+    height: 60px;
+    line-height: 60px;
+    color: $text-secondary;
+  }
+  .tabs-item{
+    @include flex-column;
+    gap: 20px;
+    &.active{
+      display: block;
+    }
+  }
 }

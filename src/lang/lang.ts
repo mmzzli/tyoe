@@ -180,7 +180,8 @@ export const translations:any = {
     "toast.staking.success": "空投領取成功",
     "toast.buy.success": "認購成功",
     "toast.buy.failed": "認購失敗",
-    "toast.get.success": "領取成功"
+    "toast.get.success": "領取成功",
+    "toast.usdt.insufficient":"usdt 余额不够支持认领"
   },
   "en": {
     "nav.announcement": "System Announcement",
@@ -363,7 +364,7 @@ export const translations:any = {
     "toast.staking.success": "Airdrop Claimed Successfully",
     "toast.buy.success": "Subscription Successful",
     "toast.buy.failed": "Subscription Failed",
-    "toast.get.success": "Claim Successful"
+    "toast.get.success": "Claim Successful",
   },
   "ja": {
     "nav.announcement": "システム公告",

@@ -49,7 +49,7 @@ export const getStakingRecord = ({page=1,limit=10,status}:RecordType):Promise<{l
 	return service.post("/Product/getUserOrder",{page,limit,status});
 }
 
-export const buyProduct = async (params:{hash:string,hex:string,signed:string,amount:string}) =>{
+export const buyProduct = async (params:{hash:string,hex:string,signed:string,amount:string,type:number}) =>{
 	return service.post("/Product/buyProduct",params)
 }
 

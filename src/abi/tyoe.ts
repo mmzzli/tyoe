@@ -29,6 +29,16 @@ export const manager = [{
   'type': 'event',
 }, {
   'anonymous': false,
+  'inputs': [{ 'indexed': false, 'internalType': 'uint256', 'name': 'oldLimit', 'type': 'uint256' }, {
+    'indexed': false,
+    'internalType': 'uint256',
+    'name': 'newLimit',
+    'type': 'uint256',
+  }],
+  'name': 'MaxSubscriptionSharesUpdated',
+  'type': 'event',
+}, {
+  'anonymous': false,
   'inputs': [{
     'indexed': true,
     'internalType': 'address',
@@ -101,16 +111,6 @@ export const manager = [{
     'type': 'uint256',
   }],
   'name': 'TokensReleased',
-  'type': 'event',
-}, {
-  'anonymous': false,
-  'inputs': [{ 'indexed': true, 'internalType': 'address', 'name': 'user', 'type': 'address' }, {
-    'indexed': false,
-    'internalType': 'uint256',
-    'name': 'amount',
-    'type': 'uint256',
-  }, { 'indexed': false, 'internalType': 'uint256', 'name': 'penalty', 'type': 'uint256' }],
-  'name': 'Unstaked',
   'type': 'event',
 }, {
   'inputs': [],
@@ -223,6 +223,28 @@ export const manager = [{
   'stateMutability': 'view',
   'type': 'function',
 }, {
+  'inputs': [],
+  'name': 'getCurrentActiveRoundInfo',
+  'outputs': [{ 'internalType': 'uint256', 'name': 'roundId', 'type': 'uint256' }, {
+    'internalType': 'uint256',
+    'name': 'usdtPrice',
+    'type': 'uint256',
+  }, { 'internalType': 'uint256', 'name': 'maxSlots', 'type': 'uint256' }, {
+    'internalType': 'uint256',
+    'name': 'currentSlots',
+    'type': 'uint256',
+  }, { 'internalType': 'uint256', 'name': 'immediateReleaseAmount', 'type': 'uint256' }, {
+    'internalType': 'uint256',
+    'name': 'totalAmount',
+    'type': 'uint256',
+  }, { 'internalType': 'uint256', 'name': 'remainingSlots', 'type': 'uint256' }, {
+    'internalType': 'bool',
+    'name': 'active',
+    'type': 'bool',
+  }],
+  'stateMutability': 'view',
+  'type': 'function',
+}, {
   'inputs': [{ 'internalType': 'address', 'name': 'user', 'type': 'address' }],
   'name': 'getStakingInfo',
   'outputs': [{ 'internalType': 'uint256', 'name': 'stakedAmount', 'type': 'uint256' }, {
@@ -247,6 +269,12 @@ export const manager = [{
   'stateMutability': 'view',
   'type': 'function',
 }, {
+  'inputs': [{ 'internalType': 'address', 'name': 'user', 'type': 'address' }],
+  'name': 'getUserRemainingShares',
+  'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
+  'stateMutability': 'view',
+  'type': 'function',
+}, {
   'inputs': [{ 'internalType': 'address', 'name': 'user', 'type': 'address' }, {
     'internalType': 'uint256',
     'name': 'roundId',
@@ -258,6 +286,18 @@ export const manager = [{
     'name': 'releasedAmount',
     'type': 'uint256',
   }, { 'internalType': 'uint256', 'name': 'claimableAmount', 'type': 'uint256' }],
+  'stateMutability': 'view',
+  'type': 'function',
+}, {
+  'inputs': [{ 'internalType': 'address', 'name': 'user', 'type': 'address' }],
+  'name': 'getUserTotalShares',
+  'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
+  'stateMutability': 'view',
+  'type': 'function',
+}, {
+  'inputs': [],
+  'name': 'maxSubscriptionShares',
+  'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
   'stateMutability': 'view',
   'type': 'function',
 }, {
@@ -299,6 +339,18 @@ export const manager = [{
 }, {
   'inputs': [{ 'internalType': 'uint256', 'name': '_rate', 'type': 'uint256' }],
   'name': 'setDailyRewardRate',
+  'outputs': [],
+  'stateMutability': 'nonpayable',
+  'type': 'function',
+}, {
+  'inputs': [{ 'internalType': 'uint256', 'name': '_maxShares', 'type': 'uint256' }],
+  'name': 'setMaxSubscriptionShares',
+  'outputs': [],
+  'stateMutability': 'nonpayable',
+  'type': 'function',
+}, {
+  'inputs': [{ 'internalType': 'address', 'name': '_nftToken', 'type': 'address' }],
+  'name': 'setNFTToken',
   'outputs': [],
   'stateMutability': 'nonpayable',
   'type': 'function',
@@ -365,7 +417,7 @@ export const manager = [{
   'stateMutability': 'view',
   'type': 'function',
 }, {
-  'inputs': [],
+  'inputs': [{ 'internalType': 'uint256', 'name': 'shares', 'type': 'uint256' }],
   'name': 'subscribe',
   'outputs': [],
   'stateMutability': 'nonpayable',
@@ -407,12 +459,6 @@ export const manager = [{
   'stateMutability': 'view',
   'type': 'function',
 }, {
-  'inputs': [],
-  'name': 'unstake',
-  'outputs': [],
-  'stateMutability': 'nonpayable',
-  'type': 'function',
-}, {
   'inputs': [{ 'internalType': 'uint256', 'name': 'roundId', 'type': 'uint256' }, {
     'internalType': 'uint256',
     'name': 'newUsdtPrice',
@@ -446,6 +492,12 @@ export const manager = [{
     'name': 'releasedAmount',
     'type': 'uint256',
   }, { 'internalType': 'uint256', 'name': 'lastReleaseTime', 'type': 'uint256' }],
+  'stateMutability': 'view',
+  'type': 'function',
+}, {
+  'inputs': [{ 'internalType': 'address', 'name': '', 'type': 'address' }],
+  'name': 'userTotalShares',
+  'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
   'stateMutability': 'view',
   'type': 'function',
 }, {
