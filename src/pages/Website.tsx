@@ -93,8 +93,8 @@ const Website  = ()=>{
   const {signMessageAsync} = useSignMessage()
   const [invite]  = useState(searchParams.get('invite')||'')
   const [, setVisible] = useState(false)
-  const [stakingNumber,setStakingNumber] = useState(1);
-  const [stakingReNumber,setStakingReNumber] = useState(1);
+  const [stakingNumber,setStakingNumber] = useState<number|''>('');
+  const [stakingReNumber,setStakingReNumber] = useState<number|''>('');
   const [balance,setBalance]  = useState(0);
   const [stakingBalance,setStakingBalance]  = useState(0);
   const [random,setRandom] = useState(0)
