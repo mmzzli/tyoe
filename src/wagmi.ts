@@ -2,7 +2,7 @@ import { getDefaultConfig } from '@rainbow-me/rainbowkit';
 import {bscTestnet} from '@/config/bscTestNet.ts';
 
 export const wagmiConfig = getDefaultConfig({
-  appName: '大力火车',
+  appName: 'TYOE',
   projectId: 'YOUR_PROJECT_ID',
   chains: [
     bscTestnet

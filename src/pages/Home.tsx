@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import './home.scss';
-import { ActionSheet, Popup, Swiper, Toast } from 'react-vant';
+import { ActionSheet, Swiper, Toast } from 'react-vant';
 import { useIntl } from 'react-intl';
 import bannerUrl from '@/assets/images/banner.png';
 import banner01Url from '@/assets/images/banner01.jpg';
@@ -19,12 +19,11 @@ import { TOKEN } from '@/utils/const.ts';
 import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
 import { copyText, formatAddress, generateRandomString, getContractErrorInfo } from '@/utils/common.ts';
 import { useLocation } from 'react-router-dom';
-import { getWhitelistRecords, WhiteListItem, whitelistPhaseList, whitelistSubmit } from '@/service/home.ts';
+import { getWhitelistRecords, WhiteListItem, whitelistSubmit } from '@/service/home.ts';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import { bscTestnet } from '@/config/bscTestNet.ts';
 import NavBar from '@/component/NavBar.tsx';
-import { Check } from 'lucide-react';
 
 const banner = [
   { urlimg: bannerUrl },
@@ -775,40 +774,40 @@ const Home: React.FC = () => {
 
           <ul className="other-link">
             <li>
-              <a href="https://ethereum.org/zh/about/" target="_blank">关于我们</a>
+              <a href="https://ethereum.org/zh/about/" target="_blank">{intl.formatMessage({id:'home.footer.about'})}</a>
             </li>
             <li>
-              <a href="https://ethereum.org/zh/assets/" target="_blank">以太坊品牌资产</a>
-
-
-            </li>
-            <li>
-              <a href="https://ethereum.org/zh/community/code-of-conduct/" target="_blank">行为守则</a>
+              <a href="https://ethereum.org/zh/assets/" target="_blank">{intl.formatMessage({id:'home.footer.asset'})}</a>
 
 
             </li>
             <li>
-              <a href="https://ethereum.org/zh/about/#open-jobs" target="_blank">工作机会</a>
+              <a href="https://ethereum.org/zh/community/code-of-conduct/" target="_blank">{intl.formatMessage({id:'home.footer.role'})}</a>
 
 
             </li>
             <li>
-              <a href="https://ethereum.org/zh/privacy-policy/" target="_blank">隐私政策</a>
+              <a href="https://ethereum.org/zh/about/#open-jobs" target="_blank">{intl.formatMessage({id:'home.footer.job'})}</a>
 
 
             </li>
             <li>
-              <a href="https://ethereum.org/zh/terms-of-use/" target="_blank">使用条款</a>
+              <a href="https://ethereum.org/zh/privacy-policy/" target="_blank">{intl.formatMessage({id:'home.footer.privacy'})}</a>
 
 
             </li>
             <li>
-              <a href="https://ethereum.org/zh/cookie-policy/" target="_blank">Cookie 政策</a>
+              <a href="https://ethereum.org/zh/terms-of-use/" target="_blank">{intl.formatMessage({id:'home.footer.terms'})}</a>
 
 
             </li>
             <li>
-              <a href="mailto:press@ethereum.org" target="_blank">媒体联系方式</a>
+              <a href="https://ethereum.org/zh/cookie-policy/" target="_blank">{intl.formatMessage({id:'home.footer.cookie'})}</a>
+
+
+            </li>
+            <li>
+              <a href="mailto:press@ethereum.org" target="_blank">{intl.formatMessage({id:'home.footer.media'})}</a>
             </li>
           </ul>
         </div>
@@ -817,8 +816,8 @@ const Home: React.FC = () => {
         setClamVisable(false)
       }}>
         <div className={"title"}>
-          <div className="left">请输入认购份额</div>
-          <div className="right">还可认购份额：{leftSubNum}</div>
+          <div className="left">{intl.formatMessage({id:'home.rengou.fene'})}</div>
+          <div className="right">{intl.formatMessage({id:'home.rengou.left'})}：{leftSubNum}</div>
         </div>
         <div className="form-item">
           <div className="input">
@@ -827,9 +826,9 @@ const Home: React.FC = () => {
           <div className="max" onClick={() => setCliamNumber(leftSubNum)}>MAX</div>
         </div>
         <div className={"min-tip"}>
-          最小认购份额为 1 次，最大为 50次
+          {intl.formatMessage({id:'home.rengou.info'})}
         </div>
-        <div className={'button'} onClick={handlerClam}>确认</div>
+        <div className={'button'} onClick={handlerClam}>{intl.formatMessage({id:'home.rengou.confirm'})}</div>
       </ActionSheet>
 
     </>

@@ -566,13 +566,13 @@ const Website  = ()=>{
     <Popup visible={stakingVisable} className={'website-staking-popup'} onClose={() => {
       setStakingVisable(false);
     }}>
-      <div className="title">启动验证器</div>
+      <div className="title">{intl.formatMessage({id:'website.staking.start'})}</div>
       <div className="tabs">
         <div className={`tab ${tabs==='1'?"active":''}`} onClick={()=>setTabs('1')}>
-          质押
+          {intl.formatMessage({id:'website.staking.type1'})}
         </div>
         <div className={`tab ${tabs==='2'?"active":''}`} onClick={()=>setTabs('2')}>
-          复投
+          {intl.formatMessage({id:'website.staking.type2'})}
         </div>
       </div>
       {
@@ -590,13 +590,13 @@ const Website  = ()=>{
           </div>
 
           <div className="info-item">
-            <div className="left">TYOE平均收益率</div>
+            <div className="left">{intl.formatMessage({id:"website.staking.type.ava"})}</div>
             <div className="right">{BigNumber(stakingProduct.total * 100).toFormat()}%</div>
           </div>
           <div className="form-item">
             <div className="button">
               <button disabled={stakingBtnDisabled}
-                      onClick={handlerStaking}>确认启动
+                      onClick={handlerStaking}>{intl.formatMessage({id:"website.staking.confirm.start"})}
               </button>
             </div>
           </div>
@@ -614,13 +614,13 @@ const Website  = ()=>{
             </div>
           </div>
           <div className="info-item">
-            <div className="left">TYOE平均收益率</div>
+            <div className="left">{intl.formatMessage({id:"website.staking.type.ava"})}</div>
             <div className="right">{BigNumber(stakingProduct.total * 100).toFormat()}%</div>
           </div>
           <div className="form-item">
             <div className="button">
               <button disabled={stakingBtnReDisabled}
-                      onClick={handlerReStaking}>确认复投
+                      onClick={handlerReStaking}>{intl.formatMessage({id:"website.staking.confirm.refutou"})}
               </button>
             </div>
           </div>
