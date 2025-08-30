@@ -1,18 +1,4 @@
-export const manager = [{
-  'inputs': [{
-    'internalType': 'address',
-    'name': '_tyoeToken',
-    'type': 'address',
-  }, { 'internalType': 'address', 'name': '_usdtToken', 'type': 'address' }, {
-    'internalType': 'address',
-    'name': '_nftContract',
-    'type': 'address',
-  }, { 'internalType': 'address', 'name': '_usdtRecipient', 'type': 'address' }, {
-    'internalType': 'address',
-    'name': '_stakingRecipient',
-    'type': 'address',
-  }], 'stateMutability': 'nonpayable', 'type': 'constructor',
-}, {
+export const manager = [{ 'inputs': [], 'stateMutability': 'nonpayable', 'type': 'constructor' }, {
   'anonymous': false,
   'inputs': [{ 'indexed': true, 'internalType': 'address', 'name': 'user', 'type': 'address' }, {
     'indexed': false,
@@ -26,6 +12,11 @@ export const manager = [{
     'type': 'uint256[]',
   }],
   'name': 'AirdropClaimed',
+  'type': 'event',
+}, {
+  'anonymous': false,
+  'inputs': [{ 'indexed': false, 'internalType': 'uint8', 'name': 'version', 'type': 'uint8' }],
+  'name': 'Initialized',
   'type': 'event',
 }, {
   'anonymous': false,
@@ -51,6 +42,11 @@ export const manager = [{
   'anonymous': false,
   'inputs': [{ 'indexed': false, 'internalType': 'uint256', 'name': 'startTime', 'type': 'uint256' }],
   'name': 'ReleaseEnabled',
+  'type': 'event',
+}, {
+  'anonymous': false,
+  'inputs': [{ 'indexed': false, 'internalType': 'uint256', 'name': 'newInterval', 'type': 'uint256' }],
+  'name': 'ReleaseIntervalUpdated',
   'type': 'event',
 }, {
   'anonymous': false,
@@ -115,12 +111,6 @@ export const manager = [{
 }, {
   'inputs': [],
   'name': 'AIRDROP_AMOUNT',
-  'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
-  'stateMutability': 'view',
-  'type': 'function',
-}, {
-  'inputs': [],
-  'name': 'RELEASE_INTERVAL',
   'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
   'stateMutability': 'view',
   'type': 'function',
@@ -295,6 +285,20 @@ export const manager = [{
   'stateMutability': 'view',
   'type': 'function',
 }, {
+  'inputs': [{ 'internalType': 'address', 'name': '_tyoeToken', 'type': 'address' }, {
+    'internalType': 'address',
+    'name': '_usdtToken',
+    'type': 'address',
+  }, { 'internalType': 'address', 'name': '_nftContract', 'type': 'address' }, {
+    'internalType': 'address',
+    'name': '_usdtRecipient',
+    'type': 'address',
+  }, { 'internalType': 'address', 'name': '_stakingRecipient', 'type': 'address' }],
+  'name': 'initialize',
+  'outputs': [],
+  'stateMutability': 'nonpayable',
+  'type': 'function',
+}, {
   'inputs': [],
   'name': 'maxSubscriptionShares',
   'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
@@ -326,6 +330,12 @@ export const manager = [{
   'type': 'function',
 }, {
   'inputs': [],
+  'name': 'releaseInterval',
+  'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
+  'stateMutability': 'view',
+  'type': 'function',
+}, {
+  'inputs': [],
   'name': 'releaseStartTime',
   'outputs': [{ 'internalType': 'uint256', 'name': '', 'type': 'uint256' }],
   'stateMutability': 'view',
@@ -351,6 +361,12 @@ export const manager = [{
 }, {
   'inputs': [{ 'internalType': 'address', 'name': '_nftToken', 'type': 'address' }],
   'name': 'setNFTToken',
+  'outputs': [],
+  'stateMutability': 'nonpayable',
+  'type': 'function',
+}, {
+  'inputs': [{ 'internalType': 'uint256', 'name': '_interval', 'type': 'uint256' }],
+  'name': 'setReleaseInterval',
   'outputs': [],
   'stateMutability': 'nonpayable',
   'type': 'function',
