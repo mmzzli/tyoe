@@ -41,6 +41,10 @@ const Assets = ()=>{
       label:intl.formatMessage({id:'assets.reward'}),
       icon:<Iconfont icon={'icon-rise'}></Iconfont>
     },
+    26:{
+      label:intl.formatMessage({id:'assets.system'}),
+      icon:<Iconfont icon={'icon-rise'}></Iconfont>
+    },
   }
 
   const [assets,setAssets] = useState<UserAssetsInterface|null>(null)

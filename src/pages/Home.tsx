@@ -60,7 +60,7 @@ const Home: React.FC = () => {
   const [getDisabled, setGetDisabled] = useState(false);
 
   const [clamVisable,setClamVisable] = useState(false);
-  const [cliamNumber,setCliamNumber] = useState<null|number>(null);
+  const [cliamNumber,setCliamNumber] = useState<number|''>('');
   const [leftClimed,setLeftClimed] = useState(0);
   useEffect(() => {
     const fetchRelease = async () => {
@@ -248,9 +248,7 @@ const Home: React.FC = () => {
         } as any;
       });
       const data = await Promise.all(res);
-      data[0].active=false;
       setWhiteList(data);
-
     };
 
     if (phases.length && activeId) {
