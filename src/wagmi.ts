@@ -1,11 +1,11 @@
 import { getDefaultConfig } from '@rainbow-me/rainbowkit';
-import {bscTestnet} from '@/config/bscTestNet.ts';
+import { mainnet } from 'viem/chains';
 
 export const wagmiConfig = getDefaultConfig({
   appName: 'TYOE',
   projectId: 'YOUR_PROJECT_ID',
   chains: [
-    bscTestnet
+    mainnet
   ],
   ssr: true,
 });
