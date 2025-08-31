@@ -12,9 +12,9 @@ export const wagmiConfig = getDefaultConfig({
 
 export const contract = {
   'dev':{
-    manager:'0xFa050Ed029dF9D0D6aBeA76c843ED60A14Fb9380',
-    token:'0xe5B8F534B6dcF0199400f5E1b97DeA8D68367a68',
-    nft:'0x89256b341e94b8452c1f033ba4bc6e3861aba049',
-    usdt:'0x87892e377a2Eb1D35aC17Ca7778Ae5EdF4497127'
+    manager:'0xdC805923B4502068fc9790E64F45DFf7f15CAF66',
+    token:'0x14e0eaec345a52139218521791edBEb49e219686',
+    nft:'0x26D85A13212433Fe6A8381969c2B0dB390a0B0ae',
+    usdt:'0xdAC17F958D2ee523a2206206994597C13D831ec7'
   }
 }
