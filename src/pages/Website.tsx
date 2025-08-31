@@ -620,7 +620,7 @@ const Website  = ()=>{
           <div className="form-item">
             <div className="button">
               <button disabled={stakingBtnReDisabled}
-                      onClick={handlerReStaking}>{intl.formatMessage({id:"website.staking.confirm.refutou"})}
+                      onClick={handlerReStaking}>{intl.formatMessage({id:"website.staking.confirm.start"})}
               </button>
             </div>
           </div>
