@@ -757,7 +757,7 @@ const Home: React.FC = () => {
                 {intl.formatMessage({ id: 'footer.invite.link' })}
               </div>
               <div className="link-text">
-                {`https://www.tyoe.net?invite=${userStore.user?.invit}`}
+                {`${window.location.origin}?invite=${userStore.user?.invit}`}
               </div>
 
               <div className="link-button">
@@ -765,7 +765,7 @@ const Home: React.FC = () => {
                   <Iconfont icon={'icon-share'}></Iconfont>
                   {intl.formatMessage({ id: 'footer.copy.link' })}
                   <Iconfont icon={'icon-fuzhi'} onClick={() => {
-                    copyText(`https://www.tyoe.net?invite=${userStore.user?.invit}`);
+                    copyText(`${window.location.origin}?invite=${userStore.user?.invit}`);
                   }}></Iconfont></button>
               </div>
             </div>
