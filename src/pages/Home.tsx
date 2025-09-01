@@ -24,6 +24,7 @@ import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
 import { bscTestnet } from '@/config/bscTestNet.ts';
 import NavBar from '@/component/NavBar.tsx';
+import { mainnet } from 'viem/chains';
 
 const banner = [
   { urlimg: bannerUrl },
@@ -211,15 +212,15 @@ const Home: React.FC = () => {
   useEffect(() => {
     const chainSet = async () => {
       try {
-        await switchChainAsync({ chainId: bscTestnet.id });
+        await switchChainAsync({ chainId: mainnet.id });
 
       } catch {
         if (walletClient) {
-          await walletClient.addChain({ chain: bscTestnet });
+          await walletClient.addChain({ chain: mainnet });
         }
       }
     };
-    if (isConnected && chainId !== bscTestnet.id) {
+    if (isConnected && chainId !== mainnet.id) {
       chainSet();
     }
 
@@ -830,7 +831,6 @@ const Home: React.FC = () => {
         </div>
         <div className={'button'} onClick={handlerClam}>{intl.formatMessage({id:'home.rengou.confirm'})}</div>
       </ActionSheet>
-
     </>
   );
 };
