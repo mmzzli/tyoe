@@ -19,10 +19,9 @@ import { TOKEN } from '@/utils/const.ts';
 import { getLoginOrRegister, getUserInfo, setInviteLink } from '@/service/user.ts';
 import { copyText, formatAddress, generateRandomString, getContractErrorInfo } from '@/utils/common.ts';
 import { useLocation } from 'react-router-dom';
-import { getWhitelistRecords, WhiteListItem, whitelistSubmit } from '@/service/home.ts';
+import { getWhitelistRecords, WhiteListItem, whitelistPhaseList, whitelistSubmit } from '@/service/home.ts';
 import BigNumber from 'bignumber.js';
 import dayjs from 'dayjs';
-import { bscTestnet } from '@/config/bscTestNet.ts';
 import NavBar from '@/component/NavBar.tsx';
 import { mainnet } from 'viem/chains';
 
@@ -176,23 +175,7 @@ const Home: React.FC = () => {
 
   // 获取认购白名单倒计时
   const fetchWhitelistPhases = async () => {
-    const res = [
-      {
-        'id': 1,
-        'nowtime': 1756381889,
-        'lasttime': 1756382014,
-      },
-      {
-        'id': 2,
-        'nowtime': 1756381889,
-        'lasttime': 1756382014,
-      },
-      {
-        'id': 3,
-        'nowtime': 1756381889,
-        'lasttime': 1756382014,
-      },
-    ];//await whitelistPhaseList()
+    const res = await whitelistPhaseList()
     setPhases(res);
   };
   useEffect(() => {
@@ -238,7 +221,7 @@ const Home: React.FC = () => {
         });
         console.log(item, '-----nowTime');
         return {
-          usdtPrice: BigNumber(usdtPrice).dividedBy(10 ** 18).toFixed(0),
+          usdtPrice: BigNumber(usdtPrice).dividedBy(10 ** 6).toFixed(0),
           maxSlots: BigNumber(maxSlots).toNumber(),
           currentSlots: BigNumber(currentSlots).toNumber(),
           active,
@@ -351,9 +334,9 @@ const Home: React.FC = () => {
         address: nftAddress,
         abi: nft,
         functionName: 'balanceOf',
-        args: [address],
+        args: ['0x5FfEAfE2CD01940F73E8f869Ca682Bf236b5DCAf'],
       }) as bigint;
-      console.log(nftBalance);
+      console.log(nftBalance,'nftBalance');
 
       const requestNFTids = [];
       for (let i = 0; i < Number(nftBalance); i++) {
@@ -361,11 +344,11 @@ const Home: React.FC = () => {
           address: nftAddress,
           abi: nft,
           functionName: 'tokenOfOwnerByIndex',
-          args: [address, i],
+          args: ['0x5FfEAfE2CD01940F73E8f869Ca682Bf236b5DCAf', i],
         }));
       }
       const ids: any = await Promise.all(requestNFTids) || [];
-      console.log(ids);
+      console.log(ids,'ids');
       if (!ids.length) {
         Toast(intl.formatMessage({ id: 'toast.no.nft' }));
         return;
@@ -459,7 +442,7 @@ const Home: React.FC = () => {
 
       console.log(Number(usdtPrice));
 
-      const price = BigNumber(usdtPrice).dividedBy(10 ** 18).toFixed(0);
+      const price = BigNumber(usdtPrice).dividedBy(10 ** 6).toFixed(0);
       console.log(price);
 
       const allowance = await publicClient?.readContract({
