@@ -339,6 +339,7 @@ const Home: React.FC = () => {
       console.log(nftBalance,'nftBalance');
       if(Number(nftBalance)<1){
           Toast(intl.formatMessage({ id: 'toast.no.nft' }));
+          return
       }
       setNFTs({
         balance: Number(nftBalance),
