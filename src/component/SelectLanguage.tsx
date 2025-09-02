@@ -25,7 +25,7 @@ const SelectLanguage = () =>{
       <Iconfont onClick={()=>setVisible(true)} icon={'icon-language'}></Iconfont>
       <ActionSheet visible={visible} onCancel={()=>{setVisible(false)}}>
         <div className="languages-container">
-          <div className="title">选择语言 / Select Language</div>
+          <div className="title">選語言 / Select Language</div>
           <div className="languages">
             {languageOptions.map((option) => (
               <div className={['languages-item', option.code === store.language ? 'active' : ''].join(' ')} key={option.code} onClick={()=>{
