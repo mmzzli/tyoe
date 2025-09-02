@@ -337,22 +337,9 @@ const Home: React.FC = () => {
         args: [address],
       }) as bigint;
       console.log(nftBalance,'nftBalance');
-
-      // const requestNFTids = [];
-      // for (let i = 0; i < Number(nftBalance); i++) {
-      //   requestNFTids.push(publicClient.readContract({
-      //     address: nftAddress,
-      //     abi: nft,
-      //     functionName: 'tokenOfOwnerByIndex',
-      //     args: [address, i],
-      //   }));
-      // }
-      // const ids: any = await Promise.all(requestNFTids) || [];
-      // console.log(ids,'ids');
-      // if (!ids.length) {
-      //   Toast(intl.formatMessage({ id: 'toast.no.nft' }));
-      //   return;
-      // }
+      if(Number(nftBalance)<1){
+          Toast(intl.formatMessage({ id: 'toast.no.nft' }));
+      }
       setNFTs({
         balance: Number(nftBalance),
         balanceNo: [0],
