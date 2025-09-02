@@ -271,7 +271,9 @@ const Home: React.FC = () => {
     setClaimed(Boolean(claimed));
   };
   useEffect(() => {
-    fetchClaimed();
+    if(address){
+      fetchClaimed();
+    }
   }, [address, nfts]);
 
 
@@ -302,7 +304,9 @@ const Home: React.FC = () => {
         console.log(isWhiteListUser);
         setIsWhiteListUser(Boolean(isWhiteListUser));
       };
-      fetch();
+      if(address){
+        fetch();
+      }
     }, [address],
   );
 
@@ -384,8 +388,10 @@ const Home: React.FC = () => {
       });
       setLeftClimed(Number(res) as number)
     };
-    fetch();
-  }, [clamVisable]);
+    if(address){
+      fetch();
+    }
+  }, [clamVisable,address]);
 
 
   const leftSubNum = useMemo(() => {
@@ -408,10 +414,12 @@ const Home: React.FC = () => {
 
   const handlerClam = async () => {
     try {
+      console.log(444);
       setSubscribeDisabled(true);
       // 获取签名
       const message = generateRandomString(32);
       const signed = await signMessageAsync({ message });
+      console.log(signed);
 
 
       //  查询当前活跃期数
@@ -444,11 +452,11 @@ const Home: React.FC = () => {
       });
 
 
-      console.log(allowance);
-      const needUsdt = BigNumber(usdtPrice).multipliedBy(cliamNumber).toFixed(0)
+      console.log(allowance,'allowance');
+      const needUsdt = BigNumber(usdtPrice).multipliedBy(cliamNumber)
       console.log(needUsdt,'999999');
-      if ((allowance || 0) < needUsdt) {
-        //   查询自己有多少 usdt
+      if(!Number(allowance)){
+        console.log(3333);
         const balance:any = await publicClient?.readContract({
           address: contract.dev.usdt as `0x${string}`,
           abi: token,
@@ -465,9 +473,39 @@ const Home: React.FC = () => {
           address: contract.dev.usdt as `0x${string}`,
           abi: token,
           functionName: 'approve',
-          args: [contract.dev.manager, needUsdt],
+          args: [contract.dev.manager, needUsdt.toFixed(0)],
         });
         console.log(tx);
+      }else{
+        console.log(4444);
+        if(BigNumber(Number(allowance)||0).isLessThan(needUsdt)) {
+          //   查询自己有多少 usdt
+          const balance:any = await publicClient?.readContract({
+            address: contract.dev.usdt as `0x${string}`,
+            abi: token,
+            functionName: 'balanceOf',
+            args: [address],
+          });
+          console.log(balance);
+          if (BigNumber(balance).isLessThan(needUsdt)) {
+            Toast(intl.formatMessage({ id: 'toast.usdt.insufficient' }));
+            return;
+          }
+          // 首先撤销授权
+          await writeContractAsync({
+            address: contract.dev.usdt as `0x${string}`,
+            abi: token,
+            functionName: 'approve',
+            args: [contract.dev.manager, 0],
+          });
+          //   授权额度
+          await writeContractAsync({
+            address: contract.dev.usdt as `0x${string}`,
+            abi: token,
+            functionName: 'approve',
+            args: [contract.dev.manager, needUsdt.toFixed(0)],
+          });
+        }
       }
 
       //  查询 当前活跃基数的详情
