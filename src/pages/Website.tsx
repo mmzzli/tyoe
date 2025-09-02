@@ -102,8 +102,7 @@ const Website  = ()=>{
   const [stakingBtnReDisabled,setStakingBtnReDisabled] = useState(true)
   const navigator = useNavigate()
   const [stakingProduct,setStakingProduct] = useState({reward:0,total:0,price:0,maxprice:0})
-  const [aboutVisable, setAboutVisable] = useState<boolean>(false)
-  const [appVisable, setAppVisable] = useState<boolean>(false)
+
   const [stakingInfo,setStakingInfo] = useState<StakingInfoInterface|null>(null)
   const [stakingVisable,setStakingVisable] = useState(false);
   const [tabs,setTabs] = useState('1')
@@ -456,10 +455,7 @@ const Website  = ()=>{
             <div className="bottom">{BigNumber(stakingInfo?.pledgegetmoney||0).toFormat()}</div>
           </div>
         </div>
-        <div className="staking-container-bottom">
-          <div className="item" onClick={()=>setAboutVisable(true)}>{intl.formatMessage({ id: 'staking.footer.item1' })}</div>
-          <div className="item" onClick={()=>setAppVisable(true)}>{intl.formatMessage({ id: 'staking.footer.item2' })}</div>
-        </div>
+
       </div>
 
 
@@ -498,70 +494,7 @@ const Website  = ()=>{
         </div>
       </div>
     </div>
-    <Popup className={'about-staking-popup'} visible={aboutVisable} onClose={() => {
-      setAboutVisable(false);
-    }}>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item1"})}
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item2"})}
 
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item3"})}
-
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item4"})}
-
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item5"})}
-
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item6"})}
-
-      </div>
-      <div className="item">
-        <div className="top">
-          {intl.formatMessage({id:"staking.footer.item1.item7"})}
-
-        </div>
-        <div className="bottom">
-          <div className="bottom-li">
-            {intl.formatMessage({id:"staking.footer.item1.item8"})}
-
-          </div>
-          <div className="bottom-li">
-            {intl.formatMessage({id:"staking.footer.item1.item9"})}
-
-          </div>
-          <div className="bottom-li">
-            {intl.formatMessage({id:"staking.footer.item1.item10"})}
-
-          </div>
-        </div>
-        <div className="footer">
-          {intl.formatMessage({id:"staking.footer.item1.item11"})}
-
-        </div>
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item12"})}
-      </div>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item1.item13"})}
-      </div>
-    </Popup>
-
-    <Popup className={'app-staking-popup'} visible={appVisable} onClose={() => {
-      setAppVisable(false)}}>
-      <div className="item">
-        {intl.formatMessage({id:"staking.footer.item2.item1"})}
-      </div>
-    </Popup>
 
     <Popup visible={stakingVisable} className={'website-staking-popup'} onClose={() => {
       setStakingVisable(false);

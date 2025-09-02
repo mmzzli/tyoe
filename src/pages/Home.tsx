@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useEffect, useMemo, useRef, useState } from 'react';
 import './home.scss';
-import { ActionSheet, Swiper, Toast } from 'react-vant';
+import { ActionSheet, Popup, Swiper, Toast } from 'react-vant';
 import { useIntl } from 'react-intl';
 import bannerUrl from '@/assets/images/banner.png';
 import banner01Url from '@/assets/images/banner01.jpg';
@@ -57,6 +57,9 @@ const Home: React.FC = () => {
 
   const [subscribeDisabled, setSubscribeDisabled] = useState(false);
   const [getDisabled, setGetDisabled] = useState(false);
+
+  const [aboutVisable, setAboutVisable] = useState<boolean>(false)
+  const [appVisable, setAppVisable] = useState<boolean>(false)
 
   const [clamVisable,setClamVisable] = useState(false);
   const [cliamNumber,setCliamNumber] = useState<number|''>('');
@@ -690,6 +693,12 @@ const Home: React.FC = () => {
                         onClick={handlerGet}>{intl.formatMessage({ id: 'whitelist.claim' })}</button>
               </div>
 
+              <div className="staking-container-bottom">
+                <div className="item"
+                     onClick={() => setAboutVisable(true)}>{intl.formatMessage({ id: 'staking.footer.item1' })}</div>
+                <div className="item"
+                     onClick={() => setAppVisable(true)}>{intl.formatMessage({ id: 'staking.footer.item2' })}</div>
+              </div>
               <div className="phase-records">
                 <div
                   className="phase-records-title">{intl.formatMessage({ id: 'whitelist.participation.records' })}</div>
@@ -802,6 +811,70 @@ const Home: React.FC = () => {
         </div>
         <div className={'button'} onClick={handlerClam}>{intl.formatMessage({id:'home.rengou.confirm'})}</div>
       </ActionSheet>
+      <Popup className={'about-staking-popup'} visible={aboutVisable} onClose={() => {
+        setAboutVisable(false);
+      }}>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item1"})}
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item2"})}
+
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item3"})}
+
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item4"})}
+
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item5"})}
+
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item6"})}
+
+        </div>
+        <div className="item">
+          <div className="top">
+            {intl.formatMessage({id:"staking.footer.item1.item7"})}
+
+          </div>
+          <div className="bottom">
+            <div className="bottom-li">
+              {intl.formatMessage({id:"staking.footer.item1.item8"})}
+
+            </div>
+            <div className="bottom-li">
+              {intl.formatMessage({id:"staking.footer.item1.item9"})}
+
+            </div>
+            <div className="bottom-li">
+              {intl.formatMessage({id:"staking.footer.item1.item10"})}
+
+            </div>
+          </div>
+          <div className="staking-footer">
+            {intl.formatMessage({id:"staking.footer.item1.item11"})}
+
+          </div>
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item12"})}
+        </div>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item1.item13"})}
+        </div>
+      </Popup>
+
+      <Popup className={'app-staking-popup'} visible={appVisable} onClose={() => {
+        setAppVisable(false)}}>
+        <div className="item">
+          {intl.formatMessage({id:"staking.footer.item2.item1"})}
+        </div>
+      </Popup>
     </>
   );
 };

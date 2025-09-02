@@ -294,6 +294,18 @@
 
       }
     }
+    .staking-container-bottom{
+      @include flex-between;
+      font-size: 24px;
+      gap: 10px;
+      .item{
+        height: 60px;
+        border-radius: 20px;
+        background: $background-tertiary;
+        flex:1;
+        @include flex-center;
+      }
+    }
     .phase-records{
       &-title{
         font-size: 30px;
