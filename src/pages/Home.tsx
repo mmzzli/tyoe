@@ -334,28 +334,28 @@ const Home: React.FC = () => {
         address: nftAddress,
         abi: nft,
         functionName: 'balanceOf',
-        args: ['0x5FfEAfE2CD01940F73E8f869Ca682Bf236b5DCAf'],
+        args: [address],
       }) as bigint;
       console.log(nftBalance,'nftBalance');
 
-      const requestNFTids = [];
-      for (let i = 0; i < Number(nftBalance); i++) {
-        requestNFTids.push(publicClient.readContract({
-          address: nftAddress,
-          abi: nft,
-          functionName: 'tokenOfOwnerByIndex',
-          args: ['0x5FfEAfE2CD01940F73E8f869Ca682Bf236b5DCAf', i],
-        }));
-      }
-      const ids: any = await Promise.all(requestNFTids) || [];
-      console.log(ids,'ids');
-      if (!ids.length) {
-        Toast(intl.formatMessage({ id: 'toast.no.nft' }));
-        return;
-      }
+      // const requestNFTids = [];
+      // for (let i = 0; i < Number(nftBalance); i++) {
+      //   requestNFTids.push(publicClient.readContract({
+      //     address: nftAddress,
+      //     abi: nft,
+      //     functionName: 'tokenOfOwnerByIndex',
+      //     args: [address, i],
+      //   }));
+      // }
+      // const ids: any = await Promise.all(requestNFTids) || [];
+      // console.log(ids,'ids');
+      // if (!ids.length) {
+      //   Toast(intl.formatMessage({ id: 'toast.no.nft' }));
+      //   return;
+      // }
       setNFTs({
         balance: Number(nftBalance),
-        balanceNo: ids.map((item: any) => Number(item)),
+        balanceNo: [0],
         show: true,
       });
       // 3. 开始空投
@@ -612,9 +612,9 @@ const Home: React.FC = () => {
                 <div className="check-nft-result-item">
                   <Iconfont icon={'icon-a-circle-check1'}></Iconfont>
                   <div className="middle">
-                    <div className="top">
-                      {nfts.balanceNo[0]}
-                    </div>
+                    {/*<div className="top">*/}
+                    {/*  {nfts.balanceNo[0]}*/}
+                    {/*</div>*/}
                     <div className="bottom">
                       {intl.formatMessage({ id: 'airdop.check.nft.result.reward' })}:100 TYOE
                     </div>
