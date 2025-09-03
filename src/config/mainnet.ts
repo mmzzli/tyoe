@@ -6,7 +6,7 @@ export const mainnet = /*#__PURE__*/ defineChain({
   nativeCurrency: { name: 'Ether', symbol: 'ETH', decimals: 18 },
   rpcUrls: {
     default: {
-      http: ['https://ethereum.blockpi.network/v1/rpc/b941c3eb9540cc7babd79df45248a0e58837ffb6'],
+      http: ['https://ethereum.blockpi.network/v1/rpc/8c44179568935eed9e586b6e53a68e2d48a6528b'],
     },
   },
   blockExplorers: {
