@@ -33,7 +33,7 @@ const SelectLanguage = () =>{
                 setVisible(false)
               }}>
                 <div className="left">
-                  <div className="flag">{option.flag}</div>
+                  {/*<div className="flag">{option.flag}</div>*/}
                   <div className="name">{option.name}</div>
                 </div>
                 {
