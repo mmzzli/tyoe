@@ -561,12 +561,6 @@ const Home: React.FC = () => {
   };
 
 
-  const handlerActived = (item:PhaseItemProps) =>{
-    if(item.active){
-        setActiveId(item.phase);
-    }
-    return;
-  }
 
   return (
     <>
@@ -627,12 +621,7 @@ const Home: React.FC = () => {
               {intl.formatMessage({ id: 'airdop.check.nft' })}</button>
           </div>
 
-          <div className="check-nft-info">
-            <Iconfont icon={'icon-zhuyi'}></Iconfont>
-            <p>
-              {intl.formatMessage({ id: 'common.warning' })}：{intl.formatMessage({ id: 'airdop.check.nft.info' })}
-            </p>
-          </div>
+
 
           {
             nfts.show && !claimed && (
