@@ -900,9 +900,6 @@ const Home: React.FC = () => {
           </div>
         </div>
         <div className="item">
-          {intl.formatMessage({id:"staking.footer.item1.item12"})}
-        </div>
-        <div className="item">
           {intl.formatMessage({id:"staking.footer.item1.item13"})}
         </div>
       </Popup>

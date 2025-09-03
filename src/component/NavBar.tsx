@@ -11,10 +11,13 @@ import { useNavigate } from 'react-router-dom';
 const NavBar: React.FC<{showMenu?:boolean}> = ({showMenu=true}) => {
   const [menuVisable, setMenuVisable] = useState<PopupPosition>('')
   const navigate = useNavigate()
+  const handlerNavigateWebsite  = ()=>{
+    // navigate('/website')
+  }
 	return (
     <>
       <div className="navbar">
-        <div className="left" onClick={()=>{navigate('/website')}}>
+        <div className="left" onClick={handlerNavigateWebsite}>
           <img src={logoUrl} alt="" />
         </div>
         <div className="middle">
@@ -23,7 +26,7 @@ const NavBar: React.FC<{showMenu?:boolean}> = ({showMenu=true}) => {
         <div className="right">
           <SelectLanguage />
           {
-            showMenu ? <Iconfont icon={'icon-menu'} onClick={() => setMenuVisable('left')} ></Iconfont> : <Iconfont icon={'icon-yuyan'} onClick={()=>{navigate('/website')}}></Iconfont>
+            showMenu ? <Iconfont icon={'icon-menu'} onClick={() => setMenuVisable('left')} ></Iconfont> : ''
           }
         </div>
       </div>

@@ -22,6 +22,7 @@ import { manager, token } from '@/abi/tyoe.ts';
 import BigNumber from 'bignumber.js';
 import { buyProduct, getGoodsList, getStakingInfo, StakingInfoInterface } from '@/service/staking.ts';
 import NavBar from '@/component/NavBar.tsx';
+import * as React from 'react';
 
 
 const Website  = ()=>{
@@ -455,7 +456,9 @@ const Website  = ()=>{
             <div className="bottom">{BigNumber(stakingInfo?.pledgegetmoney||0).toFormat()}</div>
           </div>
         </div>
-
+        <div className="staking-container-info">
+            {intl.formatMessage({ id: 'staking.footer.item1.item12' })}
+        </div>
       </div>
 
 

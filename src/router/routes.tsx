@@ -20,41 +20,31 @@ const myRoutes: MyRoutesItem[] = [
 		component: './Home', // 这里应该是 Home 组件
 		name: 'Home',
 	},
-	{
-		path: "/assets",
-		component: './Assets',
-		name: 'Assets',
-	},
-	{
-		path: "/announcements",
-		component: './Announcements',
-		name: 'Announcements',
-	},
-	{
-		path: "/announcement-detail",
-		component: './AnnouncementDetail',
-		name: 'AnnouncementDetail',
-	},
-	{
-		path: "/team",
-		component: './Team',
-		name: 'Team',
-	},
-	{
-		path: "/withdraw",
-		component: './Withdraw',
-		name: 'Withdraw',
-	},
-	{
-		path:'/website',
-		component:"./Website",
-		name:'Website',
-	},
-	{
-		path: "/staking-records",
-		component: './StakingRecords',
-		name: 'StakingRecords',
-	}
+	// {
+	// 	path: "/assets",
+	// 	component: './Assets',
+	// 	name: 'Assets',
+	// },
+	// {
+	// 	path: "/team",
+	// 	component: './Team',
+	// 	name: 'Team',
+	// },
+	// {
+	// 	path: "/withdraw",
+	// 	component: './Withdraw',
+	// 	name: 'Withdraw',
+	// },
+	// {
+	// 	path:'/website',
+	// 	component:"./Website",
+	// 	name:'Website',
+	// },
+	// {
+	// 	path: "/staking-records",
+	// 	component: './StakingRecords',
+	// 	name: 'StakingRecords',
+	// }
 ];
 
 // 生成路由
