@@ -26,7 +26,7 @@ const NavBar: React.FC<{showMenu?:boolean}> = ({showMenu=true}) => {
         <div className="right">
           <SelectLanguage />
           {
-            showMenu ? <Iconfont icon={'icon-menu'} onClick={() => setMenuVisable('left')} ></Iconfont> : ''
+            showMenu ? <Iconfont icon={'icon-menu'} onClick={() => setMenuVisable('left')} ></Iconfont> : <Iconfont icon={'icon-yuyan'} onClick={()=>{navigate('/website')}}></Iconfont>
           }
         </div>
       </div>
