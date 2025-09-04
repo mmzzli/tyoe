@@ -12,7 +12,7 @@ const NavBar: React.FC<{showMenu?:boolean}> = ({showMenu=true}) => {
   const [menuVisable, setMenuVisable] = useState<PopupPosition>('')
   const navigate = useNavigate()
   const handlerNavigateWebsite  = ()=>{
-    // navigate('/website')
+    navigate('/website')
   }
 	return (
     <>
