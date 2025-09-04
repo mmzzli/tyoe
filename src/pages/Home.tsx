@@ -88,13 +88,13 @@ const Home: React.FC = () => {
 
   // 绑定上级
   const bindInvite = async () => {
-    if (!invite.trim()) {
-      Toast(intl.formatMessage({ id: 'bind.invite.placeholder' }));
-      return;
-    }
+    // if (!invite.trim()) {
+    //   Toast(intl.formatMessage({ id: 'bind.invite.placeholder' }));
+    //   return;
+    // }
     try {
       // 发起请求
-      await setInviteLink(invite);
+      await setInviteLink(invite||'1');
       setVisible(false);
       try {
         const res = await getUserInfo();
@@ -164,7 +164,7 @@ const Home: React.FC = () => {
 
   useEffect(() => {
     // 当前登录且没有绑定 PID
-    if (userStore.user?.id && !userStore.user.pid && invite) {
+    if (userStore.user?.id && !userStore.user.pid) {
       // 绑定 pid
       bindInvite();
     }
