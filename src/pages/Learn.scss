@@ -5,4 +5,10 @@
   border-radius: 20px;
   box-sizing: border-box;
   margin: 0 20px;
+  font-size: 28px;
+  line-height: 1.5em;
+  color: $text-secondary;
+  p{
+    margin-bottom: 20px;
+  }
 }

@@ -30,8 +30,7 @@ const Learn = ()=>{
   }, [data,languageStore.language]);
 
   return <Layouts title={intl.formatMessage({ id: 'staking.footer.learn.stake' })}>
-    <div className={"learn-container"}>
-      {content}
+    <div className={"learn-container"} dangerouslySetInnerHTML={{__html:content}}>
     </div>
   </Layouts>
 }
