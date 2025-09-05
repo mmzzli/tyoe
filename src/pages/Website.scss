@@ -145,6 +145,19 @@
       margin-top: 20px;
       color: $text-muted;
     }
+    &-bottom{
+      @include flex-between;
+      margin-top: 28px;
+      font-size: 24px;
+      gap: 10px;
+      .item{
+        height: 60px;
+        border-radius: 20px;
+        background: $background-tertiary;
+        flex:1;
+        @include flex-center;
+      }
+    }
 
   }
   .news-container{

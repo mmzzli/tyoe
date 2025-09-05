@@ -58,3 +58,22 @@ export const buyProduct = async (params:{hash:string,hex:string,signed:string,am
 export const unStake = async (params:{id:number})=>{
 	return service.post('/Product/delOrder',params)
 }
+
+export interface StakeLearnInterface{
+	content?:string
+	content_en:string
+	content_ko:string
+	content_ja:string
+	content_tw:string
+	create_time:string
+	toupdatime:string
+}
+export const stakeLearn = async ():Promise<StakeLearnInterface>=>{
+	return service.post('/Login/gethowplg')
+
+}
+
+export const stakeLearnBack = async ():Promise<StakeLearnInterface>=>{
+	return service.post('/Login/gethowplgbac')
+
+}

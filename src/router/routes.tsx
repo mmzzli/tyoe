@@ -44,6 +44,16 @@ const myRoutes: MyRoutesItem[] = [
 		path: "/staking-records",
 		component: './StakingRecords',
 		name: 'StakingRecords',
+	},
+	{
+		path: "/learn-stake",
+		component: './Learn',
+		name: 'Learn',
+	},
+	{
+		path: "/learn-stake-back",
+		component: './LearnBack',
+		name: 'LearnBack',
 	}
 ];
 

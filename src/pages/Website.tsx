@@ -22,7 +22,6 @@ import { manager, token } from '@/abi/tyoe.ts';
 import BigNumber from 'bignumber.js';
 import { buyProduct, getGoodsList, getStakingInfo, StakingInfoInterface } from '@/service/staking.ts';
 import NavBar from '@/component/NavBar.tsx';
-import * as React from 'react';
 
 
 const Website  = ()=>{
@@ -422,9 +421,11 @@ const Website  = ()=>{
 
           </div>
           <div className="right">
-            <div className="button" onClick={()=>{setStakingVisable(true)}}>{intl.formatMessage({ id: 'staking.button' })}</div>
+            <div className="button" onClick={() => {
+              setStakingVisable(true);
+            }}>{intl.formatMessage({ id: 'staking.button' })}</div>
             <div className="staking-records" onClick={() => {
-              navigator('/staking-records')
+              navigator('/staking-records');
             }}>
               <Iconfont icon="icon-jilu"></Iconfont>
               {intl.formatMessage({ id: 'staking.record.title' })}
@@ -452,12 +453,14 @@ const Website  = ()=>{
             <div className="bottom">{BigNumber(stakingProduct.reward * 100).toFormat()}%</div>
           </div>
           <div className="item">
-            <div className="top">{intl.formatMessage({ id: "staking.year.get" })}</div>
-            <div className="bottom">{BigNumber(stakingInfo?.pledgegetmoney||0).toFormat()}</div>
+            <div className="top">{intl.formatMessage({ id: 'staking.year.get' })}</div>
+            <div className="bottom">{BigNumber(stakingInfo?.pledgegetmoney || 0).toFormat()}</div>
           </div>
         </div>
-        <div className="staking-container-info">
-            {intl.formatMessage({ id: 'staking.footer.item1.item12' })}
+
+        <div className="staking-container-bottom">
+          <div className="item" onClick={()=>navigator('/learn-stake')}>{intl.formatMessage({ id: 'staking.footer.learn.stake' })}</div>
+          <div className="item" onClick={()=>navigator('/learn-stake-back')}>{intl.formatMessage({ id: 'staking.footer.learn.back' })}</div>
         </div>
       </div>
 
