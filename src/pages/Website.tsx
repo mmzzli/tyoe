@@ -197,8 +197,8 @@ const Website  = ()=>{
       setStakingNumber(Number(stakingProduct.price))
       return;
     }
-    if( BigNumber(balance).div(10 ** 18).isLessThan(e.target.value)){
-      setStakingNumber(BigNumber(balance).div(10 ** 18).toNumber())
+    if( BigNumber(stakingInfo?.pledgeNumber||0).isLessThan(e.target.value)){
+      setStakingNumber(BigNumber(stakingInfo?.pledgeNumber||0).toNumber())
       return;
     }
 
@@ -251,8 +251,8 @@ const Website  = ()=>{
 
 
   useEffect(() => {
-    setStakingDisabled(balance<=0 || stakingNumber<=0)
-  }, [balance,stakingNumber]);
+    setStakingDisabled(Number(stakingInfo?.pledgeNumber)<=0 || stakingNumber<=0)
+  }, [stakingInfo?.pledgeNumber,stakingNumber]);
 
   useEffect(() => {
 
@@ -307,7 +307,9 @@ const Website  = ()=>{
     }finally {
       setRandom(Math.random())
       setStakingNumber(0)
-      setStakingDisabled(false)
+      setStakingDisabled(false);
+      await fetchStakingInfo();
+
     }
 
   }
@@ -331,6 +333,7 @@ const Website  = ()=>{
       setStakingNumber(0)
       setStakingBtnReDisabled(false)
       await fetchUserInfo()
+      await fetchStakingInfo()
     }
 
   }
@@ -437,13 +440,13 @@ const Website  = ()=>{
             <div className="label">
               {intl.formatMessage({ id: 'staking.balance.left' })}
             </div>
-            <div className="value">{BigNumber(balance).div(10 ** 18).toFormat()}</div>
+            <div className="value">{BigNumber(stakingInfo?.pledgeNumber||0).toFormat()}</div>
           </div>
           <div className="form-item">
             <div className="label">
               {intl.formatMessage({ id: 'staking.balance.tyoe' })}
             </div>
-            <div className="value">{BigNumber(stakingBalance).div(10 ** 18).toFormat()}</div>
+            <div className="value">{BigNumber(stakingInfo?.pledgetotal||0).toFormat()}</div>
           </div>
 
         </div>
@@ -519,12 +522,12 @@ const Website  = ()=>{
           <div className="form-item">
             <div className="label">
               <div className="left">{intl.formatMessage({ id: 'staking.balance' })}</div>
-              <div className="right">{BigNumber(balance).div(10 ** 18).toFormat()}</div>
+              <div className="right">{BigNumber(stakingInfo?.pledgeNumber||0).toFormat()}</div>
             </div>
             <div className="input">
               <input type="number" value={stakingNumber} onInput={handlerStakingNumberChange}
                      placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
-              <div className="max" onClick={()=>setStakingNumber(BigNumber(balance).div(10 ** 18).toNumber())}>MAX</div>
+              <div className="max" onClick={()=>setStakingNumber(BigNumber(stakingInfo?.pledgeNumber||0).toNumber())}>MAX</div>
             </div>
           </div>
 
