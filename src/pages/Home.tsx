@@ -894,10 +894,12 @@ const Home: React.FC = () => {
       </Popup>
 
       <Popup className={'app-staking-popup'} visible={appVisable} onClose={() => {
-        setAppVisable(false)}}>
-        <div className="item">
-          {intl.formatMessage({id:"staking.footer.item2.item1"})}
-        </div>
+        setAppVisable(false)
+      }}>
+        <div className="item">{intl.formatMessage({ id: "staking.footer.item2.item1" })}</div>
+        <div className="item">{intl.formatMessage({ id: "staking.footer.item2.item2" })}</div>
+        <div className="item">{intl.formatMessage({ id: "staking.footer.item2.item3" })}</div>
+        <div className="item">{intl.formatMessage({ id: "staking.footer.item2.item4" })}</div>
       </Popup>
     </>
   );
