@@ -453,7 +453,7 @@ const Website  = ()=>{
         <div className="staking-container-footer">
           <div className="item">
             <div className="top">{intl.formatMessage({ id: 'staking.day.get' })}</div>
-            <div className="bottom">{BigNumber(stakingProduct.reward * 100).toFormat()}%</div>
+            <div className="bottom">{BigNumber(stakingProduct.reward * 100).toFixed(2)}%</div>
           </div>
           <div className="item">
             <div className="top">{intl.formatMessage({ id: 'staking.year.get' })}</div>
