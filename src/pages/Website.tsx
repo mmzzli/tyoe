@@ -206,16 +206,16 @@ const Website  = ()=>{
   }
 
   const handlerStakingReNumberChange = (e:any) =>{
-    if(e.target.value < Number(stakingProduct.price)){
+    if(Number(e.target.value) <= Number(stakingProduct.price)){
       setStakingNumber(Number(stakingProduct.price))
       return;
     }
 
-    if(Number(e.target.value) > Number(userStore.user?.toUsdtCost)){
-      console.log(5555);
-      setStakingReNumber(Number(userStore.user?.toUsdtCost)||0)
+    if(Number(e.target.value) > Number(userStore.user?.usdt_num||0)){
+      setStakingReNumber(Number(userStore.user?.usdt_num)||0)
       return;
     }
+
     setStakingReNumber(Number(e.target.value))
   }
 
@@ -251,13 +251,12 @@ const Website  = ()=>{
 
 
   useEffect(() => {
-    setStakingDisabled(balance<=0 || stakingNumber<=0)
+    setStakingDisabled(balance<=0 || Number(stakingNumber)<=0)
   }, [balance,stakingNumber]);
 
   useEffect(() => {
-
-    setStakingBtnReDisabled(Number(stakingInfo?.toUsdtCost)<=0 || stakingReNumber<=0)
-  }, [stakingInfo]);
+    setStakingBtnReDisabled(Number(userStore.user?.usdt_num)<=0 || Number(stakingReNumber)<=0)
+  }, [stakingInfo,stakingReNumber]);
 
   const handlerStaking = async ()=>{
     try {
@@ -525,7 +524,7 @@ const Website  = ()=>{
               <div className="right">{BigNumber(balance).div(10 ** 18).toFormat()}</div>
             </div>
             <div className="input">
-              <input type="number" value={stakingNumber} onInput={handlerStakingNumberChange}
+              <input type="number" value={stakingNumber} onInput={(e:any)=>{setStakingNumber(e.target.value)}} onBlur={handlerStakingNumberChange}
                      placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
               <div className="max" onClick={()=>setStakingNumber(BigNumber(balance).div(10 ** 18).toNumber())}>MAX</div>
             </div>
@@ -549,7 +548,7 @@ const Website  = ()=>{
               <div className="right">{BigNumber(userStore.user?.usdt_num||0).toFormat()}</div>
             </div>
             <div className="input">
-              <input type="number" value={stakingReNumber} onInput={handlerStakingReNumberChange}
+              <input type="number" value={stakingReNumber} onInput={(e:any)=>{setStakingReNumber(e.target.value)}} onBlur={handlerStakingReNumberChange}
                      placeholder={intl.formatMessage({ id: 'staking.balance.placeholder' })} />
               <div className="max" onClick={() => setStakingReNumber(BigNumber(userStore.user?.usdt_num||0).toNumber())}>MAX
               </div>
